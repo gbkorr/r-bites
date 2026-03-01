@@ -1,56 +1,74 @@
-
-
-
-
-render.matrix = function(M,palette=c('╬',' ')) cat('\r', c('\t',palette)[t(cbind(M,matrix(-1,nrow(M),10)))+2], sep='')
-
-
 library(av)
 library(jpeg)
-viddata = av_video_images('/Users/gabrielbroussardkorr/Desktop/music/Youtube Archive/hacona/Spring Rain ｜ 春雨.mp4')
 
-render.image = function(img,size=64,nv=2){
-	#pad size to account for cropping later
-	size = size + 4
-	
+video_path = 'XcQ.mp4'
+
+
+
+pal = function(str='▓∏░: ') strsplit(str,'')[[1]] #convenience function to generate palette from string
+
+render.matrix = function(M,palette=c('▓',' ')) cat('\r', c('\t',palette)[t(cbind(M,matrix(-1,nrow(M),10)))+2], sep='')
+
+render.image = function(img,size=128,shades=2){ #size = horizontal resolution
 	by = ncol(img)/size
 	
-	#nearest-neighbor downsample
+	#nearest-neighbor downsample, with double horizontal resolution
 	img = img[seq(1,nrow(img),by*2),seq(1,ncol(img),by),]
 	
 	#luma greyscale
-	img = 0.2126 * img[,,1] + 0.7152 * img[,,2] + 0.0722 * img[,,3]
+	img = 0.2126 * img[,,1] + 
+				0.7152 * img[,,2] + 
+				0.0722 * img[,,3]
 	
 	#filter
-	img = floor(img * nv)
+	floor(img * shades)
+}
+
+load.video = function(path,size=128) { #converts to low-res 25fps
+	cat('Downscaling...\n')
+	info = av_media_info(path)$video
 	
-	return(img)
+	scale = c(info$width,info$height)
+	scale = scale * (size/scale[1]) #match horizontal scale
+	scale = floor(scale/2)*2 #make even
+	
+	temp = tempdir()
+	temp = paste0(temp,'downsampled.mp4')
+	av_encode_video(path,output = temp,framerate = info$framerate,vfilter = paste0("scale=",scale[1],':',scale[2])) #downscale video
+	cat('Extracting frames...\n')
+	av_video_images(temp,fps=25)
 }
 
-play.video = function(video_files,size=64,framerate=30,palette=c('╬',' ')){
-	for (frame in video_files){
-		render.matrix(render.image(readJPEG(frame),size,nv=length(palette)),palette=palette)
-		Sys.sleep(1/framerate)
-	}
-}
-
-play.video = function(video_files,size=128,target_framerate=30,palette=c('▓','∏','░',':',' ')){
-	for (frame in 1:length(video_files)){
-		t = as.double(Sys.time())
+play.video = function(video_data,size=128,palette=c('▓','∏','░',':',' ')){
+	target_framerate = 25 #should match actual video
+	
+	frame = 1
+	while (frame < length(video_data)){
+		t = as.double(Sys.time()) #get time before rendering frame
 		
-		render.matrix(render.image(readJPEG(video_files[frame]),size,nv=length(palette)),palette=palette)
+		#render frame
+		render.matrix(render.image(readJPEG(video_data[frame]),size,shades=length(palette)),palette=palette)
 		
 		dur = as.double(Sys.time()) - t #how long that took to render
 		
-		if (dur < 1/target_framerate) Sys.sleep(1/target_framerate - dur)
+		dur_frames = dur/(1/target_framerate) #how long that took in frames
+		
+		frame = frame + ceiling(dur_frames) #advance to next frame
+		
+		#buffer
+		buff = (dur_frames - floor(dur_frames)) * 1/target_framerate
+		
+		Sys.sleep(1/target_framerate - buff) #sleep to the start of the next frame
 	}	
 }
 
-pal = function(str) strsplit(str,'')[[1]]
 
-#testpalette = pal('╬: ')
-#testpalette = pal('@#%*+=-:.') #https://alexharri.com/blog/ascii-rendering
-testpalette = pal('▓∏░: ')
+#framerate of original video: av_media_info(video_path)$video
+vid = load.video(video_path)
+play.video(vid)
 
-play.video(viddata,palette=testpalette)
+#the framerate will mainly depend on how quickly readJPEG can load each frame, o< the actual video resolution
+
+
+
 
