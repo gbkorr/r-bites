@@ -185,14 +185,14 @@ Termux Installation on my Flip Phone
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I’m using an old flipphone that isn’t really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary apks:</p>
+<p>I’m using an old flipphone that isn’t really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary APKs:</p>
 <ul>
 <li><p>enable dev mode by typing <code>*#*#33284#*#*</code> (i.e., <code>*#*#DEBUG#*#*</code> with the keypad)</p></li>
 <li><p>connect phone to computer via microusb, click OK on phone to enable usb file transfer</p></li>
 <li><p>use <a href="https://app.webadb.com">https://app.webadb.com</a> to install the APK (“Install APK” on sidebar) via ADB interface. (you can also do the ADB process manually)</p></li>
 <li><p>(Note: APKs can be uninstalled by opening “Interactive Shell” from the sidebar, finding the app name by running <code>pm list packages</code>, and then running <code>pm uninstall -k --user 0 PACKAGENAME</code>)</p></li>
 </ul>
-<p>Once I installed the Termux APPK this way, I had to set a main menu shortcut in the settings to be able to launch it.</p>
+<p>Once I installed the Termux APK this way, I had to set a main menu shortcut in the settings to be able to launch it.</p>
 <p>(To make it easier to launch other APKs, I also installed <a href="https://github.com/nhirokinet/bluelineconsole">BlueLineConsole</a> (other launchers didn’t work on this device), which I quite like. For our R purposes we won’t need any APKs other than Termux, though.)</p>
 </div>
 </div>
@@ -207,14 +207,14 @@ Termux Installation on my Flip Phone
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>echo Hello World</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
-<li>install debian in termux:</li>
+<li>install Debian in Termux:</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pkg install proot<span class="sc">-</span>distro</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>proot<span class="sc">-</span>distro install debian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="4" type="1">
-<li>log into debian and install R and some useful commands<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>log into Debian and install R and some useful commands<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>proot<span class="sc">-</span>distro login debian </span>

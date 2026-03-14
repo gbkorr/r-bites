@@ -18,7 +18,7 @@ HERE
 The first step is to install the [Termux](https://github.com/termux/termux-app) APK, which emulates a linux terminal with a decent amount of control.
 
 ::: {.callout-warning title="Termux Installation on my Flip Phone"}
-I'm using an old flipphone that isn't really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary apks:
+I'm using an old flipphone that isn't really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary APKs:
 
 - enable dev mode by typing `*#*#33284#*#*` (i.e., `*#*#DEBUG#*#*` with the keypad)
 - connect phone to computer via microusb, click OK on phone to enable usb file transfer
@@ -26,7 +26,7 @@ I'm using an old flipphone that isn't really meant to run user-provided APKs. Th
 
 - (Note: APKs can be uninstalled by opening "Interactive Shell" from the sidebar, finding the app name by running `pm list packages`, and then running `pm uninstall -k --user 0 PACKAGENAME`)
 
-Once I installed the Termux APPK this way, I had to set a main menu shortcut in the settings to be able to launch it.
+Once I installed the Termux APK this way, I had to set a main menu shortcut in the settings to be able to launch it.
 
 (To make it easier to launch other APKs, I also installed [BlueLineConsole](https://github.com/nhirokinet/bluelineconsole) (other launchers didn't work on this device), which I quite like. For our R purposes we won't need any APKs other than Termux, though.)
 :::
