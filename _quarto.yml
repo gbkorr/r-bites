@@ -14,14 +14,11 @@ website:
         icon: fa-cookie-bite
         menu:
           - text: "Console Video Player"
-            icon: tv
+            icon: file-earmark-play
             href: video-player/video-player.qmd
           - text: "R on a Flip Phone"
-            icon: phone
+            icon: terminal-fill
             href: flipphone-r/flipphone-r.html
-  
-    right:
-      - icon: fa-gear
       
 format:
   html:

@@ -33,8 +33,7 @@ Once I installed the Termux APPK this way, I had to set a main menu shortcut in 
 
 
 
-## 2. Running R in Termux
-note[^guide]
+## 2. Running R in Termux[^guide]
 
 [^guide]: I got most of this from [here](https://old.reddit.com/r/termux/comments/1ardg2l/installing_r_programming_language_issues/kqix0rg/). There's another resource you might see online for running R on Android, but it no longer works!
 
@@ -42,24 +41,24 @@ note[^guide]
 
 2. ensure you have full keyboard control[^keyb] to use the terminal
 
-[^keyb]: I had to connect a bluetooth keyboard since Termux didn't like the flip phone numpad. I believe the regular touchscreen keyboard (along with Termux's built-in buttons) should suffice for a normal android phone. 
+[^keyb]: I had to connect a bluetooth keyboard since Termux didn't like the flip phone keypad. I believe the regular touchscreen keyboard (along with Termux's built-in buttons) should suffice for a normal android phone. 
 
-```
+```{r eval=F}
 echo Hello World
 ```
 
-3. install debian in termux:
+3. install Debian in Termux:
 
-```
+```{r eval=F}
 pkg install proot-distro
 proot-distro install debian
 ```
 
-4. log into debian and install R and some useful commands[^comms]
+4. log into Debian and install R and some useful commands[^comms]
 
 [^comms]: Only `r-base-dev` is required to run R, but the other two are useful to have around.
 
-```
+```{r eval=F}
 proot-distro login debian 
 apt install curl
 apt install git
@@ -68,14 +67,14 @@ apt install r-base-dev
 
 5. you can now run a regular old R session!
 
-```
+```{r eval=F}
 R
 print(R.version.string)
 ```
 
 6. install.packages() generally works for packages that don't build their own stuff on install.
 
-```
+```{r eval=F}
 install.packages("dplyr")
 library(dplyr)
 glimpse(iris,32)
