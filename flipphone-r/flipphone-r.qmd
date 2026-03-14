@@ -1,0 +1,95 @@
+
+
+# INTRO NEEDED
+
+and photos! of the R stuff especially, and a glam photo of the phone and mouse setup lol
+
+START
+BEGIN
+HERE
+
+
+
+**Disclaimer**: Back up your phone before doing this! I did this with an old flip phone that I factory reset, so I wasn't looking out for security or data concerns. Try at your own risk.
+
+
+## 1. Termux: Android Linux Emulator
+
+The first step is to install the [Termux](https://github.com/termux/termux-app) APK, which emulates a linux terminal with a decent amount of control.
+
+::: {.callout-warning title="Termux Installation on my Flip Phone"}
+I'm using an old flipphone that isn't really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary apks:
+
+- enable dev mode by typing `*#*#33284#*#*` (i.e., `*#*#DEBUG#*#*` with the keypad)
+- connect phone to computer via microusb, click OK on phone to enable usb file transfer
+- use [https://app.webadb.com](https://app.webadb.com) to install the APK ("Install APK" on sidebar) via ADB interface. (you can also do the ADB process manually)
+
+- (Note: APKs can be uninstalled by opening "Interactive Shell" from the sidebar, finding the app name by running `pm list packages`, and then running `pm uninstall -k --user 0 PACKAGENAME`)
+
+Once I installed the Termux APPK this way, I had to set a main menu shortcut in the settings to be able to launch it.
+
+(To make it easier to launch other APKs, I also installed [BlueLineConsole](https://github.com/nhirokinet/bluelineconsole) (other launchers didn't work on this device), which I quite like. For our R purposes we won't need any APKs other than Termux, though.)
+:::
+
+
+
+## 2. Running R in Termux
+note[^guide]
+
+[^guide]: I got most of this from [here](https://old.reddit.com/r/termux/comments/1ardg2l/installing_r_programming_language_issues/kqix0rg/). There's another resource you might see online for running R on Android, but it no longer works!
+
+1. install and run the Termux app
+
+2. ensure you have full keyboard control[^keyb] to use the terminal
+
+[^keyb]: I had to connect a bluetooth keyboard since Termux didn't like the flip phone numpad. I believe the regular touchscreen keyboard (along with Termux's built-in buttons) should suffice for a normal android phone. 
+
+```
+echo Hello World
+```
+
+3. install debian in termux:
+
+```
+pkg install proot-distro
+proot-distro install debian
+```
+
+4. log into debian and install R and some useful commands[^comms]
+
+[^comms]: Only `r-base-dev` is required to run R, but the other two are useful to have around.
+
+```
+proot-distro login debian 
+apt install curl
+apt install git
+apt install r-base-dev
+```
+
+5. you can now run a regular old R session!
+
+```
+R
+print(R.version.string)
+```
+
+6. install.packages() generally works for packages that don't build their own stuff on install.
+
+```
+install.packages("dplyr")
+library(dplyr)
+glimpse(iris,32)
+```
+
+:::{.callout-note title="Package Compatibility" collapse="true"}
+Tested and working:
+
+- `dplyr`
+
+Failed to install:
+
+- `devtools`
+- `httr2` (you can get around this with clever use of `system()` and curl)
+- `httpuv`
+:::
+
