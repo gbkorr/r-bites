@@ -28,17 +28,12 @@ play.video = function(video_data,target_framerate=25,palette=c('▓','∏','░'
 	while (frame < length(video_data)){
 		t = as.double(Sys.time()) #get time before rendering frame
 		
-		#render frame
 		render.matrix(render.image(readJPEG(video_data[frame]),shades=length(palette)),palette=palette)
 		
 		dur = as.double(Sys.time()) - t #how long that took to render
-		
 		dur_frames = dur/(1/target_framerate) #how long that took in frames
-		
 		frame = frame + ceiling(dur_frames) #advance to next frame
-		
-		#buffer
-		buff = (dur_frames - floor(dur_frames)) * 1/target_framerate
+		buff = (dur_frames - floor(dur_frames)) * 1/target_framerate 	#buffer
 		
 		Sys.sleep(1/target_framerate - buff) #sleep to the start of the next frame
 	}	
@@ -48,9 +43,6 @@ play.video = function(video_data,target_framerate=25,palette=c('▓','∏','░'
 #framerate of original video: av_media_info(video_path)$video
 vid = load.video(video_path)
 play.video(vid)
-
-#the framerate will mainly depend on how quickly readJPEG can load each frame, o< the actual video resolution
-
 
 
 

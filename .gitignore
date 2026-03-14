@@ -2,5 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_store
 work
 video-player/video-player-demo.mov
+
+/.quarto/

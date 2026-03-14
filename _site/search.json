@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "video-player/video-player.html",
+    "href": "video-player/video-player.html",
+    "title": "Play Videos in R",
+    "section": "",
+    "text": "This bite has some quick code to parse video files and render them to the console using only vanilla methods. (and the av package to parse video)\nvid = load.video('XcQ.mp4')\nplay.video(vid)\nThe console must be resized (and zoomed in or out) until the video renders properly."
+  },
+  {
+    "objectID": "video-player/video-player.html#footnotes",
+    "href": "video-player/video-player.html#footnotes",
+    "title": "Play Videos in R",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nOf the default uniform block shading elements █▓▒░, RStudio renders █ at half height and ▒ as thinner than a regular monospaced character. It’s absurd!↩︎"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]
