@@ -2,6 +2,10 @@
 
 # INTRO NEEDED
 
+
+![My setup, with a quarter for scale. I'm using a small folding keyboard for maximum portability.](workstation.jpeg)
+
+
 and photos! of the R stuff especially, and a glam photo of the phone and mouse setup lol
 
 START
@@ -90,5 +94,49 @@ Failed to install:
 - `devtools`
 - `httr2` (you can get around this with clever use of `system()` and curl)
 - `httpuv`
+- `rmarkdown`
 :::
+
+
+## 3. Git Push with a Flip Phone
+
+Here's a knitted webpage I wrote and rendered (!) in R and committed to my repo, all on the flip phone.
+
+[LINK](phonemarkdown.html)
+
+Of course, I could have written this using `nano`, but it was more fun to write it as one big string within R.
+
+```{r eval=F}
+txt = "
+<this is where I typed the Rmd body>
+"
+knitr::knit(text=txt,output='phonemarkdown.html')
+q() #quit R and go back to the debian CLI
+```
+
+Then I pushed it to this repo (!!) like this:
+
+Setup: First, I needed to authorize the system to push to my repo.
+```{r eval=F}
+ssh-keygen -t ed25519 -C "<MYEMAIL>" #create new SSH key for github
+cat .ssh/id_ed25519.pub #print SSH key
+#I then MANUALLY typed the SSH into my github account
+ssh -T git@github.com #verify successful SSH
+```
+
+
+Commit Push: Now I can push to my repo with the CLI.
+```{r eval=F}
+git clone git@github.com:gbkorr/r-bites.git #clone repo from git
+destination="r-bites/flipphone-r" #destination directory
+mv phonemarkdown.hmtl $destination #move file into repo
+cd $destination
+git add phonemarkdown.hmtl #stage file
+git commit -m "Created Rmd Page with Flip Phone"
+git push origin main #push commit
+```
+
+Why? Why not— what a cool thing to do!
+
+
 
