@@ -158,6 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#termux-android-linux-emulator" id="toc-termux-android-linux-emulator" class="nav-link" data-scroll-target="#termux-android-linux-emulator">1. Termux: Android Linux Emulator</a></li>
   <li><a href="#running-r-in-termuxguide" id="toc-running-r-in-termuxguide" class="nav-link" data-scroll-target="#running-r-in-termuxguide">2. Running R in Termux</a></li>
+  <li><a href="#git-push-with-a-flip-phone" id="toc-git-push-with-a-flip-phone" class="nav-link" data-scroll-target="#git-push-with-a-flip-phone">3. Git Push with a Flip Phone</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -169,6 +170,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="intro-needed" class="level1">
 <h1>INTRO NEEDED</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="workstation.jpeg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">My setup, with a quarter for scale. I’m using a small folding keyboard for maximum portability.</figcaption>
+</figure>
+</div>
 <p>and photos! of the R stuff especially, and a glam photo of the phone and mouse setup lol</p>
 <p>START BEGIN HERE</p>
 <p><strong>Disclaimer</strong>: Back up your phone before doing this! I did this with an old flip phone that I factory reset, so I wasn’t looking out for security or data concerns. Try at your own risk.</p>
@@ -258,10 +265,43 @@ Package Compatibility
 <li><code>devtools</code></li>
 <li><code>httr2</code> (you can get around this with clever use of <code>system()</code> and curl)</li>
 <li><code>httpuv</code></li>
+<li><code>rmarkdown</code></li>
 </ul>
 </div>
 </div>
 </div>
+</section>
+<section id="git-push-with-a-flip-phone" class="level2">
+<h2 class="anchored" data-anchor-id="git-push-with-a-flip-phone">3. Git Push with a Flip Phone</h2>
+<p>Here’s a knitted webpage I wrote and rendered (!) in R and committed to my repo, all on the flip phone.</p>
+<p><a href="phonemarkdown.html">LINK</a></p>
+<p>Of course, I could have written this using <code>nano</code>, but it was more fun to write it as one big string within R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">=</span> <span class="st">"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;this is where I typed the Rmd body&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">knit</span>(<span class="at">text=</span>txt,<span class="at">output=</span><span class="st">'phonemarkdown.html'</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">q</span>() <span class="co">#quit R and go back to the debian CLI</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then I pushed it to this repo (!!) like this:</p>
+<p>Setup: First, I needed to authorize the system to push to my repo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ssh<span class="sc">-</span>keygen <span class="sc">-</span>t ed25519 <span class="sc">-</span>C <span class="st">"&lt;MYEMAIL&gt;"</span> <span class="co">#create new SSH key for github</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cat .ssh<span class="sc">/</span>id_ed25519.pub <span class="co">#print SSH key</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#I then MANUALLY typed the SSH into my github account</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ssh <span class="sc">-</span>T git<span class="sc">@</span>github.com <span class="co">#verify successful SSH</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Commit Push: Now I can push to my repo with the CLI.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git push origin main <span class="co">#push commit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Why? Why not— what a cool thing to do!</p>
 
 
 </section>
