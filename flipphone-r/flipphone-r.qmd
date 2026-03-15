@@ -88,6 +88,8 @@ glimpse(iris,32)
 Tested and working:
 
 - `dplyr`
+- `knitr`
+- `markdown`
 
 Failed to install:
 
@@ -104,13 +106,15 @@ Here's a knitted webpage I wrote and rendered (!) in R and committed to my repo,
 
 [LINK](phonemarkdown.html)
 
-Of course, I could have written this using `nano`, but it was more fun to write it as one big string within R.
+Of course, I could have written this using `nano`, but it was more fun to write it as one big string within R.[^trib]
+
+[^trib]: It took some trial and error to get the knit to work without `rmarkdown`.
 
 ```{r eval=F}
 txt = "
 <this is where I typed the Rmd body>
 "
-knitr::knit(text=txt,output='phonemarkdown.html')
+writeLines(knitr::knit2html(text=txt),'phonemarkdown.html')
 q() #quit R and go back to the debian CLI
 ```
 
@@ -133,7 +137,9 @@ mv phonemarkdown.hmtl $destination #move file into repo
 cd $destination
 git add phonemarkdown.hmtl #stage file
 git commit -m "Created Rmd Page with Flip Phone"
-git push origin main #push commit
+git push #push commit
+#then I DELETED the new SSH key on github
+#because I don't know the security of this
 ```
 
 Why? Why not— what a cool thing to do!

@@ -3,6 +3,7 @@ project:
   output-dir: docs
   resources:
     - video-player/video-player-demo.mov
+    - flipphone-r/phonemarkdown.html
 
 website:
   title: "R Bites"

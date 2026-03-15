@@ -259,6 +259,8 @@ Package Compatibility
 <p>Tested and working:</p>
 <ul>
 <li><code>dplyr</code></li>
+<li><code>knitr</code></li>
+<li><code>markdown</code></li>
 </ul>
 <p>Failed to install:</p>
 <ul>
@@ -275,12 +277,12 @@ Package Compatibility
 <h2 class="anchored" data-anchor-id="git-push-with-a-flip-phone">3. Git Push with a Flip Phone</h2>
 <p>Here’s a knitted webpage I wrote and rendered (!) in R and committed to my repo, all on the flip phone.</p>
 <p><a href="phonemarkdown.html">LINK</a></p>
-<p>Of course, I could have written this using <code>nano</code>, but it was more fun to write it as one big string within R.</p>
+<p>Of course, I could have written this using <code>nano</code>, but it was more fun to write it as one big string within R.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">=</span> <span class="st">"</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;this is where I typed the Rmd body&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">knit</span>(<span class="at">text=</span>txt,<span class="at">output=</span><span class="st">'phonemarkdown.html'</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(knitr<span class="sc">::</span><span class="fu">knit2html</span>(<span class="at">text=</span>txt),<span class="st">'phonemarkdown.html'</span>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">q</span>() <span class="co">#quit R and go back to the debian CLI</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then I pushed it to this repo (!!) like this:</p>
@@ -294,12 +296,15 @@ Package Compatibility
 <p>Commit Push: Now I can push to my repo with the CLI.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/docs/flipphone-r"</span> <span class="co">#destination directory</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git push origin main <span class="co">#push commit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mv figure <span class="sc">$</span>destination <span class="co">#move plot dir into repo</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl figure <span class="co">#stage files</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#because I don't know the security of this</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Why? Why not— what a cool thing to do!</p>
 
@@ -314,6 +319,7 @@ Package Compatibility
 <li id="fn1"><p>I got most of this from <a href="https://old.reddit.com/r/termux/comments/1ardg2l/installing_r_programming_language_issues/kqix0rg/">here</a>. There’s another resource you might see online for running R on Android, but it no longer works!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>I had to connect a bluetooth keyboard since Termux didn’t like the flip phone keypad. I believe the regular touchscreen keyboard (along with Termux’s built-in buttons) should suffice for a normal android phone.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Only <code>r-base-dev</code> is required to run R, but the other two are useful to have around.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>It took some trial and error to get the knit to work without <code>rmarkdown</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
