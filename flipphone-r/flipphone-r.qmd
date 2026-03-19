@@ -1,3 +1,10 @@
+---
+title: "Run R on Android"
+format: 
+  html:
+    toc: true
+editor: visual
+---
 
 
 # INTRO NEEDED
@@ -19,7 +26,7 @@ HERE
 
 ## 1. Termux: Android Linux Emulator
 
-The first step is to install the [Termux](https://github.com/termux/termux-app) APK, which emulates a linux terminal with a decent amount of control.
+The first step is to install the [Termux](https://github.com/termux/termux-app) app, which emulates a linux terminal with a decent amount of control.
 
 ::: {.callout-warning title="Termux Installation on my Flip Phone"}
 I'm using an old flipphone that isn't really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary APKs:
@@ -76,7 +83,9 @@ R
 print(R.version.string)
 ```
 
-6. install.packages() generally works for packages that don't build their own stuff on install.
+6. install.packages() generally works for packages that don't build their own stuff on install.[^issue]
+
+[^issue]: [This](https://old.reddit.com/r/termux/comments/1h0e44p/eli_15_how_does_termux_and_andronix_work/lz3lobw/) is probably why some packages fail to install: no access to /usr and bin.
 
 ```{r eval=F}
 install.packages("dplyr")
@@ -118,7 +127,7 @@ writeLines(knitr::knit2html(text=txt),'phonemarkdown.html')
 q() #quit R and go back to the debian CLI
 ```
 
-Then I pushed it to this repo (!!) like this:
+Then I pushed it to my repo (!!) like this:
 
 Setup: First, I needed to authorize the system to push to my repo.
 ```{r eval=F}
@@ -142,7 +151,7 @@ git push #push commit
 #because I don't know the security of this
 ```
 
-Why? Why not— what a cool thing to do!
+What's the point of all this? It's really neat, that's what! Now we know that, in a pinch, you could update your repo with some fresh R code...
 
 
 

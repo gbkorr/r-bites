@@ -20,6 +20,9 @@ website:
           - text: "R on a Flip Phone"
             icon: terminal-fill
             href: flipphone-r/flipphone-r.html
+          - text: "R-Based Video Conference"
+            icon: webcam
+            href: conference/conference.html
       
 format:
   html:

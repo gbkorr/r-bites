@@ -1,0 +1,172 @@
+---
+title: "Video Conference in R"
+format: 
+  html:
+    toc: true
+    toc-depth: 4
+---
+
+After making a [game engine](https://gbkorr.github.io/rcade/) in R, I was hard-pressed to come up with a crazier idea. 
+
+But I prevailed. What if I made a video conference client to let people see each other in realtime, running all on R? Surprisingly, R provides almost everything we need.
+
+[demo here]
+
+This gave me quite a fun challenge for the semester. Things were quite a bit more finicky to get working than in previous projects, and there were several times when all hope of it working seemed lost--- I had to push through and persevere quite a bit throughout the project.
+
+
+## 1. Details
+
+### 1.1 Big Picture
+
+Webcam video is captured by OBS, processed into images in R and sent to the client, and then displayed on the console.
+
+#### 1.1.1 Pipeline
+___
+```{r echo=F, fig.width=3, fig.height=4}
+DiagrammeR::grViz("digraph {
+	node [
+		shape = box, 
+		style = 'rounded, 
+		filled', 
+		fillcolor = Linen
+		
+		fixedsize = true,
+		width = 2,
+		height = 0.5,
+	]
+	
+	ranksep = 0.2
+	
+	empty [shape = plaintext, label = '', fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]
+	obs [label = 'OBS', fillcolor = black, fontcolor = white]
+	ffmpeg [label = 'FFmpeg in R', fillcolor = '#ff8888']
+	server [label = 'httpuv Server in R', fillcolor = '#ffbb66']
+	client [label = 'httr2 Client in R', fillcolor = '#99ddff']
+	render [label = 'Custom R Renderer', fillcolor = '#aaffaa']
+	console [label = 'R Console', fillcolor = '#cccccc']
+	
+	empty -> obs [label = '   Webcam']
+	obs -> ffmpeg [label = '   AVI video'] 
+	ffmpeg -> server [label = '   JPEG frames']
+	server -> client [label = '   raw JPEG bytes']
+	client -> render [label = '   R matrix']
+	render -> console [label = '   R string']
+}")
+```
+
+___
+### 1.2 OBS
+Unfortunately, R can't natively read from the webcam. To get webcam input, we'll use [OBS](https://obsproject.com/), the standard screen-recording and streaming application. OBS gives a lot of useful control over how it outputs video, which we'll take full advantage of.
+
+We need to turn the live webcam feed into a video format that we can read in R. We'll need to read it *as it's being written*, which restricts what file formats we can use--- but thankfully, old reliable `.mkv` still does the job. OBS has to use a *video encoder* (which we get to choose) to write live camera data into a video file, and different encoders take longer before the most recent frame can be read.
+
+After testing quite a few encoders and filetypes, the `Apple VT ProRes Software Encoder` permitted the fastest reading of recent frames (from my apple laptop webcam).[^avi] 
+
+[^avi]: `.avi` files written with certain encoders also appear to work, but I haven't explored them fully (and `.avi` files take up a lot more storage).
+
+Anyway, all of this means that we end up with a `.mkv` file that OBS writes to live. Next, we'll use FFmpeg (via R) to access this file and extract its frames as it's being written.
+
+___
+
+> Why not just use OBS to generate a real livestream?
+
+Uhh... I was particularly interested in learning to work with these video and image formats. Using an actual streaming protocol would indeed work much better. 
+
+___
+### 1.3 FFmpeg
+[FFmpeg](https://www.ffmpeg.org/) is a standard video processing software, used by R packages like `av`[^av]. In our case, we want to use it to generate a JPEG for every frame of video.
+
+[^av]: `av` is the standard package for processing videos in R, but unfortunately doesn't give us as much control over FFmpeg as we need.
+
+This turns out to be tricky. FFmpeg is very convenient to use for regular video files, and is even quite capable of reading incomplete files as they're written[^re], but reading that incomplete video *live* takes some effort and jank.
+
+[^re] Using the `-re` option makes FFmpeg process the video at its native framerate, so it won't catch up to the end if the video is continually added to.
+
+Mainly, the issue is that FFmpeg helpfully stops running when it reaches the end of the video, but we want it to just pause and wait for new data to be added. Amazingly, this happens to be possible through some jank suggested in a [forum email](https://ffmpeg.org/pipermail/ffmpeg-user/2016-July/032874.html) 10 years ago: 
+
+So we actually manage to read a video file and write its frames as JPEGs almost as soon as they're written by OBS. (The filetype and encoder determine how fast we can read a frame after OBS writes it, as mentioned in the previous section.)
+
+We save these images to a temporary folder, from which the server will send images to the client.
+
+___
+### 1.4 Memory Leak
+The process as described so far introduces a bit of an elephant in the room that can be easy to miss. If we just keep writing to the video file... we just keep writing to the video file, and video files are big and take up a lot of storage space. It would be rather bad practice to rely on a constantly-growing file, and this would prevent us from running the video conference indefinitely.
+
+The solution is to break up the video every so often and get rid of the old parts we don't need anymore. Luckily, OBS provides a built-in option to start writing to a new video file every X minutes--- we can just wait for this and then delete the first file. (and the old image frames as well!)
+
+Getting everything to mesh nicely with this file switch is actually a bit of a headache---my current implementation has to pause for 5-10 seconds to do it---but the infrequency of happening every few minutes makes it not a huge concern.
+
+Doing all this makes it so we never take up more space than a couple minute's worth of video, fixing any concerns of a memory leak.
+
+___
+### 1.5 Server and Client
+The simplest and neatest way to serve our photos is to have a static server serving the whole directory containing the images, so the client can request whatever frame it wants, whenever it wants. This takes a lot less effort than trying to manually serve the right frame at the right time, and works just about as well.
+
+To get a frame, the client just sends an http request with the image filename, which is in order (frame `1.jpeg`, `2.jpeg`, etc...). The server will serve the image, or a 404 error if the image doesn't exist yet.
+
+This makes it simple to create a system that robustly keeps up with the server--- the client asks for an image every frame and just tries again if it gets a 404. This ensures that it will keep running and catch up if the server or client experience lag or get desynced.
+
+### 1.6 Rendering Engine
+Once the client gets the image, it's time to prepare it to draw. This uses [an engine](/video-player/video-player.qmd) I had already made to render video in the console[^pedigree].
+
+[^pedigree]: Which is itself based on [rcade's](https://gbkorr.github.io/rcade/articles/render.html) console rendering.
+
+```{r echo=F, fig.width = 5,fig.height=1}
+DiagrammeR::grViz("digraph {
+	rankdir = 'LR'
+
+	node [
+		peripheries=0,
+		
+		fixedsize = true,
+		width = 1.2,
+		height = 0.5,
+		
+		fontsize = 12,
+	]
+	
+	edge [style = 'invis']
+	
+	'3-channel RGB\nmatrix from\njpeg::readJPEG()' -> 
+	'merge channels\nto collapse into\none matrix' ->
+	'nearest-neighbor\ndownsample to\nreduce resolution' ->
+	'round gray\nvalues to one\nof 5 colors' ->
+	'encode matrix as\nprintable string\n ' ->
+	'cat() string\nto console\n '
+
+	node [
+		peripheries = true,
+	
+		shape = box, 
+		style = 'rounded, 
+		filled', 
+		fillcolor = 'transparent'
+		
+		fixedsize = true,
+		width = 1.2,
+		height = 0.4,
+		
+		fontsize = 14,
+	]
+	
+	edge [style = 'solid', arrowsize=0.5]
+	
+	ranksep = 0.2
+	
+	JPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print
+}
+")
+```
+
+
+
+
+## 2. Guide
+This section will describe how to try the project out yourself.
+
+
+### 2.1 Setup
+
+
+

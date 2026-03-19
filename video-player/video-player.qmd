@@ -4,7 +4,6 @@ format:
   html:
     toc: true
     toc-depth: 4
-editor: visual
 ---
 
 This bite has some quick code to parse video files and render them to the console using only vanilla methods. (and the `av` package to parse video)
@@ -67,7 +66,7 @@ library(jpeg)
 
 We use the standard video processing package `av` to generate JPEG images from a video file, and the `jpeg` package to read these images.
 
-`av` uses (FFmpeg)[https://www.ffmpeg.org/download.html] to process videos, which you might have to install.
+`av` uses [FFmpeg](https://www.ffmpeg.org/download.html) to process videos, which you might have to install.
 
 ------------------------------------------------------------------------
 
