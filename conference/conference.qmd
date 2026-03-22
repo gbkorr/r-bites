@@ -21,7 +21,7 @@ This gave me quite a fun challenge for the semester. Things were quite a bit mor
 
 Webcam video is captured by OBS, processed into images in R and sent to the client, and then displayed on the console.
 
-#### 1.1.1 Pipeline
+#### Pipeline
 ___
 ```{r echo=F, fig.width=3, fig.height=4}
 DiagrammeR::grViz("digraph {
@@ -47,7 +47,7 @@ DiagrammeR::grViz("digraph {
 	console [label = 'R Console', fillcolor = '#cccccc']
 	
 	empty -> obs [label = '   Webcam']
-	obs -> ffmpeg [label = '   AVI video'] 
+	obs -> ffmpeg [label = '   MKV video'] 
 	ffmpeg -> server [label = '   JPEG frames']
 	server -> client [label = '   raw JPEG bytes']
 	client -> render [label = '   R matrix']
@@ -59,7 +59,7 @@ ___
 ### 1.2 OBS
 Unfortunately, R can't natively read from the webcam. To get webcam input, we'll use [OBS](https://obsproject.com/), the standard screen-recording and streaming application. OBS gives a lot of useful control over how it outputs video, which we'll take full advantage of.
 
-We need to turn the live webcam feed into a video format that we can read in R. We'll need to read it *as it's being written*, which restricts what file formats we can use--- but thankfully, old reliable `.mkv` still does the job. OBS has to use a *video encoder* (which we get to choose) to write live camera data into a video file, and different encoders take longer before the most recent frame can be read.
+We need to turn the live webcam feed into a video format that we can read in R. We'll need to read it *as it's being written*, which restricts what file formats we can use--- but thankfully, old reliable `.mkv` still does the job. OBS has to use a *video encoder* (which we get to choose) to write live camera data into a video file, and different encoders take longer before the most recent frame can be read. (Lower-framerate videos also take longer, so we use a relatively high framerate and only save images every few frames)
 
 After testing quite a few encoders and filetypes, the `Apple VT ProRes Software Encoder` permitted the fastest reading of recent frames (from my apple laptop webcam).[^avi] 
 
@@ -81,7 +81,7 @@ ___
 
 This turns out to be tricky. FFmpeg is very convenient to use for regular video files, and is even quite capable of reading incomplete files as they're written[^re], but reading that incomplete video *live* takes some effort and jank.
 
-[^re] Using the `-re` option makes FFmpeg process the video at its native framerate, so it won't catch up to the end if the video is continually added to.
+[^re]: Using the `-re` option makes FFmpeg process the video at its native framerate, so it won't catch up to the end if the video is continually added to.
 
 Mainly, the issue is that FFmpeg helpfully stops running when it reaches the end of the video, but we want it to just pause and wait for new data to be added. Amazingly, this happens to be possible through some jank suggested in a [forum email](https://ffmpeg.org/pipermail/ffmpeg-user/2016-July/032874.html) 10 years ago: 
 
@@ -107,8 +107,9 @@ To get a frame, the client just sends an http request with the image filename, w
 
 This makes it simple to create a system that robustly keeps up with the server--- the client asks for an image every frame and just tries again if it gets a 404. This ensures that it will keep running and catch up if the server or client experience lag or get desynced.
 
+___
 ### 1.6 Rendering Engine
-Once the client gets the image, it's time to prepare it to draw. This uses [an engine](/video-player/video-player.qmd) I had already made to render video in the console[^pedigree].
+Once the client gets the image, it's time to prepare it to draw. This uses an [engine](/video-player/video-player.qmd) I made previously to render video in the console[^pedigree].
 
 [^pedigree]: Which is itself based on [rcade's](https://gbkorr.github.io/rcade/articles/render.html) console rendering.
 
@@ -165,8 +166,69 @@ DiagrammeR::grViz("digraph {
 ## 2. Guide
 This section will describe how to try the project out yourself.
 
+> Note: this has only been tested on my macbook. The project may work on Windows but might require some fiddling.
+
 
 ### 2.1 Setup
+
+Download and install [OBS](https://obsproject.com/). Launch OBS and skip the autoconfig wizard (click `Cancel`).
+
+Change the settings with `OBS Studio -> Preferences` (or `File -> Settings`). All the following steps are critical.
+
+:::{.callout-note title='Settings' collapse=true}
+1. Go to `Output` on the sidebar.
+
+1. Change `Output Mode` to `Advanced`.
+
+1. Go to the `Recording` tab.
+
+1. Set `Recording Path` to a folder where video files will go; I recommend making a new folder for this on your desktop. R will also have to read from this folder.
+
+1. Enable `Generate File Name without Space`.
+
+1. Change `Recording Format` to `Matroska Video (.mkv)`.
+
+1. Change `Video Encoder` to `Apple VT ProRes Software Encoder` (or `AOM AV1`).
+
+1. Enable `Automatic File Splitting`, `Split by Time`, `2 minutes`.
+
+1. Go to `Video` on the sidebar.
+
+1. Set `Common FPS Values` to 48.
+
+1. Click `OK` at the bottom to leave the settings.
+
+1. Add a new video source with the plus button in the `Sources` panel. 
+
+1. Select `Video Capture Device`, `OK`, and select your webcam for the `Device`.
+
+1. Change the `Preset` to the lowest possible resolution and click `OK`.
+
+1. Right-click the new source and select `Resize output`, and click `Yes`.
+
+1. OBS should now be ready.
+:::
+
+___
+### 2.2 Usage
+
+#### 2.2.1 Server
+
+open R and run `stream.webcam` with that directory and your IP (or localhost if testing by yourself)
+set directory to that folder, and run
+
+TODO
+
+> Note: streaming between devices will require port forwarding to be set up on your network. If you don't knopw what that means, it's not worth trying to set up.
+
+
+#### 2.2.2 Client
+
+run steam.client() with the IP of the person you're conferencing with (or localhost)
+
+
+
+
 
 
 

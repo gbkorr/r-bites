@@ -9,11 +9,6 @@ website:
   title: "R Bites"
   navbar:
     left:
-      - about.qmd
-        
-      - text: "Bites"
-        icon: fa-cookie-bite
-        menu:
           - text: "Console Video Player"
             icon: file-earmark-play
             href: video-player/video-player.qmd

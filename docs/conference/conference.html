@@ -87,33 +87,20 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
-  </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bites" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
-      <i class="bi bi-fa-cookie-bite" role="img">
+    <a class="nav-link" href="../video-player/video-player.html" rel="" target=""><i class="bi bi-file-earmark-play" role="img">
 </i> 
- <span class="menu-text">Bites</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-bites">    
-        <li>
-    <a class="dropdown-item" href="../video-player/video-player.html" rel="" target=""><i class="bi bi-file-earmark-play" role="img">
-</i> 
- <span class="dropdown-text">Console Video Player</span></a>
+ <span class="menu-text">Console Video Player</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html" rel="" target=""><i class="bi bi-terminal-fill" role="img">
+  <li class="nav-item">
+    <a class="nav-link" href="../flipphone-r/flipphone-r.html" rel="" target=""><i class="bi bi-terminal-fill" role="img">
 </i> 
- <span class="dropdown-text">R on a Flip Phone</span></a>
+ <span class="menu-text">R on a Flip Phone</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../conference/conference.html" rel="" target=""><i class="bi bi-webcam" role="img">
+  <li class="nav-item">
+    <a class="nav-link active" href="../conference/conference.html" rel="" target="" aria-current="page"><i class="bi bi-webcam" role="img">
 </i> 
- <span class="dropdown-text">R-Based Video Conference</span></a>
+ <span class="menu-text">R-Based Video Conference</span></a>
   </li>  
-    </ul>
-  </li>
 </ul>
             <div class="quarto-navbar-tools ms-auto">
 </div>
@@ -134,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#big-picture" id="toc-big-picture" class="nav-link" data-scroll-target="#big-picture">1.1 Big Picture</a>
   <ul class="collapse">
-  <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">1.1.1 Pipeline</a></li>
+  <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
   </ul></li>
   <li><a href="#obs" id="toc-obs" class="nav-link" data-scroll-target="#obs">1.2 OBS</a></li>
   <li><a href="#ffmpeg" id="toc-ffmpeg" class="nav-link" data-scroll-target="#ffmpeg">1.3 FFmpeg</a></li>
@@ -145,6 +132,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#guide" id="toc-guide" class="nav-link" data-scroll-target="#guide">2. Guide</a>
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">2.1 Setup</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">2.2 Usage</a>
+  <ul class="collapse">
+  <li><a href="#server" id="toc-server" class="nav-link" data-scroll-target="#server">2.2.1 Server</a></li>
+  <li><a href="#client" id="toc-client" class="nav-link" data-scroll-target="#client">2.2.2 Client</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -179,12 +171,12 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="big-picture">1.1 Big Picture</h3>
 <p>Webcam video is captured by OBS, processed into images in R and sent to the client, and then displayed on the console.</p>
 <section id="pipeline" class="level4">
-<h4 class="anchored" data-anchor-id="pipeline">1.1.1 Pipeline</h4>
+<h4 class="anchored" data-anchor-id="pipeline">Pipeline</h4>
 <hr>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-749f7573e1de0c3276dd" style="width:100%;height:866px;"></div>
-<script type="application/json" data-for="htmlwidget-749f7573e1de0c3276dd">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   AVI video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-31bd5c863f29402ad859" style="width:100%;height:866px;"></div>
+<script type="application/json" data-for="htmlwidget-31bd5c863f29402ad859">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   MKV video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <hr>
@@ -193,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="obs" class="level3">
 <h3 class="anchored" data-anchor-id="obs">1.2 OBS</h3>
 <p>Unfortunately, R can’t natively read from the webcam. To get webcam input, we’ll use <a href="https://obsproject.com/">OBS</a>, the standard screen-recording and streaming application. OBS gives a lot of useful control over how it outputs video, which we’ll take full advantage of.</p>
-<p>We need to turn the live webcam feed into a video format that we can read in R. We’ll need to read it <em>as it’s being written</em>, which restricts what file formats we can use— but thankfully, old reliable <code>.mkv</code> still does the job. OBS has to use a <em>video encoder</em> (which we get to choose) to write live camera data into a video file, and different encoders take longer before the most recent frame can be read.</p>
+<p>We need to turn the live webcam feed into a video format that we can read in R. We’ll need to read it <em>as it’s being written</em>, which restricts what file formats we can use— but thankfully, old reliable <code>.mkv</code> still does the job. OBS has to use a <em>video encoder</em> (which we get to choose) to write live camera data into a video file, and different encoders take longer before the most recent frame can be read. (Lower-framerate videos also take longer, so we use a relatively high framerate and only save images every few frames)</p>
 <p>After testing quite a few encoders and filetypes, the <code>Apple VT ProRes Software Encoder</code> permitted the fastest reading of recent frames (from my apple laptop webcam).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Anyway, all of this means that we end up with a <code>.mkv</code> file that OBS writes to live. Next, we’ll use FFmpeg (via R) to access this file and extract its frames as it’s being written.</p>
 <hr>
@@ -206,8 +198,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="ffmpeg" class="level3">
 <h3 class="anchored" data-anchor-id="ffmpeg">1.3 FFmpeg</h3>
 <p><a href="https://www.ffmpeg.org/">FFmpeg</a> is a standard video processing software, used by R packages like <code>av</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. In our case, we want to use it to generate a JPEG for every frame of video.</p>
-<p>This turns out to be tricky. FFmpeg is very convenient to use for regular video files, and is even quite capable of reading incomplete files as they’re written[^re], but reading that incomplete video <em>live</em> takes some effort and jank.</p>
-<p>[^re] Using the <code>-re</code> option makes FFmpeg process the video at its native framerate, so it won’t catch up to the end if the video is continually added to.</p>
+<p>This turns out to be tricky. FFmpeg is very convenient to use for regular video files, and is even quite capable of reading incomplete files as they’re written<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, but reading that incomplete video <em>live</em> takes some effort and jank.</p>
 <p>Mainly, the issue is that FFmpeg helpfully stops running when it reaches the end of the video, but we want it to just pause and wait for new data to be added. Amazingly, this happens to be possible through some jank suggested in a <a href="https://ffmpeg.org/pipermail/ffmpeg-user/2016-July/032874.html">forum email</a> 10 years ago:</p>
 <p>So we actually manage to read a video file and write its frames as JPEGs almost as soon as they’re written by OBS. (The filetype and encoder determine how fast we can read a frame after OBS writes it, as mentioned in the previous section.)</p>
 <p>We save these images to a temporary folder, from which the server will send images to the client.</p>
@@ -226,15 +217,16 @@ ul.task-list li input[type="checkbox"] {
 <p>The simplest and neatest way to serve our photos is to have a static server serving the whole directory containing the images, so the client can request whatever frame it wants, whenever it wants. This takes a lot less effort than trying to manually serve the right frame at the right time, and works just about as well.</p>
 <p>To get a frame, the client just sends an http request with the image filename, which is in order (frame <code>1.jpeg</code>, <code>2.jpeg</code>, etc…). The server will serve the image, or a 404 error if the image doesn’t exist yet.</p>
 <p>This makes it simple to create a system that robustly keeps up with the server— the client asks for an image every frame and just tries again if it gets a 404. This ensures that it will keep running and catch up if the server or client experience lag or get desynced.</p>
+<hr>
 </section>
 <section id="rendering-engine" class="level3">
 <h3 class="anchored" data-anchor-id="rendering-engine">1.6 Rendering Engine</h3>
-<p>Once the client gets the image, it’s time to prepare it to draw. This uses <a href="../video-player/video-player.html">an engine</a> I had already made to render video in the console<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>Once the client gets the image, it’s time to prepare it to draw. This uses an <a href="../video-player/video-player.html">engine</a> I made previously to render video in the console<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 
-<div class="grViz html-widget html-fill-item" id="htmlwidget-5c000ac4cc6f92aca0d9" style="width:100%;height:130px;"></div>
-<script type="application/json" data-for="htmlwidget-5c000ac4cc6f92aca0d9">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-bc05696b3385a6c99890" style="width:100%;height:130px;"></div>
+<script type="application/json" data-for="htmlwidget-bc05696b3385a6c99890">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -242,10 +234,64 @@ ul.task-list li input[type="checkbox"] {
 <section id="guide" class="level2">
 <h2 class="anchored" data-anchor-id="guide">2. Guide</h2>
 <p>This section will describe how to try the project out yourself.</p>
+<blockquote class="blockquote">
+<p>Note: this has only been tested on my macbook. The project may work on Windows but might require some fiddling.</p>
+</blockquote>
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">2.1 Setup</h3>
+<p>Download and install <a href="https://obsproject.com/">OBS</a>. Launch OBS and skip the autoconfig wizard (click <code>Cancel</code>).</p>
+<p>Change the settings with <code>OBS Studio -&gt; Preferences</code> (or <code>File -&gt; Settings</code>). All the following steps are critical.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Settings">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Settings
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Go to <code>Output</code> on the sidebar.</p></li>
+<li><p>Change <code>Output Mode</code> to <code>Advanced</code>.</p></li>
+<li><p>Go to the <code>Recording</code> tab.</p></li>
+<li><p>Set <code>Recording Path</code> to a folder where video files will go; I recommend making a new folder for this on your desktop. R will also have to read from this folder.</p></li>
+<li><p>Enable <code>Generate File Name without Space</code>.</p></li>
+<li><p>Change <code>Recording Format</code> to <code>Matroska Video (.mkv)</code>.</p></li>
+<li><p>Change <code>Video Encoder</code> to <code>Apple VT ProRes Software Encoder</code> (or <code>AOM AV1</code>).</p></li>
+<li><p>Enable <code>Automatic File Splitting</code>, <code>Split by Time</code>, <code>2 minutes</code>.</p></li>
+<li><p>Go to <code>Video</code> on the sidebar.</p></li>
+<li><p>Set <code>Common FPS Values</code> to 48.</p></li>
+<li><p>Click <code>OK</code> at the bottom to leave the settings.</p></li>
+<li><p>Add a new video source with the plus button in the <code>Sources</code> panel.</p></li>
+<li><p>Select <code>Video Capture Device</code>, <code>OK</code>, and select your webcam for the <code>Device</code>.</p></li>
+<li><p>Change the <code>Preset</code> to the lowest possible resolution and click <code>OK</code>.</p></li>
+<li><p>Right-click the new source and select <code>Resize output</code>, and click <code>Yes</code>.</p></li>
+<li><p>OBS should now be ready.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="usage" class="level3">
+<h3 class="anchored" data-anchor-id="usage">2.2 Usage</h3>
+<section id="server" class="level4">
+<h4 class="anchored" data-anchor-id="server">2.2.1 Server</h4>
+<p>open R and run <code>stream.webcam</code> with that directory and your IP (or localhost if testing by yourself) set directory to that folder, and run</p>
+<p>TODO</p>
+<blockquote class="blockquote">
+<p>Note: streaming between devices will require port forwarding to be set up on your network. If you don’t knopw what that means, it’s not worth trying to set up.</p>
+</blockquote>
+</section>
+<section id="client" class="level4">
+<h4 class="anchored" data-anchor-id="client">2.2.2 Client</h4>
+<p>run steam.client() with the IP of the person you’re conferencing with (or localhost)</p>
 
 
+</section>
 </section>
 </section>
 
@@ -255,7 +301,8 @@ ul.task-list li input[type="checkbox"] {
 <ol>
 <li id="fn1"><p><code>.avi</code> files written with certain encoders also appear to work, but I haven’t explored them fully (and <code>.avi</code> files take up a lot more storage).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p><code>av</code> is the standard package for processing videos in R, but unfortunately doesn’t give us as much control over FFmpeg as we need.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Which is itself based on <a href="https://gbkorr.github.io/rcade/articles/render.html">rcade’s</a> console rendering.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Using the <code>-re</code> option makes FFmpeg process the video at its native framerate, so it won’t catch up to the end if the video is continually added to.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Which is itself based on <a href="https://gbkorr.github.io/rcade/articles/render.html">rcade’s</a> console rendering.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

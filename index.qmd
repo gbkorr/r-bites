@@ -1,8 +1,24 @@
 ---
-title: "R Bites"
+title: "R Bites: Mini R Projects"
 ---
 
+This is a website featuring little R projects that weren't big enough on their own.
 
+*So far*:
 
+<img align='left' style="margin: 0px 12px 0px 0px" src=images/video-player.gif>
+A lightweight set of functions to render video in the console at native framerate. [link](video-player/video-player.qmd)
 
+<br clear="left"/>
 
+<img align='left' width=100 height=70 style="margin: 0px 12px 0px 0px" src=images/flipphone.jpeg> Running R on a flip phone, and pushing to github from it. [link](flipphone-r/flipphone-r.qmd)
+
+<br clear="left">
+
+<img align='left' width=100 height=70 style="margin: 0px 12px 0px 0px" src=images/selfie.png>
+
+A video conference client running in R, streaming webcam video to the console. [link](conference/conference.qmd)
+
+<br clear="left">
+
+See my [main website](https://gbkorr.github.io/gbkorr/) for more projects!

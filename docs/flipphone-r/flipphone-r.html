@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Bites - Run R on Android</title>
+<title>R Bites - Running R on Android</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,33 +116,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
-  </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bites" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
-      <i class="bi bi-fa-cookie-bite" role="img">
+    <a class="nav-link" href="../video-player/video-player.html" rel="" target=""><i class="bi bi-file-earmark-play" role="img">
 </i> 
- <span class="menu-text">Bites</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-bites">    
-        <li>
-    <a class="dropdown-item" href="../video-player/video-player.html" rel="" target=""><i class="bi bi-file-earmark-play" role="img">
-</i> 
- <span class="dropdown-text">Console Video Player</span></a>
+ <span class="menu-text">Console Video Player</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html" rel="" target=""><i class="bi bi-terminal-fill" role="img">
+  <li class="nav-item">
+    <a class="nav-link active" href="../flipphone-r/flipphone-r.html" rel="" target="" aria-current="page"><i class="bi bi-terminal-fill" role="img">
 </i> 
- <span class="dropdown-text">R on a Flip Phone</span></a>
+ <span class="menu-text">R on a Flip Phone</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../conference/conference.html" rel="" target=""><i class="bi bi-webcam" role="img">
+  <li class="nav-item">
+    <a class="nav-link" href="../conference/conference.html" rel="" target=""><i class="bi bi-webcam" role="img">
 </i> 
- <span class="dropdown-text">R-Based Video Conference</span></a>
+ <span class="menu-text">R-Based Video Conference</span></a>
   </li>  
-    </ul>
-  </li>
 </ul>
             <div class="quarto-navbar-tools ms-auto">
 </div>
@@ -159,12 +146,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#intro-needed" id="toc-intro-needed" class="nav-link active" data-scroll-target="#intro-needed">INTRO NEEDED</a>
-  <ul class="collapse">
-  <li><a href="#termux-android-linux-emulator" id="toc-termux-android-linux-emulator" class="nav-link" data-scroll-target="#termux-android-linux-emulator">1. Termux: Android Linux Emulator</a></li>
-  <li><a href="#running-r-in-termuxguide" id="toc-running-r-in-termuxguide" class="nav-link" data-scroll-target="#running-r-in-termuxguide">2. Running R in Termux</a></li>
+  <li><a href="#termux-android-linux-emulator" id="toc-termux-android-linux-emulator" class="nav-link active" data-scroll-target="#termux-android-linux-emulator">1. Termux: Android Linux Emulator</a></li>
+  <li><a href="#running-r-in-termux1" id="toc-running-r-in-termux1" class="nav-link" data-scroll-target="#running-r-in-termux1">2. Running R in Termux</a></li>
   <li><a href="#git-push-with-a-flip-phone" id="toc-git-push-with-a-flip-phone" class="nav-link" data-scroll-target="#git-push-with-a-flip-phone">3. Git Push with a Flip Phone</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -173,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Run R on Android</h1>
+<h1 class="title">Running R on Android</h1>
 </div>
 
 
@@ -188,16 +172,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="intro-needed" class="level1">
-<h1>INTRO NEEDED</h1>
+<p>I was messing around with an old android flipphone of mine and wondered if I could run R on it. Turns out you can, and I even managed to make a repo push with it! This article records the process I went through.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="workstation.jpeg" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">My setup, with a quarter for scale. I’m using a small folding keyboard for maximum portability.</figcaption>
 </figure>
 </div>
-<p>and photos! of the R stuff especially, and a glam photo of the phone and mouse setup lol</p>
-<p>START BEGIN HERE</p>
 <p><strong>Disclaimer</strong>: Back up your phone before doing this! I did this with an old flip phone that I factory reset, so I wasn’t looking out for security or data concerns. Try at your own risk.</p>
 <section id="termux-android-linux-emulator" class="level2">
 <h2 class="anchored" data-anchor-id="termux-android-linux-emulator">1. Termux: Android Linux Emulator</h2>
@@ -212,23 +193,24 @@ Termux Installation on my Flip Phone
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I’m using an old flipphone that isn’t really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary APKs:</p>
+<p>I’m using an old flipphone<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that isn’t really meant to run user-provided APKs. This was the process I figured out (from fragmentary advice online) to install and run arbitrary APKs:</p>
 <ul>
 <li><p>enable dev mode by typing <code>*#*#33284#*#*</code> (i.e., <code>*#*#DEBUG#*#*</code> with the keypad)</p></li>
 <li><p>connect phone to computer via microusb, click OK on phone to enable usb file transfer</p></li>
-<li><p>use <a href="https://app.webadb.com">https://app.webadb.com</a> to install the APK (“Install APK” on sidebar) via ADB interface. (you can also do the ADB process manually)</p></li>
+<li><p>use <a href="https://app.webadb.com" class="uri">https://app.webadb.com</a> to install the APK (“Install APK” on sidebar) via ADB interface. (you can also do the ADB process manually)</p></li>
 <li><p>(Note: APKs can be uninstalled by opening “Interactive Shell” from the sidebar, finding the app name by running <code>pm list packages</code>, and then running <code>pm uninstall -k --user 0 PACKAGENAME</code>)</p></li>
 </ul>
 <p>Once I installed the Termux APK this way, I had to set a main menu shortcut in the settings to be able to launch it.</p>
 <p>(To make it easier to launch other APKs, I also installed <a href="https://github.com/nhirokinet/bluelineconsole">BlueLineConsole</a> (other launchers didn’t work on this device), which I quite like. For our R purposes we won’t need any APKs other than Termux, though.)</p>
+<p>(More APKs: this <a href="https://github.com/austinauyeung/C9">mouse app</a> looks pretty good, though I haven’t tried it.)</p>
 </div>
 </div>
 </section>
-<section id="running-r-in-termuxguide" class="level2">
-<h2 class="anchored" data-anchor-id="running-r-in-termuxguide">2. Running R in Termux<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></h2>
+<section id="running-r-in-termux1" class="level2">
+<h2 class="anchored" data-anchor-id="running-r-in-termux1">2. Running R in Termux<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></h2>
 <ol type="1">
 <li><p>install and run the Termux app</p></li>
-<li><p>ensure you have full keyboard control<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> to use the terminal</p></li>
+<li><p>ensure you have full keyboard control<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> to use the terminal</p></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>echo Hello World</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -241,13 +223,11 @@ Termux Installation on my Flip Phone
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>proot<span class="sc">-</span>distro install debian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="4" type="1">
-<li>log into Debian and install R and some useful commands<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>log into Debian and install R:</li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>proot<span class="sc">-</span>distro login debian </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>apt install curl</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>apt install git</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>apt install r<span class="sc">-</span>base<span class="sc">-</span>dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>apt install r<span class="sc">-</span>base<span class="sc">-</span>dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="5" type="1">
 <li>you can now run a regular old R session!</li>
@@ -257,7 +237,7 @@ Termux Installation on my Flip Phone
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(R.version.string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="6" type="1">
-<li>install.packages() generally works for packages that don’t build their own stuff on install.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li>install.packages() works for most packages<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
 </ol>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
@@ -310,35 +290,35 @@ Package Compatibility
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ssh<span class="sc">-</span>keygen <span class="sc">-</span>t ed25519 <span class="sc">-</span>C <span class="st">"&lt;MYEMAIL&gt;"</span> <span class="co">#create new SSH key for github</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cat .ssh<span class="sc">/</span>id_ed25519.pub <span class="co">#print SSH key</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#I then MANUALLY typed the SSH into my github account</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#I then MANUALLY typed the key into my github account</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ssh <span class="sc">-</span>T git<span class="sc">@</span>github.com <span class="co">#verify successful SSH</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Commit Push: Now I can push to my repo with the CLI.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#because I don't know the security of this</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>apt install git</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#because I don't know the security of this</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What’s the point of all this? It’s really neat, that’s what! Now we know that, in a pinch, you could update your repo with some fresh R code…</p>
 
 
-</section>
 </section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>I got most of this from <a href="https://old.reddit.com/r/termux/comments/1ardg2l/installing_r_programming_language_issues/kqix0rg/">here</a>. There’s another resource you might see online for running R on Android, but it no longer works!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>I had to connect a bluetooth keyboard since Termux didn’t like the flip phone keypad. I believe the regular touchscreen keyboard (along with Termux’s built-in buttons) should suffice for a normal android phone.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Only <code>r-base-dev</code> is required to run R, but the other two are useful to have around.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p><a href="https://old.reddit.com/r/termux/comments/1h0e44p/eli_15_how_does_termux_and_andronix_work/lz3lobw/">This</a> is probably why some packages fail to install: no access to /usr and bin.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>An <code>Alcatel Go Flip V</code> from around 2021.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I got most of this from <a href="https://old.reddit.com/r/termux/comments/1ardg2l/installing_r_programming_language_issues/kqix0rg/">here</a>. There’s another resource you might see online for running R on Android, but it no longer works!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I had to connect a bluetooth keyboard since Termux didn’t like the flip phone keypad. I believe the regular touchscreen keyboard (along with Termux’s built-in buttons) should suffice for a normal android phone.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>But typically not the “complex” ones that do clever things with the computer. This is likely due to proot’s (lack of) directory permissions, as suggested <a href="https://old.reddit.com/r/termux/comments/1h0e44p/eli_15_how_does_termux_and_andronix_work/lz3lobw/">here</a>. It <em>should be feasible</em> to build most packages yourself, but it would take a lot of effort.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>It took some trial and error to get the knit to work without <code>rmarkdown</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
