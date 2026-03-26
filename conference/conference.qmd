@@ -10,7 +10,10 @@ After making a [game engine](https://gbkorr.github.io/rcade/) in R, I was hard-p
 
 But I prevailed. What if I made a video conference client to let people see each other in realtime, running all on R? Surprisingly, R provides almost everything we need.
 
-[demo here]
+::: {.callout-note title="Demo (no audio)" collapse="true"}
+{{< video gesticulation.mov >}}
+Gesticulation is particularly effective to make up for the low frame rate.
+:::
 
 This gave me quite a fun challenge for the semester. Things were quite a bit more finicky to get working than in previous projects, and there were several times when all hope of it working seemed lost--- I had to push through and persevere quite a bit throughout the project.
 

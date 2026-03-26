@@ -14,18 +14,18 @@
     "text": "Footnotes\n\n\nOf the default uniform block shading elements █▓▒░, RStudio renders █ at half height and ▒ as thinner than a regular monospaced character. It’s absurd!↩︎"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R Bites: Mini R Projects",
     "section": "",
-    "text": "About this site"
+    "text": "This is a website featuring little R projects that weren’t big enough on their own.\nSo far:\n A lightweight set of functions to render video in the console at native framerate. link\n\n Running R on a flip phone, and pushing to github from it. link\n\n\nA video conference client running in R, streaming webcam video to the console. link\n\nGithub: https://github.com/gbkorr/r-bites\nSee my main website for more projects!"
   },
   {
     "objectID": "conference/conference.html",
     "href": "conference/conference.html",
     "title": "Video Conference in R",
     "section": "",
-    "text": "After making a game engine in R, I was hard-pressed to come up with a crazier idea.\nBut I prevailed. What if I made a video conference client to let people see each other in realtime, running all on R? Surprisingly, R provides almost everything we need.\n[demo here]\nThis gave me quite a fun challenge for the semester. Things were quite a bit more finicky to get working than in previous projects, and there were several times when all hope of it working seemed lost— I had to push through and persevere quite a bit throughout the project."
+    "text": "After making a game engine in R, I was hard-pressed to come up with a crazier idea.\nBut I prevailed. What if I made a video conference client to let people see each other in realtime, running all on R? Surprisingly, R provides almost everything we need.\nThis gave me quite a fun challenge for the semester. Things were quite a bit more finicky to get working than in previous projects, and there were several times when all hope of it working seemed lost— I had to push through and persevere quite a bit throughout the project."
   },
   {
     "objectID": "conference/conference.html#details",
@@ -47,13 +47,6 @@
     "title": "Video Conference in R",
     "section": "Footnotes",
     "text": "Footnotes\n\n\n.avi files written with certain encoders also appear to work, but I haven’t explored them fully (and .avi files take up a lot more storage).↩︎\nav is the standard package for processing videos in R, but unfortunately doesn’t give us as much control over FFmpeg as we need.↩︎\nUsing the -re option makes FFmpeg process the video at its native framerate, so it won’t catch up to the end if the video is continually added to.↩︎\nWhich is itself based on rcade’s console rendering.↩︎"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "R Bites: Mini R Projects",
-    "section": "",
-    "text": "This is a website featuring little R projects that weren’t big enough on their own.\nSo far:\n A lightweight set of functions to render video in the console at native framerate. link\n\n Running R on a flip phone, and pushing to github from it. link\n\n\nA video conference client running in R, streaming webcam video to the console. link\n\nSee my main website for more projects!"
   },
   {
     "objectID": "flipphone-r/flipphone-r.html",

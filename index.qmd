@@ -21,4 +21,6 @@ A video conference client running in R, streaming webcam video to the console. [
 
 <br clear="left">
 
+Github: [https://github.com/gbkorr/r-bites](https://github.com/gbkorr/r-bites)
+
 See my [main website](https://gbkorr.github.io/gbkorr/) for more projects!
