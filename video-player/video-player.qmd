@@ -221,8 +221,21 @@ The supply of good-quality characters for palettes is severely limited: many cha
 
 [^1]: Of the default uniform block shading elements █▓▒░, RStudio renders █ at half height and ▒ as thinner than a regular monospaced character. It's absurd!
 
+---
+
+#### Resolution
+
+`cat()` struggles to render quickly at higher resolutions (as well as on some devices in general). Reducing the resolution without losing a lot of visual clarity is challenging, especially with the limited palette choices. I experimented with generating characters with marching squares, but this proved to be far less effective than just varying the shades. This may be worth revisiting with cleverer use of the alphabet and combining both approaches.
+
 ------------------------------------------------------------------------
 
 #### Pure R
 
 This is intended to run in RStudio; it actually does work in R.app, but R.app renders much less frequently than RStudio and therefore can't support a very good framerate.
+
+---
+
+#### History
+
+Rendering video in the console is a bit of a canonical exercise, and has been done many times before (though not in RStudio, as far as I can tell). The purpose of this bite is mainly to provide a very lightweight set of functions (~20 lines of code) to accomplish this.
+

@@ -154,7 +154,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a>
   <ul>
   <li><a href="#palette" id="toc-palette" class="nav-link" data-scroll-target="#palette">Palette</a></li>
+  <li><a href="#resolution" id="toc-resolution" class="nav-link" data-scroll-target="#resolution">Resolution</a></li>
   <li><a href="#pure-r" id="toc-pure-r" class="nav-link" data-scroll-target="#pure-r">Pure R</a></li>
+  <li><a href="#history" id="toc-history" class="nav-link" data-scroll-target="#history">History</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -431,9 +433,19 @@ Demo
 <p>The supply of good-quality characters for palettes is severely limited: many characters (notably, the full block) render too small or not monospaced<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in the RStudio console, and even those that don’t still have significant gaps between lines. This is one of the few combinations with good contrast that doesn’t introduce distracting shapes and patterns.</p>
 <hr>
 </section>
+<section id="resolution" class="level4">
+<h4 class="anchored" data-anchor-id="resolution">Resolution</h4>
+<p><code>cat()</code> struggles to render quickly at higher resolutions (as well as on some devices in general). Reducing the resolution without losing a lot of visual clarity is challenging, especially with the limited palette choices. I experimented with generating characters with marching squares, but this proved to be far less effective than just varying the shades. This may be worth revisiting with cleverer use of the alphabet and combining both approaches.</p>
+<hr>
+</section>
 <section id="pure-r" class="level4">
 <h4 class="anchored" data-anchor-id="pure-r">Pure R</h4>
 <p>This is intended to run in RStudio; it actually does work in R.app, but R.app renders much less frequently than RStudio and therefore can’t support a very good framerate.</p>
+<hr>
+</section>
+<section id="history" class="level4">
+<h4 class="anchored" data-anchor-id="history">History</h4>
+<p>Rendering video in the console is a bit of a canonical exercise, and has been done many times before (though not in RStudio, as far as I can tell). The purpose of this bite is mainly to provide a very lightweight set of functions (~20 lines of code) to accomplish this.</p>
 
 
 </section>

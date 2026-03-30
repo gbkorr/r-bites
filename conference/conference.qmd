@@ -233,7 +233,9 @@ run steam.client() with the IP of the person you're conferencing with (or localh
 
 
 
+# Next Steps
 
+framerate-resolution tradeoff
 
 
 
