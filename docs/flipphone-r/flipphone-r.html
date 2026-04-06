@@ -179,7 +179,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption class="figure-caption">My setup, with a quarter for scale. I’m using a small folding keyboard for maximum portability.</figcaption>
 </figure>
 </div>
-<p><strong>Disclaimer</strong>: Back up your phone before doing this! I did this with an old flip phone that I factory reset, so I wasn’t looking out for security or data concerns. Try at your own risk.</p>
 <section id="termux-android-linux-emulator" class="level2">
 <h2 class="anchored" data-anchor-id="termux-android-linux-emulator">1. Termux: Android Linux Emulator</h2>
 <p>The first step is to install the <a href="https://github.com/termux/termux-app">Termux</a> app, which emulates a linux terminal with a decent amount of control.</p>
@@ -265,8 +264,8 @@ Package Compatibility
 <p>Failed to install:</p>
 <ul>
 <li><code>devtools</code></li>
-<li><code>httr2</code> (you can get around this with clever use of <code>system()</code> and curl)</li>
-<li><code>httpuv</code></li>
+<li><code>httr2</code> (you can get around this with clever use of <code>system()</code> and wget)</li>
+<li><code>httpuv</code> (I believe this is possible with a <a href="https://github.com/its-pointless/gcc_termux/blob/master/R-patches/httpuv.patch">patch</a>, but haven’t tried)</li>
 <li><code>rmarkdown</code></li>
 </ul>
 </div>
@@ -304,7 +303,7 @@ Package Compatibility
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#because I don't know the security of this</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#for the sake of security!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What’s the point of all this? It’s really neat, that’s what! Now we know that, in a pinch, you could update your repo with some fresh R code…</p>
 

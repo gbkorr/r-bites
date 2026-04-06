@@ -9,8 +9,6 @@ I was messing around with an old android flipphone of mine and wondered if I cou
 
 ![My setup, with a quarter for scale. I'm using a small folding keyboard for maximum portability.](workstation.jpeg)
 
-**Disclaimer**: Back up your phone before doing this! I did this with an old flip phone that I factory reset, so I wasn't looking out for security or data concerns. Try at your own risk.
-
 ## 1. Termux: Android Linux Emulator
 
 The first step is to install the [Termux](https://github.com/termux/termux-app) app, which emulates a linux terminal with a decent amount of control.
@@ -90,8 +88,8 @@ Tested and working:
 Failed to install:
 
 -   `devtools`
--   `httr2` (you can get around this with clever use of `system()` and curl)
--   `httpuv`
+-   `httr2` (you can get around this with clever use of `system()` and wget)
+-   `httpuv` (I believe this is possible with a [patch](https://github.com/its-pointless/gcc_termux/blob/master/R-patches/httpuv.patch), but haven't tried)
 -   `rmarkdown`
 :::
 
@@ -136,7 +134,7 @@ git add phonemarkdown.hmtl #stage file
 git commit -m "Created Rmd Page with Flip Phone"
 git push #push commit
 #then I DELETED the new SSH key on github
-#because I don't know the security of this
+#for the sake of security!
 ```
 
 What's the point of all this? It's really neat, that's what! Now we know that, in a pinch, you could update your repo with some fresh R code...

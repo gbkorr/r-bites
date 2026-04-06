@@ -176,7 +176,7 @@ This section will describe how to try the project out yourself.
 
 ### 2.1 Setup
 
-Download and install [OBS](https://obsproject.com/). Launch OBS and skip the autoconfig wizard (click `Cancel`).
+Download and install [OBS](https://obsproject.com/) and [FFmpeg](https://www.ffmpeg.org/). Launch OBS and skip the autoconfig wizard (click `Cancel`).
 
 Change the settings with `OBS Studio -> Preferences` (or `File -> Settings`). All the following steps are critical.
 
