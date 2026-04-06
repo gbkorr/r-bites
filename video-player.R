@@ -3,7 +3,7 @@ library(jpeg)
 
 video_path = 'XcQ.mp4'
 
-render.matrix = function(M,palette=c('▓',' ')) cat('\r', c('\t',palette)[t(cbind(M,matrix(-1,nrow(M),10)))+2], sep='')
+render.matrix = function(M,palette=c('▓',' ')) cat('\r', c('.','\t',palette)[t(cbind(-2,M,matrix(-1,nrow(M),10)))+3], sep='')
 
 render.image = function(img,shades=2) floor(shades * (0.2126 * img[,,1] + 0.7152 * img[,,2] + 0.0722 * img[,,3]))
 
