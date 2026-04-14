@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.4.557">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -47,7 +81,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,6 +96,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -75,9 +116,9 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">R Bites</span>
     </a>
@@ -89,24 +130,24 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../video-player/video-player.html" rel="" target=""><i class="bi bi-file-earmark-play" role="img">
+    <a class="nav-link" href="../video-player/video-player.html"> <i class="bi bi-file-earmark-play" role="img">
 </i> 
- <span class="menu-text">Console Video Player</span></a>
+<span class="menu-text">Console Video Player</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../flipphone-r/flipphone-r.html" rel="" target=""><i class="bi bi-terminal-fill" role="img">
+    <a class="nav-link" href="../flipphone-r/flipphone-r.html"> <i class="bi bi-terminal-fill" role="img">
 </i> 
- <span class="menu-text">R on a Flip Phone</span></a>
+<span class="menu-text">R on a Flip Phone</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../conference/conference.html" rel="" target="" aria-current="page"><i class="bi bi-webcam" role="img">
+    <a class="nav-link active" href="../conference/conference.html" aria-current="page"> <i class="bi bi-webcam" role="img">
 </i> 
- <span class="menu-text">R-Based Video Conference</span></a>
+<span class="menu-text">R-Based Video Conference</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -136,11 +177,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">2.1 Setup</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">2.2 Usage</a>
   <ul class="collapse">
-  <li><a href="#server" id="toc-server" class="nav-link" data-scroll-target="#server">2.2.1 Server</a></li>
-  <li><a href="#client" id="toc-client" class="nav-link" data-scroll-target="#client">2.2.2 Client</a></li>
+  <li><a href="#r-startup" id="toc-r-startup" class="nav-link" data-scroll-target="#r-startup">2.2.1 R Startup</a></li>
+  <li><a href="#obs-1" id="toc-obs-1" class="nav-link" data-scroll-target="#obs-1">2.2.2 OBS</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">3. Next Steps</a></li>
   </ul>
 </nav>
     </div>
@@ -162,7 +203,9 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
+
 </header>
+
 
 <p>After making a <a href="https://gbkorr.github.io/rcade/">game engine</a> in R, I was hard-pressed to come up with a crazier idea.</p>
 <p>But I prevailed. What if I made a video conference client to let people see each other in realtime, running all on R? Surprisingly, R provides almost everything we need.</p>
@@ -195,8 +238,8 @@ Demo (no audio)
 <hr>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-53de3a24223c8b5de15a" style="width:100%;height:866px;"></div>
-<script type="application/json" data-for="htmlwidget-53de3a24223c8b5de15a">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   MKV video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-7b3aa86dbf59f82886eb" style="width:100%;height:866px;"></div>
+<script type="application/json" data-for="htmlwidget-7b3aa86dbf59f82886eb">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   MKV video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <hr>
@@ -244,9 +287,8 @@ Demo (no audio)
 <p>Once the client gets the image, it’s time to prepare it to draw. This uses an <a href="../video-player/video-player.html">engine</a> I made previously to render video in the console<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-
-<div class="grViz html-widget html-fill-item" id="htmlwidget-1f33ab5b227630017a24" style="width:100%;height:130px;"></div>
-<script type="application/json" data-for="htmlwidget-1f33ab5b227630017a24">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-8658891b287583253cf6" style="width:100%;height:130px;"></div>
+<script type="application/json" data-for="htmlwidget-8658891b287583253cf6">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -259,7 +301,7 @@ Demo (no audio)
 </blockquote>
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">2.1 Setup</h3>
-<p>Download and install <a href="https://obsproject.com/">OBS</a>. Launch OBS and skip the autoconfig wizard (click <code>Cancel</code>).</p>
+<p>Download and install <a href="https://obsproject.com/">OBS</a> and <a href="https://www.ffmpeg.org/">FFmpeg</a>. Launch OBS and skip the autoconfig wizard (click <code>Cancel</code>).</p>
 <p>Change the settings with <code>OBS Studio -&gt; Preferences</code> (or <code>File -&gt; Settings</code>). All the following steps are critical.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Settings">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -298,23 +340,40 @@ Settings
 </section>
 <section id="usage" class="level3">
 <h3 class="anchored" data-anchor-id="usage">2.2 Usage</h3>
-<section id="server" class="level4">
-<h4 class="anchored" data-anchor-id="server">2.2.1 Server</h4>
-<p>open R and run <code>stream.webcam</code> with that directory and your IP (or localhost if testing by yourself) set directory to that folder, and run</p>
-<p>TODO</p>
+<section id="r-startup" class="level4">
+<h4 class="anchored" data-anchor-id="r-startup">2.2.1 R Startup</h4>
+<p>You and the person you’ll be conferencing with should both follow these steps.</p>
+<p>Open an R window which will serve as the host for your webcam stream. Load <code>webcam.R</code> and run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream.webcam</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&lt;</span>OBS recording path<span class="sc">&gt;</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&lt;</span>your IP address, including port<span class="sc">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now open a new R window to act as the client to receive the other person’s stream. Load <code>client.R</code> and run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode f code-with-copy"><code class="sourceCode fortranfixed"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stream.client(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>the other persons<span class="st">'</span>s IP address, including port<span class="op">&gt;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>desired rendering resolution (default <span class="dv">200</span>)<span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The rendering resolution has a huge impact on the framerate of the console stream. I recommend a value of <code>100</code> or <code>64</code> if the default is too slow and choppy.</p>
+<p>If you want to test this by streaming to yourself, use <code>127.0.0.1:8080</code> for both IP addresses.</p>
 <blockquote class="blockquote">
 <p>Note: streaming between devices will require port forwarding to be set up on your network. If you don’t knopw what that means, it’s not worth trying to set up.</p>
 </blockquote>
 </section>
-<section id="client" class="level4">
-<h4 class="anchored" data-anchor-id="client">2.2.2 Client</h4>
-<p>run steam.client() with the IP of the person you’re conferencing with (or localhost)</p>
+<section id="obs-1" class="level4">
+<h4 class="anchored" data-anchor-id="obs-1">2.2.2 OBS</h4>
+<p>Now, both of you can open OBS and click “Start Recording”. The console streams should start after a few seconds; you may have to resize the window and/or zoom out with <code>cmd -</code> to get it to render properly.</p>
+<p>To stop, just end the recording. To completely clean up, you can also remove the OBS recording folder.</p>
 </section>
 </section>
 </section>
-<section id="next-steps" class="level1">
-<h1>Next Steps</h1>
-<p>framerate-resolution tradeoff</p>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">3. Next Steps</h2>
+<p>There’s a lot to be improved here. For one, using a real streaming protocol would work infinitely better than the duct tape solution going on here, and OBS already facilitates this.</p>
+<p>More importantly, though, the console rendering isn’t the best— even on powerful computers there’s a strong tradeoff between resolution and framerate. I don’t believe there’s a solution for this… but there may be a way to increase visual resolution without changing the character resolution. I’ve experimented a little with compositing and marching squares to improve contrast and visibility, but I haven’t found anything yet that’s better than the default, naive approach this guide (and my generic <a href="../video-player/video-player.html">video renderer</a>) use.</p>
 
 
 </section>
@@ -408,10 +467,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -421,8 +497,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -434,7 +519,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -478,6 +686,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -503,6 +712,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -564,6 +799,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 </div> <!-- /content -->
 <script>videojs(video_shortcode_videojs_video1);</script>
+
 
 
 

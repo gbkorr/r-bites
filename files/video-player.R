@@ -13,7 +13,7 @@ load.video = function(path,size=128,framerate=25) {
 	
 	scale = c(info$width,info$height)
 	scale = scale * (size/scale[1]) #match horizontal scale
-	scale[2] = scale[2]/2 #halve vertical scale
+	scale[2] = scale[2]/2 #third vertical scale
 	scale = floor(scale/2)*2 #make even
 	
 	temp = tempdir()

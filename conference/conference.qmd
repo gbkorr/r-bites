@@ -217,25 +217,45 @@ Change the settings with `OBS Studio -> Preferences` (or `File -> Settings`). Al
 ___
 ### 2.2 Usage
 
-#### 2.2.1 Server
+#### 2.2.1 R Startup
+You and the person you'll be conferencing with should both follow these steps.
 
-open R and run `stream.webcam` with that directory and your IP (or localhost if testing by yourself)
-set directory to that folder, and run
+Open an R window which will serve as the host for your webcam stream. Load `webcam.R` and run:
 
-TODO
+```{r eval=F}
+stream.webcam(
+	<OBS recording path>, 
+	<your IP address, including port>
+)
+```
+
+Now open a new R window to act as the client to receive the other person's stream. Load `client.R` and run:
+
+```{f eval=F}
+stream.client(
+	<the other persons's IP address, including port>,
+	<desired rendering resolution (default 200)>
+)
+```
+
+The rendering resolution has a huge impact on the framerate of the console stream. I recommend a value of `100` or `64` if the default is too slow and choppy. 
+
+
+If you want to test this by streaming to yourself, use `127.0.0.1:8080` for both IP addresses.
 
 > Note: streaming between devices will require port forwarding to be set up on your network. If you don't knopw what that means, it's not worth trying to set up.
 
 
-#### 2.2.2 Client
+#### 2.2.2 OBS
+Now, both of you can open OBS and click "Start Recording". The console streams should start after a few seconds; you may have to resize the window and/or zoom out with `cmd -` to get it to render properly.
 
-run steam.client() with the IP of the person you're conferencing with (or localhost)
+To stop, just end the recording. To completely clean up, you can also remove the OBS recording folder.
 
 
+## 3. Next Steps
+There's a lot to be improved here. For one, using a real streaming protocol would work infinitely better than the duct tape solution going on here, and OBS already facilitates this. 
 
-# Next Steps
-
-framerate-resolution tradeoff
+More importantly, though, the console rendering isn't the best— even on powerful computers there's a strong tradeoff between resolution and framerate. I don't believe there's a solution for this... but there may be a way to increase visual resolution without changing the character resolution. I've experimented a little with compositing and marching squares to improve contrast and visibility, but I haven't found anything yet that's better than the default, naive approach this guide (and my generic [video renderer](/video-player/video-player.qmd)) use.
 
 
 
