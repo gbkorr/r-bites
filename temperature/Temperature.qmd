@@ -343,7 +343,7 @@ Gemini was very helpful at **identifying canonical solutions** (FaaS, pyscript m
 On the topic of "AI-generated" code— I'm a strong coder, and I don't like having others write code for me; I treated all code produced by the LLM the same as I do StackExchange code (from which it was undoubtably copied, anyway). When I find code online, I run, edit, and **mess with it a bunch to figure out how it works**. The LLM was also quite good for this scenario— gone are the days of obtuse StackExchange answers (and browsing), and bad/hallucinated code isn't a concern because... I know what I'm doing and work with the code myself. (Also, the LLM is unlikely to hallucinate code if you tell it to stick to canonical solutions to simple problems, like I did here.)
 
 ### Style
-**All my writing is my own**, and I would never use an LLM to write. It makes me a bit sad that that's even possible :(
+**All my writing is my own**, and I would never use an LLM to write. It makes me a bit sad that that's even possible<br>:(
 
 Luckily, writing is often about **explaining your thought process**— something that, if I'm the one writing the code, an LLM can only speculate on. There's also... quite a bit of satisfaction to be gotten out of reading things that you know a human wrote.
 
