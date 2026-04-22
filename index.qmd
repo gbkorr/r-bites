@@ -1,8 +1,13 @@
 ---
-title: "R Bites: Mini R Projects"
+title: "R Bites"
+author: "By Gabriel Broussard Korr"
+language:
+  title-block-author-single: ""
 ---
 
-This is where I upload articles on small projects I've done. It was originally only for R, but I started branching out!
+---
+
+This is where I upload articles on small projects I've done. At first it was just for R, but I started branching out!
 
 See my [Github](https://github.com/gbkorr) for more projects!
 

@@ -15,13 +15,13 @@ website:
         
           - text: "Live Temperature from Satellites"
             icon: globe-americas
-            href: temperature/temperature.html
+            href: temperature/temperature.qmd
           - text: "R-Based Video Conference"
             icon: webcam
-            href: conference/conference.html
+            href: conference/conference.qmd
           - text: "R on a Flip Phone"
             icon: terminal-fill
-            href: flipphone-r/flipphone-r.html
+            href: flipphone-r/flipphone-r.qmd
           - text: "R Console Video Player"
             icon: file-earmark-play
             href: video-player/video-player.qmd
