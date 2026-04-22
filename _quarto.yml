@@ -7,12 +7,11 @@ project:
     - flipphone-r/phonemarkdown.html
 
 website:
-  title: "R Bites"
+  title: "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites"
   navbar:
     left:
       - text: "Articles"
         menu:
-        
           - text: "Live Temperature from Satellites"
             icon: globe-americas
             href: temperature/temperature.qmd

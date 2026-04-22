@@ -349,7 +349,7 @@ Luckily, writing is often about **explaining your thought process**— something
 
 I've been experimenting more lately with the (over)use of **bold text**, which, in my opinion, adds a huge amount to skimmability and generally improves the reading experience. It's something I've picked up from various R-affiliated data science bloggers[^yan], though I doubt I've found the balance between benefits and distraction yet.
 
-[^yan]: Such as [Yan Holz](https://www.yan-holtz.com/), a great figure in that space.
+[^yan]: Such as [Yan Holtz](https://www.yan-holtz.com/), a great figure in that space.
 
 
 
