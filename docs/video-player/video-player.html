@@ -124,21 +124,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="../video-player/video-player.html" aria-current="page"> <i class="bi bi-file-earmark-play" role="img">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
 </i> 
-<span class="menu-text">Console Video Player</span></a>
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../flipphone-r/flipphone-r.html"> <i class="bi bi-terminal-fill" role="img">
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
 </i> 
-<span class="menu-text">R on a Flip Phone</span></a>
+ <span class="dropdown-text">R-Based Video Conference</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../conference/conference.html"> <i class="bi bi-webcam" role="img">
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
 </i> 
-<span class="menu-text">R-Based Video Conference</span></a>
+ <span class="dropdown-text">R on a Flip Phone</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -194,6 +206,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -899,6 +917,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>© gbkorr 2026</p>
+</div>
+  </div>
+</footer>
 <script>videojs(video_shortcode_videojs_video1);</script>
 
 

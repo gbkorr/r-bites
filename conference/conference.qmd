@@ -1,5 +1,7 @@
 ---
 title: "Video Conference in R"
+date: April 2026
+date-format: 'MMMM YYYY'
 format: 
   html:
     toc: true
@@ -231,7 +233,7 @@ stream.webcam(
 
 Now open a new R window to act as the client to receive the other person's stream. Load `client.R` and run:
 
-```{f eval=F}
+```{r eval=F}
 stream.client(
 	<the other persons's IP address, including port>,
 	<desired rendering resolution (default 200)>

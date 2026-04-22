@@ -10,21 +10,31 @@ website:
   title: "R Bites"
   navbar:
     left:
-          - text: "Console Video Player"
-            icon: file-earmark-play
-            href: video-player/video-player.qmd
-          - text: "R on a Flip Phone"
-            icon: terminal-fill
-            href: flipphone-r/flipphone-r.html
+      - text: "Articles"
+        menu:
+        
+          - text: "Live Temperature from Satellites"
+            icon: globe-americas
+            href: temperature/temperature.html
           - text: "R-Based Video Conference"
             icon: webcam
             href: conference/conference.html
+          - text: "R on a Flip Phone"
+            icon: terminal-fill
+            href: flipphone-r/flipphone-r.html
+          - text: "R Console Video Player"
+            icon: file-earmark-play
+            href: video-player/video-player.qmd
+      
+  page-footer:
+    right: "---\n&copy; Gabriel Broussard Korr — 2026"
       
 format:
   html:
     theme: [cosmo, monocode.scss]
     css: styles.css
     toc: true
+  
       
 #ref: https://yihui.org/rmarkdown/rmarkdown-site
 #styles: yuenhsu.com/posts/highlight-styles.html#monokai

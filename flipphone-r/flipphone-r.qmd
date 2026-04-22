@@ -1,5 +1,7 @@
 ---
 title: "Running R on Android"
+date: March 2026
+date-format: 'MMMM YYYY'
 format: 
   html:
     toc: true

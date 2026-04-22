@@ -129,21 +129,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../video-player/video-player.html"> <i class="bi bi-file-earmark-play" role="img">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
 </i> 
-<span class="menu-text">Console Video Player</span></a>
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../flipphone-r/flipphone-r.html"> <i class="bi bi-terminal-fill" role="img">
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
 </i> 
-<span class="menu-text">R on a Flip Phone</span></a>
+ <span class="dropdown-text">R-Based Video Conference</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="../conference/conference.html" aria-current="page"> <i class="bi bi-webcam" role="img">
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
 </i> 
-<span class="menu-text">R-Based Video Conference</span></a>
+ <span class="dropdown-text">R on a Flip Phone</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -198,6 +210,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -238,8 +256,8 @@ Demo (no audio)
 <hr>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-7b3aa86dbf59f82886eb" style="width:100%;height:866px;"></div>
-<script type="application/json" data-for="htmlwidget-7b3aa86dbf59f82886eb">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   MKV video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-6806571fbe1332840f7e" style="width:100%;height:866px;"></div>
+<script type="application/json" data-for="htmlwidget-6806571fbe1332840f7e">{"x":{"diagram":"digraph {\n\tnode [\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = Linen\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 2,\n\t\theight = 0.5,\n\t]\n\t\n\tranksep = 0.2\n\t\n\tempty [shape = plaintext, label = \"\", fillcolor = transparent, width=0, height=0, margin=0, peripheries=0]\n\tobs [label = \"OBS\", fillcolor = black, fontcolor = white]\n\tffmpeg [label = \"FFmpeg in R\", fillcolor = \"#ff8888\"]\n\tserver [label = \"httpuv Server in R\", fillcolor = \"#ffbb66\"]\n\tclient [label = \"httr2 Client in R\", fillcolor = \"#99ddff\"]\n\trender [label = \"Custom R Renderer\", fillcolor = \"#aaffaa\"]\n\tconsole [label = \"R Console\", fillcolor = \"#cccccc\"]\n\t\n\tempty -> obs [label = \"   Webcam\"]\n\tobs -> ffmpeg [label = \"   MKV video\"] \n\tffmpeg -> server [label = \"   JPEG frames\"]\n\tserver -> client [label = \"   raw JPEG bytes\"]\n\tclient -> render [label = \"   R matrix\"]\n\trender -> console [label = \"   R string\"]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <hr>
@@ -287,8 +305,8 @@ Demo (no audio)
 <p>Once the client gets the image, it’s time to prepare it to draw. This uses an <a href="../video-player/video-player.html">engine</a> I made previously to render video in the console<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-8658891b287583253cf6" style="width:100%;height:130px;"></div>
-<script type="application/json" data-for="htmlwidget-8658891b287583253cf6">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-debbee2a4ff87f6b6578" style="width:100%;height:130px;"></div>
+<script type="application/json" data-for="htmlwidget-debbee2a4ff87f6b6578">{"x":{"diagram":"digraph {\n\trankdir = \"LR\"\n\n\tnode [\n\t\tperipheries=0,\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.5,\n\t\t\n\t\tfontsize = 12,\n\t]\n\t\n\tedge [style = \"invis\"]\n\t\n\t\"3-channel RGB\nmatrix from\njpeg::readJPEG()\" -> \n\t\"merge channels\nto collapse into\none matrix\" ->\n\t\"nearest-neighbor\ndownsample to\nreduce resolution\" ->\n\t\"round gray\nvalues to one\nof 5 colors\" ->\n\t\"encode matrix as\nprintable string\n \" ->\n\t\"cat() string\nto console\n \"\n\n\tnode [\n\t\tperipheries = true,\n\t\n\t\tshape = box, \n\t\tstyle = \"rounded, \n\t\tfilled\", \n\t\tfillcolor = \"transparent\"\n\t\t\n\t\tfixedsize = true,\n\t\twidth = 1.2,\n\t\theight = 0.4,\n\t\t\n\t\tfontsize = 14,\n\t]\n\t\n\tedge [style = \"solid\", arrowsize=0.5]\n\t\n\tranksep = 0.2\n\t\n\tJPEG -> Grayscale -> Downsample -> Quantize -> Stringify -> Print\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -352,10 +370,10 @@ Settings
 </div>
 <p>Now open a new R window to act as the client to receive the other person’s stream. Load <code>client.R</code> and run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode f code-with-copy"><code class="sourceCode fortranfixed"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stream.client(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>the other persons<span class="st">'</span>s IP address, including port<span class="op">&gt;</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>desired rendering resolution (default <span class="dv">200</span>)<span class="op">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream.client</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&lt;</span>the other persons<span class="st">'s IP address, including port&gt;,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;desired rendering resolution (default 200)&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The rendering resolution has a huge impact on the framerate of the console stream. I recommend a value of <code>100</code> or <code>64</code> if the default is too slow and choppy.</p>
 <p>If you want to test this by streaming to yourself, use <code>127.0.0.1:8080</code> for both IP addresses.</p>
@@ -798,6 +816,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<hr>
+<p>© Gabriel Broussard Korr — 2026</p>
+</div>
+  </div>
+</footer>
 <script>videojs(video_shortcode_videojs_video1);</script>
 
 

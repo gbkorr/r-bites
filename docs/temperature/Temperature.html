@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>R Bites - “Live” Temperature Data from Geostationary Satellites</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module"> import webr from 'https://cdn.jsdelivr.net/npm/webr/+esm' </script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">R Bites</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
+</i> 
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
+</i> 
+ <span class="dropdown-text">R-Based Video Conference</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
+</i> 
+ <span class="dropdown-text">R on a Flip Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#big-picture" id="toc-big-picture" class="nav-link active" data-scroll-target="#big-picture">Big Picture</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a>
+  <ul class="collapse">
+  <li><a href="#satellite-imagery" id="toc-satellite-imagery" class="nav-link" data-scroll-target="#satellite-imagery">Satellite Imagery</a></li>
+  <li><a href="#the-satellites" id="toc-the-satellites" class="nav-link" data-scroll-target="#the-satellites">The Satellites</a></li>
+  <li><a href="#clms" id="toc-clms" class="nav-link" data-scroll-target="#clms">CLMS</a></li>
+  </ul></li>
+  <li><a href="#the-backend" id="toc-the-backend" class="nav-link" data-scroll-target="#the-backend">The Backend</a>
+  <ul class="collapse">
+  <li><a href="#s3-access" id="toc-s3-access" class="nav-link" data-scroll-target="#s3-access">S3 Access</a></li>
+  <li><a href="#vercel-and-faas" id="toc-vercel-and-faas" class="nav-link" data-scroll-target="#vercel-and-faas">Vercel and FaaS</a></li>
+  <li><a href="#the-s3-script" id="toc-the-s3-script" class="nav-link" data-scroll-target="#the-s3-script">The S3 Script</a></li>
+  </ul></li>
+  <li><a href="#the-frontend" id="toc-the-frontend" class="nav-link" data-scroll-target="#the-frontend">The Frontend</a>
+  <ul class="collapse">
+  <li><a href="#web-python" id="toc-web-python" class="nav-link" data-scroll-target="#web-python">Web Python</a></li>
+  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
+  </ul></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a>
+  <ul class="collapse">
+  <li><a href="#ai-usage" id="toc-ai-usage" class="nav-link" data-scroll-target="#ai-usage">AI Usage</a></li>
+  <li><a href="#style" id="toc-style" class="nav-link" data-scroll-target="#style">Style</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">“Live” Temperature Data from Geostationary Satellites</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="big-picture" class="level2">
+<h2 class="anchored" data-anchor-id="big-picture">Big Picture</h2>
+<p>I think it’s really neat that we, as random citizens, have access to (almost) <strong>live visual data from satellites</strong>. I wanted to make a tool to demonstrate this, and to practice some basic full-stack development.</p>
+<p>This set of buttons below takes coordinates (or your own location, if you select <code>Autofill</code>)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and uses data from a satellite cluster to <strong>estimate the temperature</strong> from an hour or so ago in that location.</p>
+<p>The satellites cannot estimate temperature when a location has cloud cover; if it was cloudy when the measurement was taken, the tool will say so.</p>
+<script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
+<py-config style="display: none">packages = ["xarray","h5netcdf","h5py","matplotlib"]</py-config>
+
+<script>
+//export simple JS function to return geolocation
+function get_geolocation(){
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            pos => resolve(pos),
+            error => reject(error)
+        );
+    });
+}
+</script>
+<script type="py">
+    import xarray #process netcdf
+    from pyodide.http import pyfetch #make http requests
+    from pyscript import display #write to webpage
+    from js import document, window, get_geolocation #interact with webpage
+    import re #regex
+    import matplotlib.pyplot as plt #plot
+
+    #keeping this off during development to avoid unnecessary Vercel queries
+    deployed = True
+
+    #get html elements
+    stdout_div = document.getElementById("stdout")
+    button = document.getElementById("button")
+    lat_input = document.getElementById("lat")
+    lon_input = document.getElementById("lon")
+
+    #print to div
+    def stdout(str): stdout_div.innerHTML = str
+    #it would be easier to use pyscript.display(), but this doesn't support printing the degrees° symbol
+
+    #fetch .nc file from Vercel
+    stdout("Retrieving satellite data...")
+    try:
+        if (deployed): response = await pyfetch("https://gbkorr-clms-temperature.vercel.app/api/get_s3") 
+        if not response.ok: raise Exception()
+    except:
+        stdout("Failed to retreive satellite data. Sorry :(")
+    raw = await response.bytes()
+    stdout("Satellite data loaded.")
+
+    #write to script filesystem
+    with open('data.nc', 'wb') as file: file.write(raw) 
+
+    #open and read file
+    data = xarray.open_dataset('data.nc', engine="h5netcdf")
+    
+    #plotting this nc file raw; I didn't have to add any of this info!
+    df = data['LST'].isel(time=0,lat=slice(0, None, 10), lon=slice(0, None, 10))
+    fig, ax = plt.subplots(figsize=(8, 4))
+    df.plot(ax=ax, cmap='viridis', vmin=240, vmax=340)
+    display(fig, target="plot")
+
+    #enable button
+    button.disabled = False
+    button.style.backgroundColor = '#0d6efd'
+    button.innerText = 'Get Temperature!'
+
+    def to_F(K): return(K * 1.8 - 459.67)
+    def to_C(K): return(K - 273.15)
+    def get_temperature(nc,lat,lon): return(float(data['LST'].sel(lat=lat,lon=lon,method="nearest")))
+    
+    async def autofill(event):
+        pos = await get_geolocation()
+        lat_input.value = pos.coords.latitude
+        lon_input.value = pos.coords.longitude
+
+    async def temperature_button(event):
+        if (lat_input.value == '' or lon_input.value == ''): 
+            stdout('No coordinates provided.')
+            return
+        
+        temp = get_temperature(data,lat_input.value,lon_input.value)
+
+        #check if NaN
+        if (temp != temp): temp = "Cloudy."
+        else: temp = f"{round(to_F(temp))}&deg; F ({round(to_C(temp))}&deg; C)"
+        stdout(f"Satellite: {temp}")
+
+</script>
+    
+<div>Input coordinates:</div>
+<input id="lat" size="4" placeholder="Lat">, <input id="lon" size="4" placeholder="Lon"> / <button id="autofill" py-click="autofill" style="background-color: lightgray">Autofill</button>
+<br>
+<button id="button" py-click="temperature_button" class="btn btn-primary" disabled="true" style="background-color: grey; margin-top:5px">Loading...</button>
+<div id="stdout">Loading Python frontend...</div>
+<div id="plot"><style>#plot img { width: 600; height: auto}</style></div>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<p>At this moment, there are over <strong>10,000 satellites</strong> orbiting the Earth performing various roles. Some of these record sensory data, and of these, a handful are made available to the public, like those in the <a href="https://dataspace.copernicus.eu/"><strong>Copernicus ecosystem</strong></a> of the ESA (European Space Agency).</p>
+<p><strong>Sensory data from satellites</strong> can be quite a valuable asset—especially if it can be recorded with high time resolution (i.e.&nbsp;images more than once every few days)—and many such satellites focus on acting as a <a href="https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades/">paid service</a> for government programs, boasting high-resolution images almost hourly.</p>
+<p>Some satellites, though, were <strong>launched in the name of Science</strong>— and as it goes in the study of the Earth and Cosmos, there’s little reason (and demand) to charge for these scientific measurements. Satellites launched as part of the ESA’s Copernicus Program are one such group, and cover a <strong>variety of sensory modes</strong>, including full RGB images of the Earth’s surface assembled every three by the Sentinel-2 mission.</p>
+<p>Copernicus makes its data conveniently <strong>available for free online</strong> through several means. Most of these means—like a <a href="https://browser.dataspace.copernicus.eu/">webpage</a> that allows users to select and download specific sensory measurements for a given area and time—are built on the core data-providing service of an s3 bucket in which all processed Copernicus measurements (fancy image files) are stored.</p>
+<p>To my understanding, an s3 bucket is a <strong>simple cloud storage server</strong> provided by the Amazon Web Services (AWS) ecosystem which essentially just serves static files, and can be navigated much like a regular filesystem. Copernicus exposes theirs to the public— instead of having to middleman through one of their webservices, we can just <strong>download data directly</strong> from the s3 bucket! Copernicus’s <a href="https://documentation.dataspace.copernicus.eu/APIs/S3.html">documentation</a> for this isn’t great, but s3 buckets are super simple and easy to use.</p>
+<section id="satellite-imagery" class="level3">
+<h3 class="anchored" data-anchor-id="satellite-imagery">Satellite Imagery</h3>
+<p>These satellites manage to do a lot with <strong>just image data</strong>. By using different filters (including those off the visual spectrum), different satellites can capture not just RGB images of the Earth but also estimate vegetation cover, humidity, surface temperature, and identify water features and clouds.</p>
+<p>This project focuses on <a href="https://climate.esa.int/en/projects/land-surface-temperature/">Land Surface Temperature</a>, which isn’t the same as the everyday air temperature we usually use— but it’s often pretty close.</p>
+</section>
+<section id="the-satellites" class="level3">
+<h3 class="anchored" data-anchor-id="the-satellites">The Satellites</h3>
+<p>The satellites in question providing our data here are surprisingly hard to find info on. It’s a constellation (group of satellites in a pattern around the earth to provide consistent coverage) in geostationary orbit, so the satellites permanently stay in the same spot above the Earth’s surface. Infrared measurements are presumably gathered from the satellites and stitched together before (or after) being processed into LST.</p>
+</section>
+<section id="clms" class="level3">
+<h3 class="anchored" data-anchor-id="clms">CLMS</h3>
+<p>Anyway, the Copernicus Land Monitoring Service (<a href="https://land.copernicus.eu/en/about">CLMS</a>) is one of the services provided by Copernicus, the organization which collects and processes this data and <strong>makes it available to the public</strong>. Copernicus generally deals with data from the ESA’s satellites, but it seems it might also use other organizations’ data (e.g.&nbsp;from NASA) for some projects.</p>
+</section>
+</section>
+<section id="the-backend" class="level2">
+<h2 class="anchored" data-anchor-id="the-backend">The Backend</h2>
+<section id="s3-access" class="level3">
+<h3 class="anchored" data-anchor-id="s3-access">S3 Access</h3>
+<p>Following <a href="https://documentation.dataspace.copernicus.eu/APIs/S3.html">their guide</a>, we can download data from the s3 bucket by signing up for free credentials from the Copernicus website. Amazon provides a wealth of tools to accomplish this from whatever language fits your needs<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>I looked around the bucket a bit by running <code>aws s3 ls</code> in my terminal until I found the path to the hourly temperature data. Conveniently, the file is located and stored in such a way that we can <strong>query it procedurally</strong> by just knowing the date and time! Good on them.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Path Structure">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Path Structure
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>s3://eodata/CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2</code><strong>/YYYY/MM/DD/</strong><code>c_gls_LST_</code><strong>YYYYMMDDHHHH</strong><code>_GLOBE_GEO_V2.2.1_nc/</code></p>
+<p>Where HHHH is the (military) hour, e.g.&nbsp;1300 for 1:00 PM.</p>
+<p>There’s also plenty of ways to grep these files or find the most recent, but this approach is most convenient.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="vercel-and-faas" class="level3">
+<h3 class="anchored" data-anchor-id="vercel-and-faas">Vercel and FaaS</h3>
+<p>I need this webpage to be able to retrieve the satellite data. I could easily set up a server running on my computer that performs the necessary retrieval, but I <strong>don’t feel like keeping a server up 24/7</strong>. Luckily, there’s a much easier option.</p>
+<p>Because of how basic S3 retrieval is, we only really need one simple function to run to get it. Instead of running my own server to perform this function when the user loads the webpage, we can use an external service to <strong>host just the function</strong>— when I query its url, it will run the function once and send back whatever it spits out. This is called Faas—Functions as a Service—and it’s a common use case for simple retrieval backends like these.</p>
+<p>You can set up FaaS with <a href="https://aws.amazon.com/lambda/">AWS itself</a>, but it’s a bit involved; I went with the better option of using <a href="https://vercel.com/docs/functions">Vercel</a>, which runs off of AWS but <strong>streamlines out a lot of the details</strong>. Both have generous free plans for individuals— it doesn’t cost them much to run a random function every so often for someone’s website that’s rarely visited.</p>
+<p>To do this, I set up a free “hobby”-level Vercel account and created a new project on the website<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. There were several options for how to proceed, but I decided to do everything through the <strong>Vercel CLI tools</strong> locally on my computer, since the project was so simple. I installed those, created a new folder, and ran the tools to associate that folder with my project. Then <em>all I had to do</em> was make a file <code>folder/api/get_s3.py</code> (and run a vercel command to deploy), and now whenever anyone visits <code>https://gbkorr-clms-temperature.vercel.app/api/get_s3</code>, Vercel runs <code>get_s3.py</code> and sends back the output!</p>
+</section>
+<section id="the-s3-script" class="level3">
+<h3 class="anchored" data-anchor-id="the-s3-script">The S3 Script</h3>
+<p><code>get_s3</code> is just a simple script that requests the latest file from the S3 bucket and streams it back, using Python’s <strong>dedicated <code>boto3</code> library</strong> for working with S3.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="get_s3.py">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+get_s3.py
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> http.server <span class="im">import</span> BaseHTTPRequestHandler</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> boto3</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> botocore.config <span class="im">import</span> Config</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> handler(BaseHTTPRequestHandler):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> do_GET(<span class="va">self</span>):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    s3 <span class="op">=</span> boto3.client(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">'s3'</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      endpoint_url <span class="op">=</span> <span class="st">'https://eodata.dataspace.copernicus.eu'</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      aws_access_key_id <span class="op">=</span> <span class="st">'&lt;ACCESS KEY FROM COPERNICUS&gt;'</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      aws_secret_access_key <span class="op">=</span> <span class="st">'&lt;SECRET KEY FROM COPERNICUS&gt;'</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      config <span class="op">=</span> Config(s3 <span class="op">=</span> {<span class="st">'addressing_style'</span>: <span class="st">'path'</span>})</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> datetime.datetime.now(datetime.UTC) <span class="co">#get current time</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">buffer</span> <span class="op">=</span> <span class="dv">60</span> <span class="op">-</span> t.hour <span class="co">#minutes remaining in hour</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> t.replace(hour <span class="op">=</span> t.hour <span class="op">-</span> <span class="dv">1</span>) <span class="co">#look at the last hour</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    filecode <span class="op">=</span> t.strftime(<span class="st">"%Y%m</span><span class="sc">%d</span><span class="st">%H00"</span>) <span class="co">#time info in file</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    pathcode <span class="op">=</span> t.strftime(<span class="st">"%Y/%m/</span><span class="sc">%d</span><span class="st">"</span>) <span class="co">#time info in bucket path</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    file_obj <span class="op">=</span> s3.get_object(</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>      Bucket <span class="op">=</span> <span class="st">'eodata'</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      Key <span class="op">=</span> <span class="ss">f'CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2/</span><span class="sc">{</span>pathcode<span class="sc">}</span><span class="ss">/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V2.2.1_nc/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V2.2.1.nc'</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_response(<span class="dv">200</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_header(<span class="st">'Content-type'</span>, <span class="st">'application/x-netcdf'</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_header(<span class="st">'Content-Disposition'</span>, <span class="st">'attachment; filename="data.nc"'</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_header(<span class="st">'Access-Control-Allow-Origin'</span>, <span class="st">'*'</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_header(<span class="st">'Cache-Control'</span>, <span class="ss">f's-maxage=</span><span class="sc">{</span><span class="bu">buffer</span> <span class="op">*</span> <span class="dv">60</span><span class="sc">}</span><span class="ss">'</span>) <span class="co">#cache for the rest of the hour</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.end_headers()</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#stream response</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk <span class="kw">in</span> file_obj[<span class="st">'Body'</span>].iter_chunks(chunk_size<span class="op">=</span><span class="dv">4096</span>):</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.wfile.write(chunk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-frontend" class="level2">
+<h2 class="anchored" data-anchor-id="the-frontend">The Frontend</h2>
+<p>This webpage was created with <a href="https://quarto.org/">Quarto</a>, a clean markdown renderer based on Rmarkdown, and running a block of HTML near the beginning to work with the satellite data.</p>
+<section id="web-python" class="level3">
+<h3 class="anchored" data-anchor-id="web-python">Web Python</h3>
+<p>The HTML block runs Python locally on the browser via <a href="https://pyscript.net/">PyScript</a>. This makes it <em>much</em> easier to handle and process the data, since Python is (behind R 🙂) <strong>the standard language for data science</strong>. I was really impressed how seamlessly pyscript ran and interfaced with the webpage’s javascript!</p>
+<p><strong>There’s three parts to it</strong>— getting the data by fetching my Vercel url, processing it to plot and get the temperature, and interacting with the webpage itself to display the processed info. I made the Python do all the work, only using HTML and javascript when necessary.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="HTML Block">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+HTML Block
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">"module"</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://pyscript.net/releases/2026.3.1/core.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">py-config</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display: none"</span><span class="dt">&gt;</span>packages = ["xarray","h5netcdf","h5py","matplotlib"]<span class="dt">&lt;/</span><span class="kw">py-config</span><span class="dt">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">//export simple JS function to return geolocation</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">get_geolocation</span>(){</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">navigator</span><span class="op">.</span><span class="at">geolocation</span><span class="op">.</span><span class="fu">getCurrentPosition</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            pos <span class="kw">=&gt;</span> <span class="fu">resolve</span>(pos)<span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            error <span class="kw">=&gt;</span> <span class="fu">reject</span>(error)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">"py"</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> xarray <span class="co">#process netcdf</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> pyodide.http <span class="im">import</span> pyfetch <span class="co">#make http requests</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> pyscript <span class="im">import</span> display <span class="co">#write to webpage</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> js <span class="im">import</span> document, window, get_geolocation <span class="co">#interact with webpage</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> re <span class="co">#regex</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt <span class="co">#plot</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get html elements</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    stdout_div <span class="op">=</span> document.getElementById(<span class="st">"stdout"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    button <span class="op">=</span> document.getElementById(<span class="st">"button"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    lat_input <span class="op">=</span> document.getElementById(<span class="st">"lat"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    lon_input <span class="op">=</span> document.getElementById(<span class="st">"lon"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print to div</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> stdout(<span class="bu">str</span>): stdout_div.innerHTML <span class="op">=</span> <span class="bu">str</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#it would be easier to use pyscript.display(), but this doesn't support printing the degrees° symbol</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#fetch .nc file from Vercel</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    stdout(<span class="st">"Retrieving satellite data..."</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="cf">await</span> pyfetch(<span class="st">"https://gbkorr-clms-temperature.vercel.app/api/get_s3"</span>) </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> response.ok: <span class="cf">raise</span> <span class="pp">Exception</span>()</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        stdout(<span class="st">"Failed to retreive satellite data. Sorry :("</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    raw <span class="op">=</span> <span class="cf">await</span> response.<span class="bu">bytes</span>()</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    stdout(<span class="st">"Satellite data loaded."</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#write to script filesystem</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">'data.nc'</span>, <span class="st">'wb'</span>) <span class="im">as</span> <span class="bu">file</span>: <span class="bu">file</span>.write(raw) </span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">#open and read file</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> xarray.open_dataset(<span class="st">'data.nc'</span>, engine<span class="op">=</span><span class="st">"h5netcdf"</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plotting this nc file raw; I didn't have to add any of this info!</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> data[<span class="st">'LST'</span>].isel(time<span class="op">=</span><span class="dv">0</span>,lat<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="va">None</span>, <span class="dv">10</span>), lon<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="va">None</span>, <span class="dv">10</span>))</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    df.plot(ax<span class="op">=</span>ax, cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    display(fig, target<span class="op">=</span><span class="st">"plot"</span>)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">#enable button</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    button.disabled <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    button.style.backgroundColor <span class="op">=</span> <span class="st">'#0d6efd'</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    button.innerText <span class="op">=</span> <span class="st">'Get Temperature!'</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> to_F(K): <span class="cf">return</span>(K <span class="op">*</span> <span class="fl">1.8</span> <span class="op">-</span> <span class="fl">459.67</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> to_C(K): <span class="cf">return</span>(K <span class="op">-</span> <span class="fl">273.15</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_temperature(nc,lat,lon): <span class="cf">return</span>(<span class="bu">float</span>(data[<span class="st">'LST'</span>].sel(lat<span class="op">=</span>lat,lon<span class="op">=</span>lon,method<span class="op">=</span><span class="st">"nearest"</span>)))</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> autofill(event):</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        pos <span class="op">=</span> <span class="cf">await</span> get_geolocation()</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        lat_input.value <span class="op">=</span> pos.coords.latitude</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        lon_input.value <span class="op">=</span> pos.coords.longitude</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> temperature_button(event):</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (lat_input.value <span class="op">==</span> <span class="st">''</span> <span class="kw">or</span> lon_input.value <span class="op">==</span> <span class="st">''</span>): </span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>            stdout(<span class="st">'No coordinates provided.'</span>)</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        temp <span class="op">=</span> get_temperature(data,lat_input.value,lon_input.value)</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="co">#check if NaN</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (temp <span class="op">!=</span> temp): temp <span class="op">=</span> <span class="st">"Cloudy."</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>: temp <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span><span class="bu">round</span>(to_F(temp))<span class="sc">}</span><span class="ss">&amp;deg; F (</span><span class="sc">{</span><span class="bu">round</span>(to_C(temp))<span class="sc">}</span><span class="ss">&amp;deg; C)"</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        stdout(<span class="ss">f"Satellite: </span><span class="sc">{</span>temp<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span>Input coordinates:<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">'lat'</span><span class="ot"> size</span><span class="op">=</span><span class="st">"4"</span><span class="ot"> placeholder</span><span class="op">=</span><span class="st">"Lat"</span><span class="dt">&gt;&lt;/</span><span class="kw">input</span><span class="dt">&gt;</span>, <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">'lon'</span><span class="ot"> size</span><span class="op">=</span><span class="st">"4"</span><span class="ot"> placeholder</span><span class="op">=</span><span class="st">"Lon"</span><span class="dt">&gt;&lt;/</span><span class="kw">input</span><span class="dt">&gt;</span> / <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> id</span><span class="op">=</span><span class="st">"autofill"</span><span class="ot"> py-click</span><span class="op">=</span><span class="st">"autofill"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"background-color: lightgray"</span><span class="dt">&gt;</span>Autofill<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> id</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> py-click</span><span class="op">=</span><span class="st">"temperature_button"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-primary"</span><span class="ot"> disabled</span><span class="op">=</span><span class="st">true</span><span class="ot"> style</span><span class="op">=</span><span class="st">"background-color: grey; margin-top:5px"</span><span class="dt">&gt;</span>Loading...<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">'stdout'</span><span class="dt">&gt;</span>Loading Python frontend...<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">'plot'</span><span class="dt">&gt;&lt;</span><span class="kw">style</span><span class="dt">&gt;</span><span class="pp">#plot</span> img { <span class="kw">width</span><span class="ch">:</span> <span class="dv">600</span><span class="op">;</span> <span class="kw">height</span><span class="ch">:</span> <span class="bu">auto</span>}<span class="dt">&lt;/</span><span class="kw">style</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>The HTML also uses javascript’s built-in geolocation API to request the user’s location if they click the <code>Autofill</code> button. Like everything else, it’s surprisingly convenient.</p>
+</section>
+<section id="plotting" class="level3">
+<h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
+<p>I wasn’t originally going to have a plot, but adding one turned out to be, once again, <strong>amazingly simple</strong>; xarray+matplotlib have good defaults that produce a great plot without requiring manual annotation.</p>
+<p><strong>Here’s a gif</strong> of this plot from a two-day window; you can clearly see the earth’s rotation as the sunlit area moves across the Earth. You can even see the flow of clouds! The data is all in Kelvin; for reference, 300K is 80°F (27°C) and 280K is 44°F (7°C).</p>
+<p><img src="temperature.gif" class="img-fluid" width="600"></p>
+</section>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<section id="ai-usage" class="level3">
+<h3 class="anchored" data-anchor-id="ai-usage">AI Usage</h3>
+<p>I’ve been pretty slow to get on the AI train, and I decided this would be <strong>a good project to dip my toes in</strong>. This was a great use case for it since “I knew there was a lot I didn’t know I didn’t know”. That is to say, I wasn’t very familiar with web networking/FaaS/running non-javascript languages in the browser, and I knew there would be “standard” approaches for all of these— but learning about the existance of said approaches used to be quite difficult without taking a class, stumbling across a lucky article, or scouring advice forums.</p>
+<p>Gemini was very helpful at <strong>identifying canonical solutions</strong> (FaaS, pyscript modules, etc.), as well as alerting me to alternatives to learn more about. With knowledge of these solutions and use cases, I was able to put these all together to make this project— and I learned a heck of a lot about how they work in the process.</p>
+<p>On the topic of “AI-generated” code— I’m a strong coder, and I don’t like having others write code for me; I treated all code produced by the LLM the same as I do StackExchange code (from which it was undoubtably copied, anyway). When I find code online, I run, edit, and <strong>mess with it a bunch to figure out how it works</strong>. The LLM was also quite good for this scenario— gone are the days of obtuse StackExchange answers (and browsing), and bad/hallucinated code isn’t a concern because… I know what I’m doing and work with the code myself. (Also, the LLM is unlikely to hallucinate code if you tell it to stick to canonical solutions to simple problems, like I did here.)</p>
+</section>
+<section id="style" class="level3">
+<h3 class="anchored" data-anchor-id="style">Style</h3>
+<p><strong>All my writing is my own</strong>, and I would never use an LLM to write. It makes me a bit sad that that’s even possible :(</p>
+<p>Luckily, writing is often about <strong>explaining your thought process</strong>— something that, if I’m the one writing the code, an LLM can only speculate on. There’s also… quite a bit of satisfaction to be gotten out of reading things that you know a human wrote.</p>
+<p>I’ve been experimenting more lately with the (over)use of <strong>bold text</strong>, which, in my opinion, adds a huge amount to skimmability and generally improves the reading experience. It’s something I’ve picked up from various R-affiliated data science bloggers<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, though I doubt I’ve found the balance between benefits and distraction yet.</p>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>All personal location info is handled client-side, so your location never leaves your computer. Fear not!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Learning about AWS for this project, it’s quite interesting that this company provides such services. I wonder if the goal is to use Amazon’s wealth to improve global efficiency, or to achieve technological dominance wherein great amounts of organizations rely completely on it.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>And used the settings to change the project name and URL, though that’s technically not necessary.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Such as <a href="https://www.yan-holtz.com/">Yan Holz</a>, a great figure in that space.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>© gbkorr 2026</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
