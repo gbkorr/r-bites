@@ -77,6 +77,160 @@
     "text": "Footnotes\n\n\nAn Alcatel Go Flip V from around 2021.↩︎\nI got most of this from here. There’s another resource you might see online for running R on Android, but it no longer works!↩︎\nI had to connect a bluetooth keyboard since Termux didn’t like the flip phone keypad. I believe the regular touchscreen keyboard (along with Termux’s built-in buttons) should suffice for a normal android phone.↩︎\nBut typically not the “complex” ones that do clever things with the computer. This is likely due to proot’s (lack of) directory permissions, as suggested here. It should be feasible to build most packages yourself, but it would take a lot of effort.↩︎\nIt took some trial and error to get the knit to work without rmarkdown.↩︎"
   },
   {
+    "objectID": "linux-phone/linux-phone.html",
+    "href": "linux-phone/linux-phone.html",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "",
+    "text": "Phones are pretty powerful in this day and age1, supporting pretty good storage and processing power. Both computers and phones are still relatively expensive, but…\nThere’s a thing cell providers do now where they sell a phone at 1/4th the market cost (wow!), but lock the cell service to their specific company (e.g. Verizon)— if you buy the phone and want to use it as a phone, you must use that company. The idea is that, because cell service is relatively expensive, someone buying the phone will end up paying more than the cost of the phone to the service provider if they use it for a few years.\nBut what if we didn’t use it as a phone? A smartphone with no cell service is still a functioning computer (including WiFi access!), and as I said, its specs are pretty decent now…\nIt turns out that you can get one of those carrier locked phones new for under $50, and turn it into a decent laptop computer by running Linux on it! This process doesn’t even require rooting/jailbreaking the phone— you could do it to your android today if you wanted.\nA word of warning, of course— the process is somewhat involved, and takes some motivation to push through. This is a great example of “you can do things cheaply if you know how and have the patience for it”.\n\n\n\n\n\n\n\n\n\nNote: I may wax eloquent about many of the products I’m using, but I’m not sponsored or affiliated with any of them. I just love a good piece of technology :)\n\nI’ve opted for a Moto G Power 20242, which is just about $50 for a new-in-box carrier-locked model. You can (as of writing this) easily find these on Ebay or the likes of Amazon and Walmart.3\nWith a full HD display, 128 gigs of storage, and 12 gigs of RAM, this phone is better than the Macbook Air I used for 10 years— and incredibly cheaper.\n\n\nThe Moto G Play (especially in upcoming years) has a similar carrier-locked model for just $30, but is a bit weaker and lower-resolution— less suitable for a laptop, but potentially ideal for projects that require a small, versatile computer. This thing costs the same as a Raspberry Pi, but it’s more powerful and has an integrated display, battery, and camera! It’s actually pretty crazy.\nRealistically, any recent Android phone should work; Motorola happens to offer the most powerful phones in this price range at the time of writing.\n\n\n\n\nUsing a phone as a computer like this comes with two big limitations: arm64 architecture and lack of root access.\nAnd of course, you can’t use cell service unless you buy the locked provider’s plan— but you can connect to your regular phone’s hotspot, which dodges the issue entirely! (Or, do this on your main phone if you have an Android)\n\n\nPhones typically use arm64 chips, as do Raspberry Pis. Generally this makes running things inconvenient occasionally, and forces you to emulate certain executables (especially for video games). Luckily, there’s oodles of emulation options, and most applications already provide an arm64 executable.\n\n\n\nThe lack of root privileges is actually somewhat nice— it makes it impossible to brick or damage your phone while messing around with the terminal— but it does introduce some issues trying to install and run a lot of libraries and software. Luckily, the software we use for the computer provides an option for a “pseudo-root” environment, in which we pretend we have root access and can do almost everything that lets us do.\nThis solution isn’t perfect—and getting some applications to work is a bit more complicated than on a regular PC—but for the most part, you can do pretty much do anything you’d want to do on a personal computer!"
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#the-big-idea",
+    "href": "linux-phone/linux-phone.html#the-big-idea",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "",
+    "text": "Phones are pretty powerful in this day and age1, supporting pretty good storage and processing power. Both computers and phones are still relatively expensive, but…\nThere’s a thing cell providers do now where they sell a phone at 1/4th the market cost (wow!), but lock the cell service to their specific company (e.g. Verizon)— if you buy the phone and want to use it as a phone, you must use that company. The idea is that, because cell service is relatively expensive, someone buying the phone will end up paying more than the cost of the phone to the service provider if they use it for a few years.\nBut what if we didn’t use it as a phone? A smartphone with no cell service is still a functioning computer (including WiFi access!), and as I said, its specs are pretty decent now…\nIt turns out that you can get one of those carrier locked phones new for under $50, and turn it into a decent laptop computer by running Linux on it! This process doesn’t even require rooting/jailbreaking the phone— you could do it to your android today if you wanted.\nA word of warning, of course— the process is somewhat involved, and takes some motivation to push through. This is a great example of “you can do things cheaply if you know how and have the patience for it”."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#the-phone",
+    "href": "linux-phone/linux-phone.html#the-phone",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "",
+    "text": "Note: I may wax eloquent about many of the products I’m using, but I’m not sponsored or affiliated with any of them. I just love a good piece of technology :)\n\nI’ve opted for a Moto G Power 20242, which is just about $50 for a new-in-box carrier-locked model. You can (as of writing this) easily find these on Ebay or the likes of Amazon and Walmart.3\nWith a full HD display, 128 gigs of storage, and 12 gigs of RAM, this phone is better than the Macbook Air I used for 10 years— and incredibly cheaper.\n\n\nThe Moto G Play (especially in upcoming years) has a similar carrier-locked model for just $30, but is a bit weaker and lower-resolution— less suitable for a laptop, but potentially ideal for projects that require a small, versatile computer. This thing costs the same as a Raspberry Pi, but it’s more powerful and has an integrated display, battery, and camera! It’s actually pretty crazy.\nRealistically, any recent Android phone should work; Motorola happens to offer the most powerful phones in this price range at the time of writing."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#limitations",
+    "href": "linux-phone/linux-phone.html#limitations",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "",
+    "text": "Using a phone as a computer like this comes with two big limitations: arm64 architecture and lack of root access.\nAnd of course, you can’t use cell service unless you buy the locked provider’s plan— but you can connect to your regular phone’s hotspot, which dodges the issue entirely! (Or, do this on your main phone if you have an Android)\n\n\nPhones typically use arm64 chips, as do Raspberry Pis. Generally this makes running things inconvenient occasionally, and forces you to emulate certain executables (especially for video games). Luckily, there’s oodles of emulation options, and most applications already provide an arm64 executable.\n\n\n\nThe lack of root privileges is actually somewhat nice— it makes it impossible to brick or damage your phone while messing around with the terminal— but it does introduce some issues trying to install and run a lot of libraries and software. Luckily, the software we use for the computer provides an option for a “pseudo-root” environment, in which we pretend we have root access and can do almost everything that lets us do.\nThis solution isn’t perfect—and getting some applications to work is a bit more complicated than on a regular PC—but for the most part, you can do pretty much do anything you’d want to do on a personal computer!"
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#first-power-on",
+    "href": "linux-phone/linux-phone.html#first-power-on",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "2.1 First Power-on",
+    "text": "2.1 First Power-on\nThe first order of business is to charge the phone enough to power on, and then set it up without a google account. You probably could use one, but it’d just cause unnecessary problems.\nThen, the most important thing to do once you get to the home screen is to turn off the wifi. This prevents the phone from downloading forced system updates; we’ll have to disable these permanently (section 2.4) before it’s safe to reenable wifi."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#peripherals",
+    "href": "linux-phone/linux-phone.html#peripherals",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "2.2 Peripherals",
+    "text": "2.2 Peripherals\n\n\n\n\n\nWhile the phone/computer is entirely usable as a touch-only device, I’d highly recommend using a bluetooth keyboard, and a mouse if you’re using it on a desk.4 Android supports these natively and connecting them is quite easy.\nIf you want the computer to be portable, there’s a good amount of folding keyboards that work quite well. I use and love this Targus Keyboard5 I got on Ebay for $10— its folded dimensions almost perfectly match those of the phone! It and the phone fit comfortably together in my pocket.\nAndroid has a number of hard-coded6 keyboard shortcuts that are quite useful:\n\n\n\n\n\n\nShortcuts\n\n\n\nHome Screen: Win + Enter\nSettings: Win + I\nSearch Apps: Win\nBack: Win + Backspace\nShow Windows: Win + Tab\n\n\nFor completeness, I’m using this case— it’s pretty important to get a case that functions as a stand, and I’m quite partial to the magnetic folding leather ones."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#settings",
+    "href": "linux-phone/linux-phone.html#settings",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "2.3 Settings",
+    "text": "2.3 Settings\nThere’s a lot of settings to go through.\n\n\n\n\n\n\nDeveloper Settings\n\n\n\nSettings -&gt; About phone -&gt; Tap Build number 7 times to enable Developer Mode\nSettings -&gt; System -&gt; Developer options:\n\nDisable Automatic System Updates\nEnable USB debugging (easier to transfer files from PC)\nDisable child process restrictions (important)\n\n\n\n\n\n\n\n\n\nLandscape Settings\n\n\n\nSettings -&gt; Display -&gt; Auto-rotate screen\nSettings -&gt; Home & lock screen -&gt; Home settings -&gt; Allow Home screen rotation\n\n\n\n\n\n\n\n\nMisc Settings\n\n\n\nSettings -&gt; Battery -&gt; Adaptive Battery -&gt; disable Use Adaptive Battery (otherwise this will kill important background processes)\nSettings -&gt; Display -&gt; Screen timeout (I recommend 2 minutes)\nSettings -&gt; Gestures -&gt; Press & hold power button -&gt; Access power menu\n\n\nThere’s a lot you can do with the Android settings to improve general phone navigation, but it’s not worth messing with if the goal is to stay mostly in the Xfce desktop.7\n\n\n\n\n\n\nDebloating\n\n\n\nIt’s usually a good idea to uninstall and disable unnecessary apps when you get a new phone.\nSettings -&gt; Apps -&gt; See all apps:\n\nDisable anything you won’t be using\nIncluding everything “Google” except for Files by Google and Google Play Services."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#lock-updates",
+    "href": "linux-phone/linux-phone.html#lock-updates",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "2.4 Lock Updates",
+    "text": "2.4 Lock Updates\nFor our purposes, we really want the phone to stay on the version it came with. In addition to intentionally slowing down the system, new updates often introduce new bloatware8, and can generally cause issues with settings and apps we’ve set up.\nKeeping it on the original version is thankfully quite easy, but only if you know the trick. Several options exist in the settings to turn off automatic updates— none of them work! The phone will still try to push system “security” updates to upgrade to the newest version of Android.\n\nThe Trick\nHow do we prevent the phone from installing new system updates? Just forbid it from downloading them!\nTo do this, I used NetGuard to block all internet requests from the updater app. I transferred the app apk from my computer via USB, but you’re probably ok flicking the internet on to download it directly from the phone.\n\n\n\n\n\n\nNetguard Setup\n\n\n\nSettings -&gt; Options -&gt; disable Check for updates9\nSettings -&gt; Advanced options -&gt; enable Manage system apps\nGo back to the main app list in NetGuard\nFind Motorola Software Update and disable its wifi\nSelect the upper-left slider to start the NetGuard firewall\n\n\nI also disabled internet for Google Play Services, for good measure. NetGuard starts up when the phone boots— the phone will never system update again as long as you want it that way. Now we can finally reenable wifi!\n\n\nNon-Motorola Options\nIf you’re on a different phone, you may have a different updater you need to suppress. To identify it, follow these steps:\n\n\n\n\n\n\nApp Sleuthing\n\n\n\n\n\n\nClose NetGuard.\nDownload and install PCAPdroid.\nOpen and run PCAPdroid\nGo to Settings -&gt; System updates\nTurn wifi on via the phone’s quick access menu\nSelect Check for updates, wait for it to show some sort of loading icon, and quickly disable wifi.\nGo back to PCAPdroid and view the list of outgoing connections. Look for an app like “Updater”, and take note of any other apps you might want to block the internet for."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#google-play-apps",
+    "href": "linux-phone/linux-phone.html#google-play-apps",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "2.5 Google Play Apps",
+    "text": "2.5 Google Play Apps\nNow that we can access the internet again, it’d be nice to be able to get apps from the Google Play Store. Usually, this requires that you log into a google account, but the Aurora Store lets you download them anonymously.\nHowever, it’s still a good idea to download apks directly from GitHub: many apps on the Google Play Store use an outdated version."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#termux",
+    "href": "linux-phone/linux-phone.html#termux",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "3.1 Termux",
+    "text": "3.1 Termux\nTo run Linux, we’ll be using Termux, the terminal emulator for Android. This acts pretty much the same as opening Terminal on Mac or Windows; you get a CLI (command-line interface) that lets you interact with the rest of the device.\nYou’ll need to install 3 app apks, for Termux and two addons:\n\nTermux: https://github.com/termux/termux-app\nAPI: https://github.com/termux/termux-api\nX11: https://github.com/termux/termux-x11\n\nMake sure to download the version that match your phone’s architecture; in my case, that’s the arm64 version."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#desktop-setup",
+    "href": "linux-phone/linux-phone.html#desktop-setup",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "3.2 Desktop Setup",
+    "text": "3.2 Desktop Setup\n\n\n\n\n\nOnce those are installed, it’s time to set up the desktop.10 This will mostly be running a bunch of code:\n\nDownload the required packages:\n\npkg update && pkg upgrade\npkg install termux-api x11-repo termux-x11-nightly pulseaudio xfce4\n\nCreate a new file:\n\nnano ~/startxfce4_termux.sh\n\nPaste this script11 and save the file (tap and hold and select paste, then ctrl+s ctrl+x to save and exit.)\n\n\n\n\n\n\n\n~/startxfce4_termux.sh\n\n\n\n#!/data/data/com.termux/files/usr/bin/bash\n\n# Kill open X11 processes\nkill -9 $(pgrep -f \"termux.x11\") 2&gt;/dev/null\n\n# Enable PulseAudio over Network\npulseaudio --start --load=\"module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1\" --exit-idle-time=-1\n\n# Prepare termux-x11 session\nexport XDG_RUNTIME_DIR=${TMPDIR}\ntermux-x11 :0 &gt;/dev/null &\n\n# Wait a bit until termux-x11 gets started.\nsleep 3\n\n# Launch Termux X11 main activity\nam start --user 0 -n com.termux.x11/com.termux.x11.MainActivity &gt; /dev/null 2&gt;&1\nsleep 1\n\n# Set audio server\nexport PULSE_SERVER=127.0.0.1\n\n# Run XFCE4 Desktop\nenv DISPLAY=:0 dbus-launch --exit-with-session xfce4-session & &gt; /dev/null 2&gt;&1\n\nexit 0\n\n\n\nAnd set an alias for it to make it easier to run.\n\necho \"alias xfce='bash ~/startxfce4_termux.sh'\" &gt;&gt; ~/.bashrc && . ~/.bashrc\n\nAlso, it’s useful to run this now to get access to the rest of your phone within the desktop:\n\ntermux-setup-storage"
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#preferences",
+    "href": "linux-phone/linux-phone.html#preferences",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.1 Preferences",
+    "text": "4.1 Preferences\nBefore (or after) starting the desktop, let’s change some settings. Click and hold on the app on your phone’s home screen, and open Preferences.\n\n\n\n\n\n\nPreferences\n\n\n\nOutput:\n\nenable Fullscreen\nScreen orientation -&gt; landscape\nenable Hide display cutout\n\nKeyboard:\n\ndisable Show additional keyboard\ndisable Show IME with external keyboard\nenable Enforce char-based input\n\nPointer:\n\nCapture external pointer devices when possible\n\nYou can changes mouse speed here, and mouse acceleration from Applications -&gt; Settings -&gt; Mouse and Touchpad on the Xfce desktop. Note: this is quite sensitive to DPI, and low-DPI mice will feel sluggish. Modern mice typically have good enough DPI, though."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#start-xfce",
+    "href": "linux-phone/linux-phone.html#start-xfce",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.2 Start Xfce",
+    "text": "4.2 Start Xfce\nNow you can go back to Termux and run xfce to open the desktop. Your mouse (heh) and keyboard work normally, and it feels just as responsive as a normal computer."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#xfce-settings",
+    "href": "linux-phone/linux-phone.html#xfce-settings",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.3 Xfce Settings",
+    "text": "4.3 Xfce Settings\nTime for some housekeeping to make things look a little nicer. Xfce has a lot of tools for customization— go wild!12\nSettings can be accessed by right-clicking on the Desktop and navigating Applications -&gt; Settings.\n\nScroll Zoom\nThe best thing about Xfce—and something particularly useful because of the small phone screen—is that the entire display can be zoomed in with a hotkey. To set this hotkey, right click on the desktop and go to:\nApplications -&gt; Settings -&gt; Window Manager Tweaks -&gt; Accessibility -&gt; Key used to grab and move windows\nI recommend setting this to shift, since some of the other hotkeys are overridden by Android shortcuts.\n A Gif of the zoom in action. It’s much smoother IRL.\n\n\nScreensaver\nXfce provides a nice screensaver app, but the performance benefit is questionable. It’s likely a better idea to use the phone’s regular screen timeout functionality (Settings App -&gt; Display -&gt; Screen timeout).13\nIf you do want to set up a screensaver, first go to Termux:X11’s preferences (see section 4.1) and enable Output -&gt; Keep Screen On.\nThen run pkg install xfce4-screensaver; you can now change screensaver settings by right-clicking on the desktop and going to Applications -&gt; Settings -&gt; Xfce Screensaver. You may have to disable Lock Screen -&gt; `Lock Screen; I’m not sure if it works otherwise."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#useful-applications",
+    "href": "linux-phone/linux-phone.html#useful-applications",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.4 Useful Applications",
+    "text": "4.4 Useful Applications\n\nTerminal\nThe Terminal app just runs Termux in a window, and comes preinstalled with Xfce. Much easier than switching back and forth.\n\n\nFirefox\nFirefox is useful not only as a web browser but also as a fantastic swiss army knife for viewing media formats.\npkg install firefox\nTo put an application like this on the desktop, right click -&gt; Create Launcher and start typing the name of the application. You should then see an option like Create Launcher Firefox, which will autofill what you need to create the launcher.\n\n\nUtilities\npkg install mousepad xfce4-notes-plugin\n\nMousepad is Xfce’s basic text editor.\nXfce4-notes is a nice application for sticky notes on the desktop; I recommend adding it to the menu bar.\n\nI’ve had trouble setting up the basic image/video viewers that exist for Xfce; I’d recommend just using firefox to view media."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#heavy-editing-software",
+    "href": "linux-phone/linux-phone.html#heavy-editing-software",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.5 Heavy Editing Software",
+    "text": "4.5 Heavy Editing Software\nYou can run some pretty powerful programs here.\n\nImage Editing: GIMP (pkg install gimp)\nVideo Editing: Shotcut (pkg install shotcut)\nCoding IDE: code-oss (pkg install code-oss)\n\n(If any of these take too long to download, try running termux-change-repo and selecting your nearest continent.)\nIn my experience, these run at a very reasonable speed!\n \nXfce has automatic tiling— just move a window to the edge of the screen."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#access-to-local-files",
+    "href": "linux-phone/linux-phone.html#access-to-local-files",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "4.6 Access to Local Files",
+    "text": "4.6 Access to Local Files\nIf you ran termux-setup-storage earlier, there should be a folder ~/storage which links to all the phone’s regular files, like Photos and Downloads. You can drag this onto your desktop from the file manager to make it easier to access.\nNote that this folder only allows you to access the phone’s files within Termux/Xfce, and not the other way around. I’ve yet to find a way to achieve the opposite. This also applies to access to USB flashdrives.\nSince connecting via USB to another computer gives access to the regular phone filesystem, I usually use the storage folder to move any Xfce files over so I can access them on another computer.\n\nFlashdrive Shenanigans\nNeed more storage? Instead of buying an expensive microsd card to put in the sim tray, I’m using this $5 128gb flashdrive14 (casing removed) with a $1 USB-C adapter.\nI think you could fit 6 (for &gt;800GB total incl. the phone’s internal storage) of these in this little window area if you really wanted to, and it would keep the same small profile. That’s some serious manual external storage…\nBy including the USB-C adapter, it means I also have a portable adapter whenever I need it to connect a regular USB to the phone. (Which is much more useful than the extra storage, )"
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#termux-settings",
+    "href": "linux-phone/linux-phone.html#termux-settings",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "5.1 Termux Settings",
+    "text": "5.1 Termux Settings\nIf you want to use the Termux app itself (instead of interacting with it via the Terminal application in Xfce), you may want to change some settings to make it more convenient.\n\n\n\n\n\n\nTermux Settings\n\n\n\nTo remove the buttons at the bottom (ESC, HOME, etc.), run:\necho \"extra-keys=[]\" &gt;&gt; ~/.termux/termux.properties && exit\nAnd reopen the app.\nNow right click somewhere in Termux and scroll down to select Settings. Then, Termux -&gt; Terminal I/O -&gt; enable Soft Keyboard Only If No Hardware.\n\n\nYou can change the look of Termux easily with termux-styling; after installing it, just right-click in Termux and select Style. The base font for Termux is a little weird; I use “CascadiaCode” and really like it."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#useful-packages",
+    "href": "linux-phone/linux-phone.html#useful-packages",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "5.2 Useful Packages",
+    "text": "5.2 Useful Packages\nTermux uses its own package manager and repository. If you want to use packages not in the Termux repo, see the next section (5.3).\nTermux comes with python15 and nodejs preinstalled!\n\n\n\n\n\n\nRecommended Packages\n\n\n\nRecommended packages for using the terminal. Not relevant if you’re sticking to the desktop.\nInstall with:\npkg install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch\nmandoc lets you run man to view the documentation (manual) for any function. Surprised this isn’t installed by default.\nmicro is a modern lightweight text editor— it serves the same role as nano, but uses intuitive keybindings like ctrl+s to save and ctrl+q to quit. Much more convenient, imo.\ntmux16 is a “terminal multiplexer”, which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run tmux to start; once you’re in, all hotkeys will start with ctrl+b. Press ctrl+b ? (i.e. ctrl+b shift+/) to see a list of commands. The most important are ctrl+b % or \" to split a pane horizontally/vertically, ctrl+b &lt;arrow keys&gt; to move around panes, and ctrl+b x or exit to close a pane.\ntimg lets you view images and video within the terminal by running timg &lt;file&gt;. Pretty useful if you encounter images while using the terminal.\ncmus makes it easy to listen to music while using the terminal. Run it with cmus, add a playlist with :add &lt;folder&gt;, and navigate the songlist by pressing 2 and moving up and down with the arrow keys. Enter to play the song, c to pause/unpause, and q to quit.\ncmatrix animates cascading green text; use it (run cmatrix) to show your friends what a cool hacker you are. Quit with q.\nfastfetch and cpufetch print out information about your system and cpu cores respectively when you run fastfetch/cpufetch and look pretty neat.\n\n\n   A rather over-the-top tmux setup,17 along with the output of fastfetch and cpufetch. Seeing CPU specs directly like this is pretty cool!"
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#proot-debian",
+    "href": "linux-phone/linux-phone.html#proot-debian",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "5.3 Proot Debian",
+    "text": "5.3 Proot Debian\nIf you want an installation that has root-like privileges (giving access to a lot more useful packages), or just want to use a specific Linux distro, you can use Proot-Distro. This simulates its own “pseudo-root” filesystem to give you something much closer to a regular distro than Termux.18\n\nWarning: proot-distro installations typically run slower than anything run directly on Termux. I’d recommend using native Termux whenever possible, and only running proot when you really have to.\n\npkg install proot-distro\nUse proot-distro list to see available distributions. I recommend Debian:\nproot-distro install debian\necho \"alias debian='proot-distro login debian'\" &gt;&gt; ~/.bashrc && exec bash\ndebian\nln -s /data/data/com.termux/files/home termux\napt update\nThis will set up a debian installation; launch the debian shell with debian and quit with exit. This also includes a folder (termux) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that’s more complicated).\nProot debian can run anything already installed on Termux, but you can also use apt to install Debian packages that would otherwise be unavailable. I’ve had great success running the R language this way, for example.\nYou can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, Create Launcher, enable Run in terminal, and set the command to proot-distro login debian19. You can get an icon for the launcher here (use the SVG one for background transparency)."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#termux-api",
+    "href": "linux-phone/linux-phone.html#termux-api",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "5.4 Termux-API",
+    "text": "5.4 Termux-API\nTermux-API offers a bunch of fun ways to interact with the phone (via Termux, not proot).\nTake a selfie: (without saving it)\ntermux-camera-photo -c 1 tmp && timg tmp && rm tmp\nRead out the date:\ndate +\"%A; %B %dth %Y\" | termux-tts-speak\nIt also offers some pretty powerful tools for using your phone as a sensor, with commands like termux-location (GPS), termux-torch (flashlight), and termux-sensor (gyroscope et al.)."
+  },
+  {
+    "objectID": "linux-phone/linux-phone.html#footnotes",
+    "href": "linux-phone/linux-phone.html#footnotes",
+    "title": "A Decent Linux Laptop for $50!?",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\n(Mid-2020s)↩︎\nSomehow they decided to reduce the computing power of the 2025 version, so I’d recommend the one from 2024.↩︎\nCarrier-locked phones like these are pretty abundantly available (often selling for below MSRP), because who the heck would want to use one?↩︎\nThe technology for ring-sized touchpads/trackballs is almost here, but cheap versions that work well aren’t available yet at the time of writing. Once they are, that’s what I’d recommend using— even a tiny touchpad is plenty of space to comfortably (if somewhat slowly) mouse a laptop on the go, and these things take up no space at all in your pocket.↩︎\nA “Targus Ergonomic Foldable Keyboard” or something like that.↩︎\nI believe Android 16 lets you change these, but I’m using Android 14.↩︎\nGenerally, the phone is better if you like switching between tabs while working, and the Xfce desktop is better if you prefer splitscreen/windows, as I do.↩︎\nThe amount of which seems to increase ever year…↩︎\n(we don’t want NetGuard losing uptime if it updates itself)↩︎\nI learned how to do this here.↩︎\nsource . Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!↩︎\nThe default configuration settings are quite powerful, and there are plenty of addons you can download to change things more drastically.↩︎\nYou’ll have to input your password again if the phone turns off, but this can be done entirely from a bluetooth keyboard— just like if you were using a laptop.↩︎\nYes, I tested it and confirmed it’s legit. Soon these will be easier to find at this price, too.↩︎\nThough some python packages need their own Termux package, like pkg install python-numpy, instead of pip.↩︎\nWhile Termux is a portmanteau of “terminal” and “linux”, tmux literally abbreviates “terminal multiplexer”.↩︎\nFrom left to right: terminal (just ran ls -R), micro editing a python file, terminal (just ran that python file), cmus playing music, and cmatrix looking cool.↩︎\nIt’s also possible to run Xfce from proot, giving you a rooted desktop, but I hear it runs a lot worse than just using Termux.↩︎\nApparently launcher commands can’t use bash aliases (like the debian one we just created), probably because they run off of shell instead of bash.↩︎"
+  },
+  {
     "objectID": "conference/conference.html",
     "href": "conference/conference.html",
     "title": "Video Conference in R",
@@ -116,7 +270,7 @@
     "href": "index.html",
     "title": "R Bites",
     "section": "",
-    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects!\n\nRecent Articles:\nApril\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the RStudio console at native framerate. link"
+    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects!\n\nRecent Articles:\nApril\n\nA full guide on using a phone as a Linux laptop. link\n\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the RStudio console at native framerate. link"
   },
   {
     "objectID": "temperature/temperature.html",

@@ -12,6 +12,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Linux Desktop on a Phone"
+            icon: android
+            href: linux-phone/linux-phone.qmd
           - text: "Live Temperature from Satellites"
             icon: globe-americas
             href: temperature/temperature.qmd
@@ -30,7 +33,7 @@ website:
       
 format:
   html:
-    theme: [cosmo, monocode.scss]
+    theme: [monocode.scss]
     css: styles.css
     toc: true
   

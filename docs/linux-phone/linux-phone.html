@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>&nbsp;&nbsp;R Bites - A Decent Linux Laptop for $50!?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title"><i class="bi bi-hexagon"></i>&nbsp;&nbsp;R Bites</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
+</i> 
+ <span class="dropdown-text">Linux Desktop on a Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
+</i> 
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
+</i> 
+ <span class="dropdown-text">R-Based Video Conference</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
+</i> 
+ <span class="dropdown-text">R on a Flip Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><strong>1. Introduction</strong></a>
+  <ul class="collapse">
+  <li><a href="#the-big-idea" id="toc-the-big-idea" class="nav-link" data-scroll-target="#the-big-idea">1.1 The Big Idea</a></li>
+  <li><a href="#the-phone" id="toc-the-phone" class="nav-link" data-scroll-target="#the-phone">1.2 The Phone</a>
+  <ul class="collapse">
+  <li><a href="#alternatives" id="toc-alternatives" class="nav-link" data-scroll-target="#alternatives">Alternatives</a></li>
+  </ul></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">1.3 Limitations</a>
+  <ul class="collapse">
+  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a></li>
+  <li><a href="#no-root" id="toc-no-root" class="nav-link" data-scroll-target="#no-root">No Root</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#phone-setup" id="toc-phone-setup" class="nav-link" data-scroll-target="#phone-setup"><strong>2. Phone Setup</strong></a>
+  <ul class="collapse">
+  <li><a href="#first-power-on" id="toc-first-power-on" class="nav-link" data-scroll-target="#first-power-on">2.1 First Power-on</a></li>
+  <li><a href="#peripherals" id="toc-peripherals" class="nav-link" data-scroll-target="#peripherals">2.2 Peripherals</a></li>
+  <li><a href="#settings" id="toc-settings" class="nav-link" data-scroll-target="#settings">2.3 Settings</a></li>
+  <li><a href="#lock-updates" id="toc-lock-updates" class="nav-link" data-scroll-target="#lock-updates">2.4 Lock Updates</a>
+  <ul class="collapse">
+  <li><a href="#the-trick" id="toc-the-trick" class="nav-link" data-scroll-target="#the-trick">The Trick</a></li>
+  <li><a href="#non-motorola-options" id="toc-non-motorola-options" class="nav-link" data-scroll-target="#non-motorola-options">Non-Motorola Options</a></li>
+  </ul></li>
+  <li><a href="#google-play-apps" id="toc-google-play-apps" class="nav-link" data-scroll-target="#google-play-apps">2.5 Google Play Apps</a></li>
+  </ul></li>
+  <li><a href="#linux-setup" id="toc-linux-setup" class="nav-link" data-scroll-target="#linux-setup"><strong>3. Linux Setup</strong></a>
+  <ul class="collapse">
+  <li><a href="#termux" id="toc-termux" class="nav-link" data-scroll-target="#termux">3.1 Termux</a></li>
+  <li><a href="#desktop-setup" id="toc-desktop-setup" class="nav-link" data-scroll-target="#desktop-setup">3.2 Desktop Setup</a></li>
+  </ul></li>
+  <li><a href="#xfce-configuration" id="toc-xfce-configuration" class="nav-link" data-scroll-target="#xfce-configuration"><strong>4. Xfce Configuration</strong></a>
+  <ul class="collapse">
+  <li><a href="#preferences" id="toc-preferences" class="nav-link" data-scroll-target="#preferences">4.1 Preferences</a></li>
+  <li><a href="#start-xfce" id="toc-start-xfce" class="nav-link" data-scroll-target="#start-xfce">4.2 Start Xfce</a></li>
+  <li><a href="#xfce-settings" id="toc-xfce-settings" class="nav-link" data-scroll-target="#xfce-settings">4.3 Xfce Settings</a>
+  <ul class="collapse">
+  <li><a href="#scroll-zoom" id="toc-scroll-zoom" class="nav-link" data-scroll-target="#scroll-zoom">Scroll Zoom</a></li>
+  <li><a href="#screensaver" id="toc-screensaver" class="nav-link" data-scroll-target="#screensaver">Screensaver</a></li>
+  </ul></li>
+  <li><a href="#useful-applications" id="toc-useful-applications" class="nav-link" data-scroll-target="#useful-applications">4.4 Useful Applications</a>
+  <ul class="collapse">
+  <li><a href="#terminal" id="toc-terminal" class="nav-link" data-scroll-target="#terminal">Terminal</a></li>
+  <li><a href="#firefox" id="toc-firefox" class="nav-link" data-scroll-target="#firefox">Firefox</a></li>
+  <li><a href="#utilities" id="toc-utilities" class="nav-link" data-scroll-target="#utilities">Utilities</a></li>
+  </ul></li>
+  <li><a href="#heavy-editing-software" id="toc-heavy-editing-software" class="nav-link" data-scroll-target="#heavy-editing-software">4.5 Heavy Editing Software</a></li>
+  <li><a href="#access-to-local-files" id="toc-access-to-local-files" class="nav-link" data-scroll-target="#access-to-local-files">4.6 Access to Local Files</a>
+  <ul class="collapse">
+  <li><a href="#flashdrive-shenanigans" id="toc-flashdrive-shenanigans" class="nav-link" data-scroll-target="#flashdrive-shenanigans">Flashdrive Shenanigans</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#fun-with-termux" id="toc-fun-with-termux" class="nav-link" data-scroll-target="#fun-with-termux"><strong>5. Fun with Termux</strong></a>
+  <ul class="collapse">
+  <li><a href="#termux-settings" id="toc-termux-settings" class="nav-link" data-scroll-target="#termux-settings">5.1 Termux Settings</a></li>
+  <li><a href="#useful-packages" id="toc-useful-packages" class="nav-link" data-scroll-target="#useful-packages">5.2 Useful Packages</a></li>
+  <li><a href="#proot-debian" id="toc-proot-debian" class="nav-link" data-scroll-target="#proot-debian">5.3 Proot Debian</a></li>
+  <li><a href="#termux-api" id="toc-termux-api" class="nav-link" data-scroll-target="#termux-api">5.4 Termux-API</a></li>
+  </ul></li>
+  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts"><strong>6. Closing Thoughts</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A Decent Linux Laptop for $50!?</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1><strong>1. Introduction</strong></h1>
+<section id="the-big-idea" class="level2">
+<h2 class="anchored" data-anchor-id="the-big-idea">1.1 The Big Idea</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/setup.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="800"></p>
+</figure>
+</div>
+<p>Phones are pretty powerful in this day and age<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, supporting pretty good storage and processing power. Both computers and phones are still <strong>relatively expensive</strong>, but…</p>
+<p>There’s a thing cell providers do now where they sell a phone at <strong>1/4th the market cost</strong> (wow!), but lock the cell service to their specific company (e.g.&nbsp;Verizon)— if you buy the phone and want to use it as a phone, you <em>must</em> use that company. The idea is that, because cell service is relatively expensive, someone buying the phone will end up paying more than the cost of the phone to the service provider if they use it for a few years.</p>
+<p>But what if we <strong>didn’t use it as a phone?</strong> A smartphone with no cell service is still a functioning computer (including WiFi access!), and as I said, its specs are pretty decent now…</p>
+<p>It turns out that you can get one of those carrier locked phones new for <strong>under $50</strong>, and turn it into a <strong>decent laptop computer</strong> by running Linux on it! This process doesn’t even require rooting/jailbreaking the phone— you could do it to your android today if you wanted.</p>
+<p>A word of warning, of course— the process is somewhat involved, and takes some motivation to push through. This is a great example of “you can do things cheaply if you know how and have the patience for it”.</p>
+</section>
+<section id="the-phone" class="level2">
+<h2 class="anchored" data-anchor-id="the-phone">1.2 The Phone</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/MotoGPower2024.webp" class="quarto-figure quarto-figure-center figure-img" height="400"></p>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>Note: I may wax eloquent about many of the products I’m using, but I’m not sponsored or affiliated with any of them. I just love a good piece of technology :)</p>
+</blockquote>
+<p>I’ve opted for a <strong>Moto G Power 2024</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, which is just about <strong>$50</strong> for a new-in-box carrier-locked model. You can (as of writing this) easily find these on Ebay or the likes of Amazon and Walmart.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>With a full HD display, 128 gigs of storage, and 12 gigs of RAM, this phone is <strong>better</strong> than the Macbook Air I used for 10 years— and incredibly cheaper.</p>
+<section id="alternatives" class="level3">
+<h3 class="anchored" data-anchor-id="alternatives">Alternatives</h3>
+<p>The Moto G Play (especially in upcoming years) has a similar carrier-locked model for just $30, but is a bit weaker and lower-resolution— less suitable for a laptop, but potentially ideal for projects that require a small, versatile computer. This thing costs the same as a Raspberry Pi, but it’s more powerful and has an integrated display, battery, and camera! It’s actually pretty crazy.</p>
+<p>Realistically, any recent Android phone should work; Motorola happens to offer the most powerful phones in this price range at the time of writing.</p>
+</section>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">1.3 Limitations</h2>
+<p>Using a phone as a computer like this comes with <strong>two big limitations</strong>: arm64 architecture and lack of root access.</p>
+<p>And of course, you can’t use cell service unless you buy the locked provider’s plan— but you can connect to your regular phone’s hotspot, which dodges the issue entirely! (Or, do this on your main phone if you have an Android)</p>
+<section id="architecture" class="level3">
+<h3 class="anchored" data-anchor-id="architecture">Architecture</h3>
+<p>Phones typically use arm64 chips, as do Raspberry Pis. Generally this makes running things inconvenient occasionally, and forces you to emulate certain executables (especially for video games). Luckily, there’s <strong>oodles of emulation options</strong>, and most applications already provide an arm64 executable.</p>
+</section>
+<section id="no-root" class="level3">
+<h3 class="anchored" data-anchor-id="no-root">No Root</h3>
+<p>The lack of root privileges is actually somewhat nice— it makes it impossible to brick or damage your phone while messing around with the terminal— but it does introduce some issues trying to install and run a lot of libraries and software. Luckily, the software we use for the computer provides an option for a <strong>“pseudo-root” environment</strong>, in which we pretend we have root access and can do almost everything that lets us do.</p>
+<p>This solution isn’t perfect—and getting some applications to work is a bit more complicated than on a regular PC—but for the most part, you can <strong>do pretty much do anything</strong> you’d want to do on a personal computer!</p>
+</section>
+</section>
+</section>
+<section id="phone-setup" class="level1">
+<h1><strong>2. Phone Setup</strong></h1>
+<section id="first-power-on" class="level2">
+<h2 class="anchored" data-anchor-id="first-power-on">2.1 First Power-on</h2>
+<p>The first order of business is to charge the phone enough to power on, and then set it up <strong>without a google account</strong>. You probably could use one, but it’d just cause unnecessary problems.</p>
+<p>Then, the most important thing to do once you get to the home screen is to <strong>turn off the wifi</strong>. This prevents the phone from downloading forced system updates; we’ll have to disable these permanently (section 2.4) before it’s safe to reenable wifi.</p>
+</section>
+<section id="peripherals" class="level2">
+<h2 class="anchored" data-anchor-id="peripherals">2.2 Peripherals</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Targus.jpg" class="quarto-figure quarto-figure-center figure-img" height="400"></p>
+</figure>
+</div>
+<p>While the phone/computer is entirely usable as a touch-only device, I’d highly recommend using a <strong>bluetooth keyboard</strong>, and a mouse if you’re using it on a desk.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Android supports these natively and connecting them is quite easy.</p>
+<p>If you want the computer to be portable, there’s a good amount of folding keyboards that work quite well. I use and love this <strong>Targus Keyboard</strong><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> I got on Ebay for $10— its folded dimensions almost <em>perfectly match</em> those of the phone! It and the phone fit comfortably together in my pocket.</p>
+<p>Android has a number of hard-coded<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> keyboard shortcuts that are quite useful:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Shortcuts">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Shortcuts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Home Screen: <code>Win + Enter</code></p>
+<p>Settings: <code>Win + I</code></p>
+<p>Search Apps: <code>Win</code></p>
+<p>Back: <code>Win + Backspace</code></p>
+<p>Show Windows: <code>Win + Tab</code></p>
+</div>
+</div>
+<p>For completeness, I’m using <a href="https://www.amazon.com/dp/B0D2VNZ6RN">this case</a>— it’s pretty important to get a case that functions as a stand, and I’m quite partial to the magnetic folding leather ones.</p>
+</section>
+<section id="settings" class="level2">
+<h2 class="anchored" data-anchor-id="settings">2.3 Settings</h2>
+<p>There’s a lot of settings to go through.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Developer Settings">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Developer Settings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Settings -&gt; <code>About phone</code> -&gt; Tap <code>Build number</code> 7 times to enable Developer Mode</p>
+<p>Settings -&gt; <code>System</code> -&gt; <code>Developer options</code>:</p>
+<ul>
+<li><code>Disable Automatic System Updates</code></li>
+<li><code>Enable USB</code> debugging (easier to transfer files from PC)</li>
+<li><strong><code>Disable child process restrictions</code></strong> (important)</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Landscape Settings">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Landscape Settings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Settings -&gt; <code>Display</code> -&gt; <code>Auto-rotate screen</code></p>
+<p>Settings -&gt; <code>Home &amp; lock screen</code> -&gt; <code>Home settings</code> -&gt; <code>Allow Home screen rotation</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Misc Settings">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Misc Settings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Settings -&gt; <code>Battery</code> -&gt; <code>Adaptive Battery</code> -&gt; <strong>disable <code>Use Adaptive Battery</code></strong> (otherwise this will kill important background processes)</p>
+<p>Settings -&gt; <code>Display</code> -&gt; <code>Screen timeout</code> (I recommend 2 minutes)</p>
+<p>Settings -&gt; <code>Gestures</code> -&gt; <code>Press &amp; hold power button</code> -&gt; <code>Access power menu</code></p>
+</div>
+</div>
+<p>There’s a lot you can do with the Android settings to improve general phone navigation, but it’s not worth messing with if the goal is to stay mostly in the Xfce desktop.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Debloating">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Debloating
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It’s usually a good idea to uninstall and disable unnecessary apps when you get a new phone.</p>
+<p>Settings -&gt; <code>Apps</code> -&gt; <code>See all apps</code>:</p>
+<ul>
+<li>Disable anything you won’t be using</li>
+<li>Including everything “Google” except for <code>Files by Google</code> and <code>Google Play Services</code>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="lock-updates" class="level2">
+<h2 class="anchored" data-anchor-id="lock-updates">2.4 Lock Updates</h2>
+<p>For our purposes, we <em>really</em> want the phone to <strong>stay on the version it came with</strong>. In addition to intentionally slowing down the system, new updates often introduce new bloatware<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, and can generally cause issues with settings and apps we’ve set up.</p>
+<p>Keeping it on the original version is thankfully quite easy, but only if you know the trick. Several options exist in the settings to turn off automatic updates— <em>none of them work!</em> The phone will still try to push system “security” updates to upgrade to the newest version of Android.</p>
+<section id="the-trick" class="level3">
+<h3 class="anchored" data-anchor-id="the-trick">The Trick</h3>
+<p>How do we prevent the phone from installing new system updates? Just <strong>forbid it from downloading them!</strong></p>
+<p>To do this, I used <a href="https://github.com/m66b/netguard">NetGuard</a> to block all internet requests from the updater app. I transferred the app apk from my computer via USB, but you’re probably ok flicking the internet on to download it directly from the phone.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Netguard Setup">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Netguard Setup
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Settings -&gt; <code>Options</code> -&gt; disable <code>Check for updates</code><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>Settings -&gt; <code>Advanced options</code> -&gt; enable <code>Manage system apps</code></p>
+<p>Go back to the main app list in NetGuard</p>
+<p>Find <code>Motorola Software Update</code> and disable its wifi</p>
+<p>Select the upper-left slider to start the NetGuard firewall</p>
+</div>
+</div>
+<p>I also disabled internet for Google Play Services, for good measure. NetGuard starts up when the phone boots— the phone will <strong>never system update again</strong> as long as you want it that way. Now we can finally reenable wifi!</p>
+</section>
+<section id="non-motorola-options" class="level3">
+<h3 class="anchored" data-anchor-id="non-motorola-options">Non-Motorola Options</h3>
+<p>If you’re on a different phone, you may have a different updater you need to suppress. To identify it, follow these steps:</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="App Sleuthing">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+App Sleuthing
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Close NetGuard.</li>
+<li>Download and install <a href="https://github.com/emanuele-f/PCAPdroid">PCAPdroid</a>.</li>
+<li>Open and run PCAPdroid</li>
+<li>Go to Settings -&gt; <code>System updates</code></li>
+<li>Turn wifi on via the phone’s quick access menu</li>
+<li>Select <code>Check for updates</code>, wait for it to show some sort of loading icon, and quickly disable wifi.</li>
+<li>Go back to PCAPdroid and view the list of outgoing connections. Look for an app like “Updater”, and take note of any other apps you might want to block the internet for.</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="google-play-apps" class="level2">
+<h2 class="anchored" data-anchor-id="google-play-apps">2.5 Google Play Apps</h2>
+<p>Now that we can access the internet again, it’d be nice to be able to get apps from the Google Play Store. Usually, this requires that you log into a google account, but the <a href="https://gitlab.com/AuroraOSS/AuroraStore">Aurora Store</a> lets you download them anonymously.</p>
+<p>However, it’s still a good idea to <strong>download apks directly from GitHub</strong>: many apps on the Google Play Store use an outdated version.</p>
+</section>
+</section>
+<section id="linux-setup" class="level1">
+<h1><strong>3. Linux Setup</strong></h1>
+<section id="termux" class="level2">
+<h2 class="anchored" data-anchor-id="termux">3.1 Termux</h2>
+<p>To run Linux, we’ll be using <a href="https://github.com/termux/termux-app">Termux</a>, the terminal emulator for Android. This acts pretty much the same as opening Terminal on Mac or Windows; you get a CLI (command-line interface) that lets you interact with the rest of the device.</p>
+<p>You’ll need to install 3 app apks, for Termux and two addons:</p>
+<ul>
+<li><strong>Termux:</strong> <a href="https://github.com/termux/termux-app">https://github.com/termux/termux-app</a></li>
+<li><strong>API:</strong> <a href="https://github.com/termux/termux-api">https://github.com/termux/termux-api</a></li>
+<li><strong>X11:</strong> <a href="https://github.com/termux/termux-x11">https://github.com/termux/termux-x11</a></li>
+</ul>
+<p>Make sure to download the version that match your phone’s architecture; in my case, that’s the <code>arm64</code> version.</p>
+</section>
+<section id="desktop-setup" class="level2">
+<h2 class="anchored" data-anchor-id="desktop-setup">3.2 Desktop Setup</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Xfce.svg" class="quarto-figure quarto-figure-center figure-img" height="300"></p>
+</figure>
+</div>
+<p>Once those are installed, it’s time to set up the desktop.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> This will mostly be running a bunch of code:</p>
+<ol type="1">
+<li>Download the required packages:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> update <span class="kw">&amp;&amp;</span> <span class="ex">pkg</span> upgrade</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install termux-api x11-repo termux-x11-nightly pulseaudio xfce4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Create a new file:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/startxfce4_termux.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Paste this script<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> and save the file (tap and hold and select paste, then <code>ctrl+s ctrl+x</code> to save and exit.)</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="~/startxfce4_termux.sh">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+~/startxfce4_termux.sh
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/data/data/com.termux/files/usr/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kill open X11 processes</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-9</span> <span class="va">$(</span><span class="ex">pgrep</span> <span class="at">-f</span> <span class="st">"termux.x11"</span><span class="va">)</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable PulseAudio over Network</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pulseaudio</span> <span class="at">--start</span> <span class="at">--load</span><span class="op">=</span><span class="st">"module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"</span> <span class="at">--exit-idle-time</span><span class="op">=</span>-1</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare termux-x11 session</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">XDG_RUNTIME_DIR</span><span class="op">=</span><span class="va">${TMPDIR}</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-x11</span> :0 <span class="op">&gt;</span>/dev/null <span class="kw">&amp;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Wait a bit until termux-x11 gets started.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch Termux X11 main activity</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ex">am</span> start <span class="at">--user</span> 0 <span class="at">-n</span> com.termux.x11/com.termux.x11.MainActivity <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Set audio server</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PULSE_SERVER</span><span class="op">=</span>127.0.0.1</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Run XFCE4 Desktop</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span> DISPLAY=:0 dbus-launch <span class="at">--exit-with-session</span> xfce4-session <span class="kw">&amp;</span> <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>And set an alias for it to make it easier to run.</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"alias xfce='bash ~/startxfce4_termux.sh'"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">.</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li>Also, it’s useful to run this now to get access to the rest of your phone within the desktop:</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-setup-storage</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="xfce-configuration" class="level1">
+<h1><strong>4. Xfce Configuration</strong></h1>
+<section id="preferences" class="level2">
+<h2 class="anchored" data-anchor-id="preferences">4.1 Preferences</h2>
+<p>Before (or after) starting the desktop, let’s change some settings. Click and hold on the app on your phone’s home screen, and open <code>Preferences</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Preferences">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Preferences
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>Output</code>:</p>
+<ul>
+<li>enable <code>Fullscreen</code></li>
+<li><code>Screen orientation</code> -&gt; <code>landscape</code></li>
+<li>enable <code>Hide display cutout</code></li>
+</ul>
+<p><code>Keyboard</code>:</p>
+<ul>
+<li>disable <code>Show additional keyboard</code></li>
+<li>disable <code>Show IME with external keyboard</code></li>
+<li>enable <code>Enforce char-based input</code></li>
+</ul>
+<p><code>Pointer</code>:</p>
+<ul>
+<li><code>Capture external pointer devices when possible</code></li>
+</ul>
+<p>You can changes mouse speed here, and mouse acceleration from <code>Applications</code> -&gt; <code>Settings</code> -&gt; <code>Mouse and Touchpad</code> on the Xfce desktop. Note: this is quite sensitive to DPI, and low-DPI mice will feel sluggish. Modern mice typically have good enough DPI, though.</p>
+</div>
+</div>
+</section>
+<section id="start-xfce" class="level2">
+<h2 class="anchored" data-anchor-id="start-xfce">4.2 Start Xfce</h2>
+<p>Now you can go back to Termux and run <code>xfce</code> to open the desktop. Your mouse (heh) and keyboard work normally, and it feels just as responsive as a normal computer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Desktop.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="800"></p>
+</figure>
+</div>
+</section>
+<section id="xfce-settings" class="level2">
+<h2 class="anchored" data-anchor-id="xfce-settings">4.3 Xfce Settings</h2>
+<p>Time for some housekeeping to make things look a little nicer. Xfce has a lot of tools for customization— go wild!<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<p>Settings can be accessed by right-clicking on the Desktop and navigating <code>Applications</code> -&gt; <code>Settings</code>.</p>
+<section id="scroll-zoom" class="level3">
+<h3 class="anchored" data-anchor-id="scroll-zoom">Scroll Zoom</h3>
+<p>The best thing about Xfce—and something particularly useful because of the small phone screen—is that the entire display can be zoomed in with a hotkey. To set this hotkey, right click on the desktop and go to:</p>
+<p><code>Applications</code> -&gt; <code>Settings</code> -&gt; <code>Window Manager Tweaks</code> -&gt; <code>Accessibility</code> -&gt; <code>Key used to grab and move windows</code></p>
+<p>I recommend setting this to shift, since some of the other hotkeys are overridden by Android shortcuts.</p>
+<p><img src="images/zoom.gif" class="img-fluid quarto-figure quarto-figure-center" width="800"> A Gif of the zoom in action. It’s much smoother IRL.</p>
+</section>
+<section id="screensaver" class="level3">
+<h3 class="anchored" data-anchor-id="screensaver">Screensaver</h3>
+<p>Xfce provides a nice screensaver app, but the performance benefit is questionable. It’s likely a better idea to use the phone’s regular screen timeout functionality (Settings App -&gt; <code>Display</code> -&gt; <code>Screen timeout</code>).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>If you do want to set up a screensaver, first go to Termux:X11’s preferences (see section 4.1) and enable <code>Output</code> -&gt; <code>Keep Screen On</code>.</p>
+<p>Then run <code>pkg install xfce4-screensaver</code>; you can now change screensaver settings by right-clicking on the desktop and going to <code>Applications</code> -&gt; <code>Settings</code> -&gt; <code>Xfce Screensaver</code>. You may have to disable <code>Lock Screen</code> -&gt; `Lock Screen; I’m not sure if it works otherwise.</p>
+</section>
+</section>
+<section id="useful-applications" class="level2">
+<h2 class="anchored" data-anchor-id="useful-applications">4.4 Useful Applications</h2>
+<section id="terminal" class="level3">
+<h3 class="anchored" data-anchor-id="terminal">Terminal</h3>
+<p>The <strong>Terminal</strong> app just runs Termux in a window, and comes preinstalled with Xfce. Much easier than switching back and forth.</p>
+</section>
+<section id="firefox" class="level3">
+<h3 class="anchored" data-anchor-id="firefox">Firefox</h3>
+<p><strong>Firefox</strong> is useful not only as a web browser but also as a fantastic swiss army knife for viewing media formats.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install firefox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To put an application like this on the desktop, right click -&gt; <code>Create Launcher</code> and start typing the name of the application. You should then see an option like <code>Create Launcher Firefox</code>, which will autofill what you need to create the launcher.</p>
+</section>
+<section id="utilities" class="level3">
+<h3 class="anchored" data-anchor-id="utilities">Utilities</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mousepad xfce4-notes-plugin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><strong>Mousepad</strong> is Xfce’s basic text editor.</li>
+<li><strong>Xfce4-notes</strong> is a nice application for sticky notes on the desktop; I recommend adding it to the menu bar.</li>
+</ul>
+<p>I’ve had trouble setting up the basic image/video viewers that exist for Xfce; I’d recommend just using firefox to view media.</p>
+</section>
+</section>
+<section id="heavy-editing-software" class="level2">
+<h2 class="anchored" data-anchor-id="heavy-editing-software">4.5 Heavy Editing Software</h2>
+<p>You can run some pretty powerful programs here.</p>
+<ul>
+<li><p><strong>Image Editing</strong>: <a href="https://www.gimp.org/">GIMP</a> (<code>pkg install gimp</code>)</p></li>
+<li><p><strong>Video Editing</strong>: <a href="https://www.shotcut.org/">Shotcut</a> (<code>pkg install shotcut</code>)</p></li>
+<li><p><strong>Coding IDE</strong>: <a href="https://github.com/microsoft/vscode">code-oss</a> (<code>pkg install code-oss</code>)</p></li>
+</ul>
+<p>(If any of these take too long to download, try running <code>termux-change-repo</code> and selecting your nearest continent.)</p>
+<p>In my experience, these run at a very reasonable speed!</p>
+<p><img src="images/editors.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/workflow.png" class="img-fluid quarto-figure quarto-figure-center" width="800"></p>
+<p>Xfce has automatic tiling— just move a window to the edge of the screen.</p>
+</section>
+<section id="access-to-local-files" class="level2">
+<h2 class="anchored" data-anchor-id="access-to-local-files">4.6 Access to Local Files</h2>
+<p>If you ran <code>termux-setup-storage</code> earlier, there should be a folder <code>~/storage</code> which links to all the phone’s regular files, like Photos and Downloads. You can drag this onto your desktop from the file manager to make it easier to access.</p>
+<p>Note that this folder only allows you to access the phone’s files within Termux/Xfce, and not the other way around. I’ve yet to find a way to achieve the opposite. This also applies to access to USB flashdrives.</p>
+<p>Since connecting via USB to another computer gives access to the regular phone filesystem, I usually use the <code>storage</code> folder to move any Xfce files over so I can access them on another computer.</p>
+<section id="flashdrive-shenanigans" class="level3">
+<h3 class="anchored" data-anchor-id="flashdrive-shenanigans">Flashdrive Shenanigans</h3>
+<p>Need more storage? Instead of buying an expensive microsd card to put in the sim tray, I’m using this $5 <strong>128gb flashdrive</strong><a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> (casing removed) with a $1 USB-C adapter.</p>
+<p>I think you could fit 6 (for &gt;800GB total incl.&nbsp;the phone’s internal storage) of these in this little window area if you really wanted to, and it would keep the same small profile. That’s some serious manual external storage…</p>
+<p>By including the USB-C adapter, it means I also have a <strong>portable adapter</strong> whenever I need it to connect a regular USB to the phone. (Which is much more useful than the extra storage, )</p>
+<p><img src="images/usb.jpeg" class="img-fluid quarto-figure quarto-figure-center" width="200"><img src="images/usbslot.jpeg" class="img-fluid quarto-figure quarto-figure-center" width="200"></p>
+</section>
+</section>
+</section>
+<section id="fun-with-termux" class="level1">
+<h1><strong>5. Fun with Termux</strong></h1>
+<p>There’s a lot you can do with Termux, whether or not you’re in Xfce.</p>
+<section id="termux-settings" class="level2">
+<h2 class="anchored" data-anchor-id="termux-settings">5.1 Termux Settings</h2>
+<p>If you want to use the Termux app itself (instead of interacting with it via the Terminal application in Xfce), you may want to change some settings to make it more convenient.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Termux Settings">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Termux Settings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To remove the buttons at the bottom (ESC, HOME, etc.), run:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"extra-keys=[]"</span> <span class="op">&gt;&gt;</span> ~/.termux/termux.properties <span class="kw">&amp;&amp;</span> <span class="bu">exit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And reopen the app.</p>
+<p>Now right click somewhere in Termux and scroll down to select <code>Settings</code>. Then, <code>Termux</code> -&gt; <code>Terminal I/O</code> -&gt; enable <code>Soft Keyboard Only If No Hardware</code>.</p>
+</div>
+</div>
+<p>You can change the look of Termux easily with <a href="https://github.com/termux/termux-styling">termux-styling</a>; after installing it, just right-click in Termux and select <code>Style</code>. The base font for Termux is a little weird; I use “CascadiaCode” and really like it.</p>
+</section>
+<section id="useful-packages" class="level2">
+<h2 class="anchored" data-anchor-id="useful-packages">5.2 Useful Packages</h2>
+<p>Termux uses its own package manager and repository. If you want to use packages not in the Termux repo, see the next section (5.3).</p>
+<p>Termux comes with <strong>python</strong><a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> and <strong>nodejs</strong> preinstalled!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Recommended Packages">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Recommended Packages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recommended packages for <em>using the terminal</em>. Not relevant if you’re sticking to the desktop.</p>
+<p>Install with:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>mandoc</strong> lets you run <code>man</code> to view the documentation (manual) for any function. Surprised this isn’t installed by default.</p>
+<p><strong>micro</strong> is a <em>modern</em> lightweight text editor— it serves the same role as <code>nano</code>, but uses intuitive keybindings like <code>ctrl+s</code> to save and <code>ctrl+q</code> to quit. Much more convenient, imo.</p>
+<p><strong>tmux</strong><a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> is a “terminal multiplexer”, which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run <code>tmux</code> to start; once you’re in, all hotkeys will start with <code>ctrl+b</code>. Press <code>ctrl+b ?</code> (i.e.&nbsp;<code>ctrl+b shift+/</code>) to see a list of commands. The most important are <code>ctrl+b % or "</code> to split a pane horizontally/vertically, <code>ctrl+b &lt;arrow keys&gt;</code> to move around panes, and <code>ctrl+b x</code> or <code>exit</code> to close a pane.</p>
+<p><strong>timg</strong> lets you view images and video within the terminal by running <code>timg &lt;file&gt;</code>. Pretty useful if you encounter images while using the terminal.</p>
+<p><strong>cmus</strong> makes it easy to listen to music while using the terminal. Run it with <code>cmus</code>, add a playlist with <code>:add &lt;folder&gt;</code>, and navigate the songlist by pressing <code>2</code> and moving up and down with the arrow keys. <code>Enter</code> to play the song, <code>c</code> to pause/unpause, and <code>q</code> to quit.</p>
+<p><strong>cmatrix</strong> animates cascading green text; use it (run <code>cmatrix</code>) to show your friends what a cool hacker you are. Quit with <code>q</code>.</p>
+<p><strong>fastfetch</strong> and <strong>cpufetch</strong> print out information about your system and cpu cores respectively when you run <code>fastfetch</code>/<code>cpufetch</code> and look pretty neat.</p>
+</div>
+</div>
+<p><img src="images/tmux.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/fastfetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/cpufetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> A rather over-the-top tmux setup,<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> along with the output of <code>fastfetch</code> and <code>cpufetch</code>. Seeing CPU specs directly like this is pretty cool!</p>
+</section>
+<section id="proot-debian" class="level2">
+<h2 class="anchored" data-anchor-id="proot-debian">5.3 Proot Debian</h2>
+<p>If you want an installation that has root-like privileges (giving access to a lot more useful packages), or just want to use a specific Linux distro, you can use <strong>Proot-Distro</strong>. This simulates its own “pseudo-root” filesystem to give you something much closer to a regular distro than Termux.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a></p>
+<blockquote class="blockquote">
+<p>Warning: proot-distro installations typically run slower than anything run directly on Termux. I’d recommend using native Termux whenever possible, and only running proot when you really have to.</p>
+</blockquote>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install proot-distro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Use <code>proot-distro list</code> to see available distributions. I recommend Debian:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">proot-distro</span> install debian</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"alias debian='proot-distro login debian'"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">exec</span> bash</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">debian</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /data/data/com.termux/files/home termux</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will set up a debian installation; launch the debian shell with <code>debian</code> and quit with <code>exit</code>. This also includes a folder (<code>termux</code>) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that’s more complicated).</p>
+<p>Proot debian can <strong>run anything already installed</strong> on Termux, but you can also use <code>apt</code> to install Debian packages that would otherwise be unavailable. I’ve had <a href="https://gbkorr.github.io/r-bites/flipphone-r/flipphone-r.html">great success</a> running the R language this way, for example.</p>
+<p>You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, <code>Create Launcher</code>, enable <code>Run in terminal</code>, and set the command to <code>proot-distro login debian</code><a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>. You can get an icon for the launcher <a href="www.debian.org/logos/">here</a> (use the SVG one for background transparency).</p>
+</section>
+<section id="termux-api" class="level2">
+<h2 class="anchored" data-anchor-id="termux-api">5.4 Termux-API</h2>
+<p>Termux-API offers a bunch of fun ways to interact with the phone (via Termux, not proot).</p>
+<p><strong>Take a selfie</strong>: (without saving it)</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-camera-photo</span> <span class="at">-c</span> 1 tmp <span class="kw">&amp;&amp;</span> <span class="ex">timg</span> tmp <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> tmp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Read out the date</strong>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +<span class="st">"%A; %B %dth %Y"</span> <span class="kw">|</span> <span class="ex">termux-tts-speak</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It also offers some pretty powerful tools for using your phone as a sensor, with commands like <code>termux-location</code> (GPS), <code>termux-torch</code> (flashlight), and <code>termux-sensor</code> (gyroscope et al.).</p>
+</section>
+</section>
+<section id="closing-thoughts" class="level1">
+<h1><strong>6. Closing Thoughts</strong></h1>
+<p>I don’t have too much to close on— TLDR, you can get a cheap-but-powerful carrier-locked smartphone for under $50 and use it as a highly capable and feature-rich Linux desktop. I’m fairly certain this has better specs than other options (e.g.&nbsp;old chromebooks) at this price point, and it has some other distinct advantages— I’m not sure it’s possible to make a more portable computer.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>(Mid-2020s)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Somehow they decided to <em>reduce</em> the computing power of the 2025 version, so I’d recommend the one from 2024.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Carrier-locked phones like these are pretty abundantly available (often selling for below MSRP), because who the heck would want to use one?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>The technology for ring-sized touchpads/trackballs is almost here, but cheap versions that work well aren’t available yet at the time of writing. Once they are, that’s what I’d recommend using— even a tiny touchpad is plenty of space to comfortably (if somewhat slowly) mouse a laptop on the go, and these things take up no space at all in your pocket.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>A “Targus Ergonomic Foldable Keyboard” or something like that.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I believe Android 16 lets you change these, but I’m using Android 14.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Generally, the phone is better if you like switching between tabs while working, and the Xfce desktop is better if you prefer splitscreen/windows, as I do.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>The amount of which seems to increase ever year…<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>(we don’t want NetGuard losing uptime if it updates itself)<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>I learned how to do this <a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/Documentation/native/termux_native.md">here</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh">source</a> . Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>The default configuration settings are quite powerful, and there are plenty of <a href="https://www.xfce-look.org">addons</a> you can download to change things more drastically.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>You’ll have to input your password again if the phone turns off, but this can be done entirely from a bluetooth keyboard— just like if you were using a laptop.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Yes, I tested it and confirmed it’s legit. Soon these will be easier to find at this price, too.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Though some python packages need their own Termux package, like <code>pkg install python-numpy</code>, instead of pip.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>While <em>Termux</em> is a portmanteau of “<strong>term</strong>inal” and “lin<strong>ux</strong>”, <em>tmux</em> literally abbreviates “<strong>t</strong>erminal <strong>mu</strong>ltiple<strong>x</strong>er”.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>From left to right: terminal (just ran <code>ls -R</code>), <code>micro</code> editing a python file, terminal (just ran that python file), <code>cmus</code> playing music, and <code>cmatrix</code> looking cool.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>It’s also possible to run Xfce from proot, giving you a rooted desktop, but I hear it runs a lot worse than just using Termux.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>Apparently launcher commands can’t use bash aliases (like the <code>debian</code> one we just created), probably because they run off of shell instead of bash.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<hr>
+<p>© Gabriel Broussard Korr — 2026</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

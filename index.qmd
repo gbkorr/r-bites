@@ -15,6 +15,12 @@ See my [Github](https://github.com/gbkorr) for more projects!
 
 *April*
 
+<img class='thumbnail' src=images/linux.jpeg>
+
+A full guide on **using a phone as a Linux laptop**. [link](linux-phone/linux-phone.qmd)
+
+<br clear="left">
+
 <img class='thumbnail' src=images/temperature.png>
 
 A **tiny full-stack Python pipeline** that retrieves satellite data to estimate your local temperature. [link](temperature/temperature.qmd) 
