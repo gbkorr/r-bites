@@ -39,6 +39,6 @@ Running **R on a flip phone**, and pushing to github from it. [link](flipphone-r
 
 <img class='thumbnail' src=images/video-player.gif>
 
-A lightweight set of functions to **render video in the console** at native framerate. [link](video-player/video-player.qmd)
+A lightweight set of functions to **render video in the RStudio console** at native framerate. [link](video-player/video-player.qmd)
 
 <br clear="left"/>

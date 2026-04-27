@@ -116,7 +116,7 @@
     "href": "index.html",
     "title": "R Bites",
     "section": "",
-    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects!\n\nRecent Articles:\nApril\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the console at native framerate. link"
+    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects!\n\nRecent Articles:\nApril\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the RStudio console at native framerate. link"
   },
   {
     "objectID": "temperature/temperature.html",
