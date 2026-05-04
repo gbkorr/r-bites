@@ -218,6 +218,7 @@ Change the settings with `OBS Studio -> Preferences` (or `File -> Settings`). Al
 
 ___
 ### 2.2 Usage
+Download the files from r-bites' [releases](https://github.com/gbkorr/r-bites/releases) page, or copy the code from the [github](https://github.com/gbkorr/r-bites/tree/main/files). You'll need `webcam.R` and `client.R`.
 
 #### 2.2.1 R Startup
 You and the person you'll be conferencing with should both follow these steps.

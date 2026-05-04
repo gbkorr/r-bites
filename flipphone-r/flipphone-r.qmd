@@ -86,6 +86,7 @@ Tested and working:
 -   `dplyr`
 -   `knitr`
 -   `markdown`
+-		`ggplot2`
 
 Failed to install:
 

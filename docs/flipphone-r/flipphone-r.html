@@ -292,6 +292,7 @@ Package Compatibility
 <li><code>dplyr</code></li>
 <li><code>knitr</code></li>
 <li><code>markdown</code></li>
+<li><pre><code>  `ggplot2`</code></pre></li>
 </ul>
 <p>Failed to install:</p>
 <ul>
@@ -310,32 +311,32 @@ Package Compatibility
 <p><a href="phonemarkdown.html">LINK</a></p>
 <p>Of course, I could have written this using <code>nano</code>, but it was more fun to write it as one big string within R.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">=</span> <span class="st">"</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;this is where I typed the Rmd body&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(knitr<span class="sc">::</span><span class="fu">knit2html</span>(<span class="at">text=</span>txt),<span class="st">'phonemarkdown.html'</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">q</span>() <span class="co">#quit R and go back to the debian CLI</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">=</span> <span class="st">"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;this is where I typed the Rmd body&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(knitr<span class="sc">::</span><span class="fu">knit2html</span>(<span class="at">text=</span>txt),<span class="st">'phonemarkdown.html'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">q</span>() <span class="co">#quit R and go back to the debian CLI</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then I pushed it to my repo (!!) like this:</p>
 <p>Setup: First, I needed to authorize the system to push to my repo.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ssh<span class="sc">-</span>keygen <span class="sc">-</span>t ed25519 <span class="sc">-</span>C <span class="st">"&lt;MYEMAIL&gt;"</span> <span class="co">#create new SSH key for github</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cat .ssh<span class="sc">/</span>id_ed25519.pub <span class="co">#print SSH key</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#I then MANUALLY typed the key into my github account</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ssh <span class="sc">-</span>T git<span class="sc">@</span>github.com <span class="co">#verify successful SSH</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ssh<span class="sc">-</span>keygen <span class="sc">-</span>t ed25519 <span class="sc">-</span>C <span class="st">"&lt;MYEMAIL&gt;"</span> <span class="co">#create new SSH key for github</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cat .ssh<span class="sc">/</span>id_ed25519.pub <span class="co">#print SSH key</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#I then MANUALLY typed the key into my github account</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ssh <span class="sc">-</span>T git<span class="sc">@</span>github.com <span class="co">#verify successful SSH</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Commit Push: Now I can push to my repo with the CLI.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>apt install git</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#for the sake of security!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>apt install git</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>git clone git<span class="sc">@</span>github.com<span class="sc">:</span>gbkorr<span class="sc">/</span>r<span class="sc">-</span>bites.git <span class="co">#clone repo from git</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>destination<span class="ot">=</span><span class="st">"r-bites/flipphone-r"</span> <span class="co">#destination directory</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>mv phonemarkdown.hmtl <span class="sc">$</span>destination <span class="co">#move file into repo</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>destination</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>git add phonemarkdown.hmtl <span class="co">#stage file</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>git commit <span class="sc">-</span>m <span class="st">"Created Rmd Page with Flip Phone"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>git push <span class="co">#push commit</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#then I DELETED the new SSH key on github</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#for the sake of security!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What’s the point of all this? It’s really neat, that’s what! Now we know that, in a pinch, you could update your repo with some fresh R code…</p>
 

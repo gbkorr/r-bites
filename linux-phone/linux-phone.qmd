@@ -24,7 +24,7 @@ But what if we **didn't use it as a phone?** A smartphone with no cell service i
 
 It turns out that you can get one of those carrier locked phones new for **under $50**, and turn it into a **decent laptop computer** by running Linux on it! This process doesn't even require rooting/jailbreaking the phone— you could do it to your android today if you wanted.
 
-A word of warning, of course— the process is somewhat involved, and takes some motivation to push through. This is a great example of "you can do things cheaply if you know how and have the patience for it".
+A word of warning, of course— the process is somewhat involved, and takes some motivation to push through. This is a great example of "you can do things cheaply— if you have the patience and know-how".
 
 
 ## 1.2 The Phone
@@ -122,6 +122,8 @@ Settings -> `Battery` -> `Adaptive Battery` -> **disable `Use Adaptive Battery`*
 Settings -> `Display` -> `Screen timeout` (I recommend 2 minutes)
 
 Settings -> `Gestures` -> `Press & hold power button` -> `Access power menu`
+
+Settings -> `System` -> `Performance` -> `RAM boost` -> `8gb`
 :::
 
 There's a lot you can do with the Android settings to improve general phone navigation, but it's not worth messing with if the goal is to stay mostly in the Xfce desktop.[^purpose]
@@ -319,7 +321,7 @@ Xfce provides a nice screensaver app, but the performance benefit is questionabl
 
 If you do want to set up a screensaver, first go to Termux:X11's preferences (see section 4.1) and enable `Output` -> `Keep Screen On`.
 
-Then run `pkg install xfce4-screensaver`; you can now change screensaver settings by right-clicking on the desktop and going to `Applications` -> `Settings` -> `Xfce Screensaver`. You may have to disable `Lock Screen` -> `Lock Screen; I'm not sure if it works otherwise.
+Then run `pkg install xfce4-screensaver`; you can now change screensaver settings by right-clicking on the desktop and going to `Applications` -> `Settings` -> `Xfce Screensaver`. You may have to disable `Lock Screen` -> `Lock Screen`; I'm not sure if it works otherwise.
 
 ## 4.4 Useful Applications
 
@@ -379,7 +381,7 @@ Need more storage? Instead of buying an expensive microsd card to put in the sim
 
 I think you could fit 6 (for >800GB total incl. the phone's internal storage) of these in this little window area if you really wanted to, and it would keep the same small profile. That's some serious manual external storage... 
 
-By including the USB-C adapter, it means I also have a **portable adapter** whenever I need it to connect a regular USB to the phone. (Which is much more useful than the extra storage, )
+By including the USB-C adapter, it means I also have a **portable adapter** whenever I need it to connect a regular USB to the phone. (Which is much more useful than the extra storage, lol)
 
 ![](images/usb.jpeg){width=200 fig-align="center"}![](images/usbslot.jpeg){width=200 fig-align="center"}
 

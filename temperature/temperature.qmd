@@ -122,7 +122,7 @@ At this moment, there are over **10,000 satellites** orbiting the Earth performi
 
 **Sensory data from satellites** can be quite a valuable asset—especially if it can be recorded with high time resolution (i.e. images more than once every few days)—and many such satellites focus on acting as a [paid service](https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades/) for government programs, boasting high-resolution images almost hourly.
 
-Some satellites, though, were **launched in the name of Science**— and as it goes in the study of the Earth and Cosmos, there's little reason (and demand) to charge for these scientific measurements. Satellites launched as part of the ESA's Copernicus Program are one such group, and cover a **variety of sensory modes**, including full RGB images of the Earth's surface assembled every three by the Sentinel-2 mission.
+Some satellites, though, were **launched in the name of Science**— and as it goes in the study of the Earth and Cosmos, there's little reason (and demand) to charge for these scientific measurements. Satellites launched as part of the ESA's Copernicus Program are one such group, and cover a **variety of sensory modes**, including full RGB images of the Earth's surface assembled every three days by the Sentinel-2 mission.
 
 Copernicus makes its data conveniently **available for free online** through several means. Most of these means—like a [webpage](https://browser.dataspace.copernicus.eu/) that allows users to select and download specific sensory measurements for a given area and time—are built on the core data-providing service of an s3 bucket in which all processed Copernicus measurements (fancy image files) are stored. 
 
