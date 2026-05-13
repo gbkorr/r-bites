@@ -168,33 +168,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
   <li><a href="#big-picture" id="toc-big-picture" class="nav-link active" data-scroll-target="#big-picture">Big Picture</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
-  <ul>
-  <li><a href="#render.matrix" id="toc-render.matrix" class="nav-link" data-scroll-target="#render.matrix"><strong>render.matrix()</strong></a></li>
-  <li><a href="#render.image" id="toc-render.image" class="nav-link" data-scroll-target="#render.image"><strong>render.image()</strong></a></li>
-  <li><a href="#load_video" id="toc-load_video" class="nav-link" data-scroll-target="#load_video"><strong>load_video()</strong></a></li>
-  <li><a href="#play_video" id="toc-play_video" class="nav-link" data-scroll-target="#play_video"><strong>play_video()</strong></a></li>
-  </ul></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
   <li><a href="#code-details" id="toc-code-details" class="nav-link" data-scroll-target="#code-details">Code Details</a>
-  <ul>
-  <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries"><strong>Libraries</strong></a></li>
-  <li><a href="#render.matrix-1" id="toc-render.matrix-1" class="nav-link" data-scroll-target="#render.matrix-1"><strong>render.matrix()</strong></a></li>
-  <li><a href="#render.image-1" id="toc-render.image-1" class="nav-link" data-scroll-target="#render.image-1"><strong>render.image()</strong></a></li>
-  <li><a href="#load_video-1" id="toc-load_video-1" class="nav-link" data-scroll-target="#load_video-1"><strong>load_video()</strong></a></li>
-  <li><a href="#play_video-1" id="toc-play_video-1" class="nav-link" data-scroll-target="#play_video-1"><strong>play_video()</strong></a></li>
+  <ul class="collapse">
+  <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries">Libraries</a></li>
+  <li><a href="#render.matrix-1" id="toc-render.matrix-1" class="nav-link" data-scroll-target="#render.matrix-1">render.matrix()</a></li>
+  <li><a href="#render.image-1" id="toc-render.image-1" class="nav-link" data-scroll-target="#render.image-1">render.image()</a></li>
+  <li><a href="#load_video-1" id="toc-load_video-1" class="nav-link" data-scroll-target="#load_video-1">load_video()</a></li>
+  <li><a href="#play_video-1" id="toc-play_video-1" class="nav-link" data-scroll-target="#play_video-1">play_video()</a></li>
   </ul></li>
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a>
-  <ul>
-  <li><a href="#palette" id="toc-palette" class="nav-link" data-scroll-target="#palette">Palette</a></li>
-  <li><a href="#resolution" id="toc-resolution" class="nav-link" data-scroll-target="#resolution">Resolution</a></li>
-  <li><a href="#pure-r" id="toc-pure-r" class="nav-link" data-scroll-target="#pure-r">Pure R</a></li>
-  <li><a href="#history" id="toc-history" class="nav-link" data-scroll-target="#history">History</a></li>
-  </ul></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
   </ul>
 </nav>
     </div>
@@ -259,27 +247,27 @@ Demo
 </section>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
-<section id="render.matrix" class="level3">
-<h3 class="anchored" data-anchor-id="render.matrix"><strong>render.matrix()</strong></h3>
+<section id="render.matrix" class="level4">
+<h4 class="anchored" data-anchor-id="render.matrix">render.matrix()</h4>
 <p>Renders an integer matrix to the console as a single wrapped line, overwriting the previous render.matrix() output. This allows us to animate video frames by drawing them in succession.</p>
 </section>
-<section id="render.image" class="level3">
-<h3 class="anchored" data-anchor-id="render.image"><strong>render.image()</strong></h3>
+<section id="render.image" class="level4">
+<h4 class="anchored" data-anchor-id="render.image">render.image()</h4>
 <p>Converts an image (e.g.&nbsp;from <code>jpeg::readJPEG()</code>) into a matrix suitable for <code>render.matrix</code>. This grayscales and quantizes it to only a few shades of gray.</p>
 </section>
-<section id="load_video" class="level3">
-<h3 class="anchored" data-anchor-id="load_video"><strong>load_video()</strong></h3>
+<section id="load_video" class="level4">
+<h4 class="anchored" data-anchor-id="load_video">load_video()</h4>
 <p>Reads a video file and generates an image for each frame using <code>av::av_video_images()</code>. The video is also downscaled and set to a specified framerate for ease of rendering.</p>
 </section>
-<section id="play_video" class="level3">
-<h3 class="anchored" data-anchor-id="play_video"><strong>play_video()</strong></h3>
+<section id="play_video" class="level4">
+<h4 class="anchored" data-anchor-id="play_video">play_video()</h4>
 <p>Reads a list of images as generated by <code>load.video()</code> or <code>av::av_video_images()</code> and renders each frame at the appropriate time. If rendering takes too long, frames will be skipped to preserve the overall video speed.</p>
 </section>
 </section>
 <section id="code-details" class="level2">
 <h2 class="anchored" data-anchor-id="code-details">Code Details</h2>
 <section id="libraries" class="level3">
-<h3 class="anchored" data-anchor-id="libraries"><strong>Libraries</strong></h3>
+<h3 class="anchored" data-anchor-id="libraries">Libraries</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(av)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jpeg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -289,7 +277,7 @@ Demo
 <hr>
 </section>
 <section id="render.matrix-1" class="level3">
-<h3 class="anchored" data-anchor-id="render.matrix-1"><strong>render.matrix()</strong></h3>
+<h3 class="anchored" data-anchor-id="render.matrix-1">render.matrix()</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="code">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -337,7 +325,7 @@ code
 <hr>
 </section>
 <section id="render.image-1" class="level3">
-<h3 class="anchored" data-anchor-id="render.image-1"><strong>render.image()</strong></h3>
+<h3 class="anchored" data-anchor-id="render.image-1">render.image()</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="code">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -368,7 +356,7 @@ code
 <hr>
 </section>
 <section id="load_video-1" class="level3">
-<h3 class="anchored" data-anchor-id="load_video-1"><strong>load_video()</strong></h3>
+<h3 class="anchored" data-anchor-id="load_video-1">load_video()</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="code">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -419,7 +407,7 @@ code
 <hr>
 </section>
 <section id="play_video-1" class="level3">
-<h3 class="anchored" data-anchor-id="play_video-1"><strong>play_video()</strong></h3>
+<h3 class="anchored" data-anchor-id="play_video-1">play_video()</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="code">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -481,24 +469,24 @@ code
 </section>
 <section id="notes" class="level2">
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<section id="palette" class="level3">
-<h3 class="anchored" data-anchor-id="palette">Palette</h3>
+<section id="palette" class="level4">
+<h4 class="anchored" data-anchor-id="palette">Palette</h4>
 <p>I chose this default (recommended) palette after quite a bit of experimenting. It aims to provide high contrast while still giving good tone resolution without using too many shades; it’s quite a bit more interpretable than many of the other palettes I tried.</p>
 <p>The supply of good-quality characters for palettes is severely limited: many characters (notably, the full block) render too small or not monospaced<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in the RStudio console, and even those that don’t still have significant gaps between lines. This is one of the few combinations with good contrast that doesn’t introduce distracting shapes and patterns.</p>
 <hr>
 </section>
-<section id="resolution" class="level3">
-<h3 class="anchored" data-anchor-id="resolution">Resolution</h3>
+<section id="resolution" class="level4">
+<h4 class="anchored" data-anchor-id="resolution">Resolution</h4>
 <p><code>cat()</code> struggles to render quickly at higher resolutions (as well as on some devices in general). Reducing the resolution without losing a lot of visual clarity is challenging, especially with the limited palette choices. I experimented with generating characters with marching squares, but this proved to be far less effective than just varying the shades. This may be worth revisiting with cleverer use of the alphabet and combining both approaches.</p>
 <hr>
 </section>
-<section id="pure-r" class="level3">
-<h3 class="anchored" data-anchor-id="pure-r">Pure R</h3>
+<section id="pure-r" class="level4">
+<h4 class="anchored" data-anchor-id="pure-r">Pure R</h4>
 <p>This is intended to run in RStudio; it actually does work in R.app, but R.app renders much less frequently than RStudio and therefore can’t support a very good framerate.</p>
 <hr>
 </section>
-<section id="history" class="level3">
-<h3 class="anchored" data-anchor-id="history">History</h3>
+<section id="history" class="level4">
+<h4 class="anchored" data-anchor-id="history">History</h4>
 <p>Rendering video in the console is a bit of a canonical exercise, and has been done many times before (though not in RStudio, as far as I can tell). The purpose of this bite is mainly to provide a very lightweight set of functions (~20 lines of code) to accomplish this.</p>
 
 

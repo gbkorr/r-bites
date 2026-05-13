@@ -9,7 +9,7 @@ language:
 
 This is where I upload articles on small projects I've done. At first it was just for R, but I started branching out!
 
-See my [Github](https://github.com/gbkorr) for more projects!
+See my [Github](https://github.com/gbkorr) for more projects.
 
 #### *Recent Articles*:
 
