@@ -29,7 +29,7 @@ website:
             href: video-player/video-player.qmd
       
   page-footer:
-    right: "---\n&copy; Gabriel Broussard Korr — 2026\n[mantis9877@gmail.com](mailto:mantis9877@gmail.com)"
+    right: "---\n&copy; Gabriel Broussard Korr — 2026<br>[mantis9877@gmail.com](mailto:mantis9877@gmail.com)"
       
 format:
   html:
