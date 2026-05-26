@@ -246,7 +246,7 @@ The rendering resolution has a huge impact on the framerate of the console strea
 
 If you want to test this by streaming to yourself, use `127.0.0.1:8080` for both IP addresses.
 
-> Note: streaming between devices will require port forwarding to be set up on your network. If you don't knopw what that means, it's not worth trying to set up.
+> Note: streaming between devices will require port forwarding to be set up on your network. If you don't know what that means, it's not worth trying to set up.
 
 
 #### 2.2.2 OBS

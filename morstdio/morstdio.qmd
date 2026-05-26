@@ -1,0 +1,37 @@
+---
+title: "Morstdio: Morse Code CLI for Headless Linux"
+date: Unk
+date-format: 'MMMM YYYY'
+format: 
+  html:
+    toc: true
+---
+
+
+remember to release this as a repo for easy download/forking
+
+Morstdio
+
+video
+code block
+
+ACTUALLY FIGURE OUT WHERE TO PUT FILES FOR THIS (have a dedicated folder and always link to it)
+like "FILES" or smth
+
+consider making this its own repo
+^^^
+idk how I feel about having code in an article (like the GIS final) vs. putting it in a (more visible?) repo
+I'd say skip it, and just provide those in a folder.
+
+
+llama.cpp and the great sage
+install guide (very brief; mainly just "had to build in docker ubuntu") 
+
+
+sh
+R
+Bash
+Python
+R
+Bash/R
+R
