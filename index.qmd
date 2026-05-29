@@ -12,6 +12,8 @@ This is where I upload articles on small projects I've done. At first it was jus
 
 See my [Github](https://github.com/gbkorr) for more projects.
 
+> Note: All my writing is my own! AI is useful, but I always write without it.
+
 #### *Recent Articles*:
 
 *May*
@@ -57,5 +59,3 @@ Running **R on a flip phone**, and pushing to github from it. [link](flipphone-r
 A lightweight set of functions to **render video in the RStudio console** at native framerate. [link](video-player/video-player.qmd)
 
 <br clear="left"/>
-
-> Note: All my writing is my own! AI is useful, but I always write without it.
