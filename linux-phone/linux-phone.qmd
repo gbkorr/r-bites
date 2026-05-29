@@ -37,7 +37,9 @@ I've opted for a **Moto G Power 2024**[^sad], which is just about **$50** for a 
 [^sad]: Somehow they decided to *reduce* the computing power of the 2025 version, so I'd recommend the one from 2024.
 [^mart]: Carrier-locked phones like these are pretty abundantly available (often selling for below MSRP), because who the heck would want to use one?
 
-With a full HD display, 128 gigs of storage, and 12 gigs of RAM, this phone is **better** than the Macbook Air I used for 10 years— and incredibly cheaper.
+With a full HD display, 128 gigs of storage, and 8-16[^swap] gigs of RAM, this phone is **better** than the Macbook Air I used for 10 years— and incredibly cheaper.
+
+[^swap]: The native "RAM boost" setting adds up to 8GB of swap memory.
 
 ### Alternatives
 The Moto G Play (especially in upcoming years) has a similar carrier-locked model for just $30, but is a bit weaker and lower-resolution— less suitable for a laptop, but potentially ideal for projects that require a small, versatile computer. This thing costs the same as a Raspberry Pi, but it's more powerful and has an integrated display, battery, and camera! It's actually pretty crazy.
@@ -68,7 +70,7 @@ The first order of business is to charge the phone enough to power on, and then 
 Then, the most important thing to do once you get to the home screen is to **turn off the wifi**. This prevents the phone from downloading forced system updates; we'll have to disable these permanently (section 2.4) before it's safe to reenable wifi.
 
 ## 2.2 Peripherals
-![](images/Targus.jpg){height=400 fig-align="center"}
+![](images/Targus.jpg){width=580 fig-align="center"}
 
 While the phone/computer is entirely usable as a touch-only device, I'd highly recommend using a **bluetooth keyboard**, and a mouse if you're using it on a desk.[^desk] Android supports these natively and connecting them is quite easy.
 

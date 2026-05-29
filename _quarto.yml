@@ -3,6 +3,7 @@ project:
   output-dir: docs
   resources:
     - video-player/video-player-demo.mov
+    - morstdio/morstdio.mp4
     - conference/gesticulation.mov
     - flipphone-r/phonemarkdown.html
 
@@ -12,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Morse Code Headless Linux"
+            icon: lightbulb-off
+            href: morstdio/morstdio.qmd
           - text: "Linux Desktop on a Phone"
             icon: android
             href: linux-phone/linux-phone.qmd
@@ -36,6 +40,7 @@ format:
     theme: [monocode.scss]
     css: styles.css
     toc: true
+    code-overflow: wrap
   
       
 #ref: https://yihui.org/rmarkdown/rmarkdown-site

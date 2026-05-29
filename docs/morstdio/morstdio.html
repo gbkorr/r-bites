@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>&nbsp;&nbsp;R Bites - Morstdio: Morse Code CLI for Headless Linux</title>
+<title>&nbsp;&nbsp;R Bites - Morstdio: Baremetal Morse Code I/O</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -39,6 +73,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -94,6 +130,11 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../morstdio/morstdio.html"><i class="bi bi-lightbulb-off" role="img">
+</i> 
+ <span class="dropdown-text">Morse Code Headless Linux</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
 </i> 
  <span class="dropdown-text">Linux Desktop on a Phone</span></a>
@@ -132,14 +173,24 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#pmorse" id="toc-pmorse" class="nav-link" data-scroll-target="#pmorse">2. PMorse</a></li>
+  <li><a href="#shell-script" id="toc-shell-script" class="nav-link" data-scroll-target="#shell-script">3. Shell Script</a></li>
+  <li><a href="#usage-guide" id="toc-usage-guide" class="nav-link" data-scroll-target="#usage-guide">4. Usage Guide</a></li>
+  <li><a href="#worlds-smallest-chatbot" id="toc-worlds-smallest-chatbot" class="nav-link" data-scroll-target="#worlds-smallest-chatbot">5. World’s smallest chatbot?</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Morstdio: Morse Code CLI for Headless Linux</h1>
+<h1 class="title">Morstdio: Baremetal Morse Code I/O</h1>
 </div>
 
 
@@ -150,7 +201,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
+      <p class="date">May 2026</p>
     </div>
   </div>
   
@@ -162,17 +213,118 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>remember to release this as a repo for easy download/forking</p>
-<p>Morstdio</p>
-<p>video code block</p>
-<p>ACTUALLY FIGURE OUT WHERE TO PUT FILES FOR THIS (have a dedicated folder and always link to it) like “FILES” or smth</p>
-<p>consider making this its own repo ^^^ idk how I feel about having code in an article (like the GIS final) vs.&nbsp;putting it in a (more visible?) repo I’d say skip it, and just provide those in a folder.</p>
-<p>llama.cpp and the great sage install guide (very brief; mainly just “had to build in docker ubuntu”)</p>
-<p>sh R Bash Python R Bash/R R</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="lyra.jpg" class="img-fluid figure-img" width="300"></p>
+<figcaption>This little thing runs a full Linux distro!</figcaption>
+</figure>
+</div>
+<p>I have a <strong>very silly problem</strong>. I recent got a tiny $15 <a href="https://www.luckfox.com/Luckfox-Lyra?search=luckfox%20lyra/#tab-description">Luckfox Lyra</a> Linux SBC<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (not sponsored, I just love this thing) that runs Ubuntu. It’s really neat and works perfectly through my computer <strong>via ADB</strong> (wherein I use my computer’s terminal to send commands to the board’s shell, where it’s executed).</p>
+<p>But what if I <strong>don’t want to connect it</strong> to my computer? And I don’t want to connect it to a screen or keyboard, either— peripherals are such a pain. I want to use this Linux OS as it was intended: completely naked.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><sup>,</sup><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>See those two <strong>buttons on the board</strong>? One is the reset button, and wouldn’t be of much use<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. But the other is for booting, and only has special behavior if held when the system turns on— the rest of the time, it can be read as a normal button. If you squint, you can also see the <strong>tiny LED</strong> marked “USER” right next to the USB-C port. This light is intended to be controllable for convenience in embedded systems.</p>
+<p>Anyway, I wrote a script that lets you <strong>control a full shell session</strong> by clicking Morse Code with the Boot button and flashes stdout (the result of commands) back to you via that LED. It works… incredibly well, far better than I expected.</p>
+<blockquote class="blockquote">
+<p>As usual, all the code and writing were made without AI. I put quite a bit of thought into the UX!<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+</blockquote>
+</section>
+<section id="pmorse" class="level2">
+<h2 class="anchored" data-anchor-id="pmorse">2. PMorse</h2>
+<p>I’ll need symbols to interact with the shell, and morse code traditionally doesn’t include very many. So I created a new dialect called <strong>programmer morse</strong><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>— or pmorse for short— which adds in all the missing ASCII symbols.</p>
+<p>&lt; <em>pmorse chart coming soon</em> &gt;</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="placeholder chart">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+placeholder chart
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><img src="pmorse.jpeg" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Traditional morse is also somewhat difficult to parse programatically (without making it a pain for the user), surprisingly. To counterract this, pmorse uses <strong>long dashes</strong> to denote spaces, which completely removes the ambiguity of pause timing and lets you pause mid-word for however long you want.</p>
+<p>Apart from that, the traditional timing system applies. Now there’s just <strong>3 relevant durations</strong>:</p>
+<ul>
+<li><strong>dash length</strong>: duration of tone (button press) to be a dash. Any shorter and the tone is considered a dot.</li>
+<li><strong>space length</strong>: much longer, duration of tone to be a space.</li>
+<li><strong>charpause</strong>: duration of a pause to consider the next tone part of a new character.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Any shorter and the pause is ignored.</li>
+</ul>
+<p>The blinker will use this system with a different set of timings that are easier to read visually. Additionally, it uses traditional morse spacing— words are separated by a pause rather than a long dash, since this is easier for humans to read. Long dashes are instead used for newlines.</p>
+</section>
+<section id="shell-script" class="level2">
+<h2 class="anchored" data-anchor-id="shell-script">3. Shell Script</h2>
+<p>The interface is intended to let you interact with a shell, so I <strong>might as well write it in shell</strong>. Hopefully you run this on something that has bash, but I made it in sh for the sake of embedded linux portability. It was great practice! (even if sh doesn’t teach great habits for bash, but at least it’s backwards-compatible)</p>
+<p>The code is split up into a few sections:</p>
+<ul>
+<li>the button listener (recording raw morse)</li>
+<li>the code that figures out what to do with that raw morse</li>
+<li>the section that actually executes your command and monitors stdin/out</li>
+<li>some code for handling the light’s blinking (it’s controlled by a file, thanks unix ♥)</li>
+<li>and a translator section that converts ASCII to and from pmorse by grepping a dictionary string.</li>
+</ul>
+<p>&lt; <em>code and repo coming soon</em>&gt;</p>
+</section>
+<section id="usage-guide" class="level2">
+<h2 class="anchored" data-anchor-id="usage-guide">4. Usage Guide</h2>
+<p>&lt; <em>coming soon</em> &gt;</p>
+</section>
+<section id="worlds-smallest-chatbot" class="level2">
+<h2 class="anchored" data-anchor-id="worlds-smallest-chatbot">5. World’s smallest chatbot?</h2>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="llamacpp.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="400"></p>
+</figure>
+</div>
+<p>I originally got the Lyra to see if it could run <a href="https://github.com/ggml-org/llama.cpp">Llama.cpp</a> (the standard LLM inferencer) with its measly <strong>128MB of RAM</strong>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Turns out it can!</p>
+<p>I was able to get it working by just building llama-cli from source<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> in a docker container with the same version of Ubuntu as the board (22.04) (and building for an ARM processor). It runs very slowly— around <strong>a token a minute</strong> after a long (~8 minute) startup for <a href="https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF">Qwen3.5-0.8B-Q4_0</a>, a small but surprisingly capable chatbot.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> It can run larger models too, albeit at an absolutely glacial pace.</p>
+<p>Anyway, let’s try running it with morstdio! I should be able to just call llama-cli, wait a while, and come back to <strong>read my message in flashed morse</strong>. I made a script<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> to facilitate this and pipe the response to stdout:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./llama-cli</span> <span class="at">-st</span> <span class="at">--simple-io</span> <span class="at">--reasoning</span> off <span class="at">-p</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">-m</span> <span class="st">"Qwen3.5-0.8B-Q4_0.gguf"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'/^&gt;/{f=1; next} /^\[/{f=0} f'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this video I’m narrating the commands and output, since you probably don’t know morse :P. But it should be readable from the video itself as well, if you do.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Demonstration">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Demonstration
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="morstdio.mp4"></video></div>
+</div>
+</div>
+<p>Now, Luckfox (and competitors<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>) make a <a href="https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description">similar SBC</a> that’s half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) <strong>smallest self-contained chatbot</strong> anyone has ever made!<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
 
 
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><em>Single-Board Computer</em>— something that runs a full operating system all by itself. Imagine a thumbdrive running windows on its own.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Although it will need a power supply connected to the USB-C port.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>If it wasn’t clear, this is a ridiculous idea and I’m being sarcastic. But I managed to pull it off!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>As in, it reboots the machine every time it’s pressed. Someday I think it’d be really funny to make a version of morstdio based on rebooting the machine at different timings, but almost all boards have two buttons nowadays.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>A morse-based interface was always going to be inconvenient, but I think I settled on a command good flow and feedback that makes it feel somewhat natural to use.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I’ll actually be using this for a much bigger project later this year, so this makes for a good test of it.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>E.g. <code>.... ..</code> &lt;hi&gt; has one charpause-length pause, between the h and i.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>You’re usually supposed to have, like, 8 to 24 gigs of RAM for this sort of thing.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>With help from Gemini… I can’t stand the C family :(. At least I know roughly what the cmake args are doing.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>I should note that running LLMs is far from the intended use case of this sort of SBC, and there are much better options for this kind of AI application. This was just a fun little experiment for giggles.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Yeesh, llamacpp args are a mess. The convenient ones for getting stdout have been deprecated with no good replacement, so I have to use awk to manually isolate the response. awk snippet genned by Qwen3.6-35B…<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>The LicheeRV Nano is slightly larger but has much more RAM (256MB). But size is what matters here!<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Though to officially claim that title, I should hook it up to a properly small battery.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -597,6 +749,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

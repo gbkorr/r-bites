@@ -1,37 +1,109 @@
 ---
-title: "Morstdio: Morse Code CLI for Headless Linux"
-date: Unk
+title: "Morstdio: Baremetal Morse Code I/O"
+date: May 2026
 date-format: 'MMMM YYYY'
 format: 
   html:
     toc: true
+    code-copy: true
 ---
 
+## 1. Introduction
 
-remember to release this as a repo for easy download/forking
+![This little thing runs a full Linux distro!](lyra.jpg){width=300 fig-align="left"}
 
-Morstdio
+I have a **very silly problem**. I recent got a tiny $15 [Luckfox Lyra](https://www.luckfox.com/Luckfox-Lyra?search=luckfox%20lyra/#tab-description) Linux SBC[^sbc] (not sponsored, I just love this thing) that runs Ubuntu. It's really neat and works perfectly through my computer **via ADB** (wherein I use my computer's terminal to send commands to the board's shell, where it's executed).
 
-video
-code block
+[^sbc]: *Single-Board Computer*— something that runs a full operating system all by itself. Imagine a thumbdrive running windows on its own.
 
-ACTUALLY FIGURE OUT WHERE TO PUT FILES FOR THIS (have a dedicated folder and always link to it)
-like "FILES" or smth
+But what if I **don't want to connect it** to my computer? And I don't want to connect it to a screen or keyboard, either— peripherals are such a pain. I want to use this Linux OS as it was intended: completely naked.[^power]^,^[^johns]
 
-consider making this its own repo
-^^^
-idk how I feel about having code in an article (like the GIS final) vs. putting it in a (more visible?) repo
-I'd say skip it, and just provide those in a folder.
+[^johns]: If it wasn't clear, this is a ridiculous idea and I'm being sarcastic. But I managed to pull it off!
+[^power]: Although it will need a power supply connected to the USB-C port.
+
+See those two **buttons on the board**? One is the reset button, and wouldn't be of much use[^lol]. But the other is for booting, and only has special behavior if held when the system turns on— the rest of the time, it can be read as a normal button. If you squint, you can also see the **tiny LED** marked "USER" right next to the USB-C port. This light is intended to be controllable for convenience in embedded systems.
+
+[^lol]: As in, it reboots the machine every time it's pressed. Someday I think it'd be really funny to make a version of morstdio based on rebooting the machine at different timings, but almost all boards have two buttons nowadays.
+
+Anyway, I wrote a script that lets you **control a full shell session** by clicking Morse Code with the Boot button and flashes stdout (the result of commands) back to you via that LED. It works... incredibly well, far better than I expected.
+
+> As usual, all the code and writing were made without AI. I put quite a bit of thought into the UX![^ux]
+
+[^ux]: A morse-based interface was always going to be inconvenient, but I think I settled on a command good flow and feedback that makes it feel somewhat natural to use.
+
+## 2. PMorse
+
+I'll need symbols to interact with the shell, and morse code traditionally doesn't include very many. So I created a new dialect called **programmer morse**[^div3]— or pmorse for short— which adds in all the missing ASCII symbols.
+
+[^div3]: I'll actually be using this for a much bigger project later this year, so this makes for a good test of it.
+
+\< *pmorse chart coming soon* \>
+
+:::{.callout-tip title="placeholder chart" collapse=true}
+![](pmorse.jpeg)
+:::
+
+Traditional morse is also somewhat difficult to parse programatically (without making it a pain for the user), surprisingly. To counterract this, pmorse uses **long dashes** to denote spaces, which completely removes the ambiguity of pause timing and lets you pause mid-word for however long you want.
+
+Apart from that, the traditional timing system applies. Now there's just **3 relevant durations**:
+
+- **dash length**: duration of tone (button press) to be a dash. Any shorter and the tone is considered a dot.
+- **space length**: much longer, duration of tone to be a space.
+- **charpause**: duration of a pause to consider the next tone part of a new character.[^charpause] Any shorter and the pause is ignored.
+
+[^charpause]: E.g. `.... ..` \<hi\> has one charpause-length pause, between the h and i.
+
+The blinker will use this system with a different set of timings that are easier to read visually. Additionally, it uses traditional morse spacing— words are separated by a pause rather than a long dash, since this is easier for humans to read. Long dashes are instead used for newlines.
+
+## 3. Shell Script
+
+The interface is intended to let you interact with a shell, so I **might as well write it in shell**. Hopefully you run this on something that has bash, but I made it in sh for the sake of embedded linux portability. It was great practice! (even if sh doesn't teach great habits for bash, but at least it's backwards-compatible)
+
+The code is split up into a few sections: 
+
+- the button listener (recording raw morse)
+- the code that figures out what to do with that raw morse
+- the section that actually executes your command and monitors stdin/out
+- some code for handling the light's blinking (it's controlled by a file, thanks unix ♥)
+- and a translator section that converts ASCII to and from pmorse by grepping a dictionary string.
+
+\< *code and repo coming soon*\>
+
+## 4. Usage Guide
+
+\< *coming soon* \>
+
+## 5. World's smallest chatbot?
+
+![](llamacpp.png){width=400 fig-align="left"}
+
+I originally got the Lyra to see if it could run [Llama.cpp](https://github.com/ggml-org/llama.cpp) (the standard LLM inferencer) with its measly **128MB of RAM**.[^gigs] Turns out it can!
+
+[^gigs]: You're usually supposed to have, like, 8 to 24 gigs of RAM for this sort of thing.
+
+I was able to get it working by just building llama-cli from source[^help] in a docker container with the same version of Ubuntu as the board (22.04) (and building for an ARM processor). It runs very slowly— around **a token a minute** after a long (~8 minute) startup for [Qwen3.5-0.8B-Q4_0](https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF), a small but surprisingly capable chatbot.[^llm] It can run larger models too, albeit at an absolutely glacial pace.
+
+[^help]: With help from Gemini... I can't stand the C family :(. At least I know roughly what the cmake args are doing.
+
+[^llm]: I should note that running LLMs is far from the intended use case of this sort of SBC, and there are much better options for this kind of AI application. This was just a fun little experiment for giggles.
+
+Anyway, let's try running it with morstdio! I should be able to just call llama-cli, wait a while, and come back to **read my message in flashed morse**. I made a script[^L] to facilitate this and pipe the response to stdout:
+
+[^L]: Yeesh, llamacpp args are a mess. The convenient ones for getting stdout have been deprecated with no good replacement, so I have to use awk to manually isolate the response. awk snippet genned by Qwen3.6-35B...
+
+```bash
+#!/bin/bash
+./llama-cli -st --simple-io --reasoning off -p "$1" -m "Qwen3.5-0.8B-Q4_0.gguf" | awk '/^>/{f=1; next} /^\[/{f=0} f'
+```
+
+In this video I'm narrating the commands and output, since you probably don't know morse :P. But it should be readable from the video itself as well, if you do.
+
+::: {.callout-note title="Demonstration"}
+{{< video morstdio.mp4 >}}
+:::
 
 
-llama.cpp and the great sage
-install guide (very brief; mainly just "had to build in docker ubuntu") 
+Now, Luckfox (and competitors[^lichee]) make a [similar SBC](https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description) that's half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) **smallest self-contained chatbot** anyone has ever made![^oops]
 
-
-sh
-R
-Bash
-Python
-R
-Bash/R
-R
+[^oops]: Though to officially claim that title, I should hook it up to a properly small battery.
+[^lichee]: The LicheeRV Nano is slightly larger but has much more RAM (256MB). But size is what matters here!

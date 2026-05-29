@@ -1,5 +1,6 @@
 ---
 title: "R Bites"
+subtitle: "R finds a way..."
 author: "By Gabriel Broussard Korr"
 language:
   title-block-author-single: ""

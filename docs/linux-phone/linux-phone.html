@@ -128,6 +128,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../morstdio/morstdio.html"><i class="bi bi-lightbulb-off" role="img">
+</i> 
+ <span class="dropdown-text">Morse Code Headless Linux</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
 </i> 
  <span class="dropdown-text">Linux Desktop on a Phone</span></a>
@@ -286,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Note: I may wax eloquent about many of the products I’m using, but I’m not sponsored or affiliated with any of them. I just love a good piece of technology :)</p>
 </blockquote>
 <p>I’ve opted for a <strong>Moto G Power 2024</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, which is just about <strong>$50</strong> for a new-in-box carrier-locked model. You can (as of writing this) easily find these on Ebay or the likes of Amazon and Walmart.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<p>With a full HD display, 128 gigs of storage, and 12 gigs of RAM, this phone is <strong>better</strong> than the Macbook Air I used for 10 years— and incredibly cheaper.</p>
+<p>With a full HD display, 128 gigs of storage, and 8-16<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> gigs of RAM, this phone is <strong>better</strong> than the Macbook Air I used for 10 years— and incredibly cheaper.</p>
 <section id="alternatives" class="level3">
 <h3 class="anchored" data-anchor-id="alternatives">Alternatives</h3>
 <p>The Moto G Play (especially in upcoming years) has a similar carrier-locked model for just $30, but is a bit weaker and lower-resolution— less suitable for a laptop, but potentially ideal for projects that require a small, versatile computer. This thing costs the same as a Raspberry Pi, but it’s more powerful and has an integrated display, battery, and camera! It’s actually pretty crazy.</p>
@@ -319,12 +324,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="peripherals">2.2 Peripherals</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Targus.jpg" class="quarto-figure quarto-figure-center figure-img" height="400"></p>
+<p><img src="images/Targus.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="580"></p>
 </figure>
 </div>
-<p>While the phone/computer is entirely usable as a touch-only device, I’d highly recommend using a <strong>bluetooth keyboard</strong>, and a mouse if you’re using it on a desk.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Android supports these natively and connecting them is quite easy.</p>
-<p>If you want the computer to be portable, there’s a good amount of folding keyboards that work quite well. I use and love this <strong>Targus Keyboard</strong><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> I got on Ebay for $10— its folded dimensions almost <em>perfectly match</em> those of the phone! It and the phone fit comfortably together in my pocket.</p>
-<p>Android has a number of hard-coded<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> keyboard shortcuts that are quite useful:</p>
+<p>While the phone/computer is entirely usable as a touch-only device, I’d highly recommend using a <strong>bluetooth keyboard</strong>, and a mouse if you’re using it on a desk.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Android supports these natively and connecting them is quite easy.</p>
+<p>If you want the computer to be portable, there’s a good amount of folding keyboards that work quite well. I use and love this <strong>Targus Keyboard</strong><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> I got on Ebay for $10— its folded dimensions almost <em>perfectly match</em> those of the phone! It and the phone fit comfortably together in my pocket.</p>
+<p>Android has a number of hard-coded<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> keyboard shortcuts that are quite useful:</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Shortcuts">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -396,7 +401,7 @@ Misc Settings
 <p>Settings -&gt; <code>System</code> -&gt; <code>Performance</code> -&gt; <code>RAM boost</code> -&gt; <code>8gb</code></p>
 </div>
 </div>
-<p>There’s a lot you can do with the Android settings to improve general phone navigation, but it’s not worth messing with if the goal is to stay mostly in the Xfce desktop.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>There’s a lot you can do with the Android settings to improve general phone navigation, but it’s not worth messing with if the goal is to stay mostly in the Xfce desktop.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Debloating">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -418,7 +423,7 @@ Debloating
 </section>
 <section id="lock-updates" class="level2">
 <h2 class="anchored" data-anchor-id="lock-updates">2.4 Lock Updates</h2>
-<p>For our purposes, we <em>really</em> want the phone to <strong>stay on the version it came with</strong>. In addition to intentionally slowing down the system, new updates often introduce new bloatware<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, and can generally cause issues with settings and apps we’ve set up.</p>
+<p>For our purposes, we <em>really</em> want the phone to <strong>stay on the version it came with</strong>. In addition to intentionally slowing down the system, new updates often introduce new bloatware<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, and can generally cause issues with settings and apps we’ve set up.</p>
 <p>Keeping it on the original version is thankfully quite easy, but only if you know the trick. Several options exist in the settings to turn off automatic updates— <em>none of them work!</em> The phone will still try to push system “security” updates to upgrade to the newest version of Android.</p>
 <section id="the-trick" class="level3">
 <h3 class="anchored" data-anchor-id="the-trick">The Trick</h3>
@@ -434,7 +439,7 @@ Netguard Setup
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Settings -&gt; <code>Options</code> -&gt; disable <code>Check for updates</code><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>Settings -&gt; <code>Options</code> -&gt; disable <code>Check for updates</code><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
 <p>Settings -&gt; <code>Advanced options</code> -&gt; enable <code>Manage system apps</code></p>
 <p>Go back to the main app list in NetGuard</p>
 <p>Find <code>Motorola Software Update</code> and disable its wifi</p>
@@ -498,7 +503,7 @@ App Sleuthing
 <p><img src="images/Xfce.svg" class="quarto-figure quarto-figure-center figure-img" height="300"></p>
 </figure>
 </div>
-<p>Once those are installed, it’s time to set up the desktop.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> This will mostly be running a bunch of code:</p>
+<p>Once those are installed, it’s time to set up the desktop.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> This will mostly be running a bunch of code:</p>
 <ol type="1">
 <li>Download the required packages:</li>
 </ol>
@@ -509,7 +514,7 @@ App Sleuthing
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/startxfce4_termux.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
-<li>Paste this script<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> and save the file (tap and hold and select paste, then <code>ctrl+s ctrl+x</code> to save and exit.)</li>
+<li>Paste this script<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> and save the file (tap and hold and select paste, then <code>ctrl+s ctrl+x</code> to save and exit.)</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="~/startxfce4_termux.sh">
 <div class="callout-header d-flex align-content-center">
@@ -605,7 +610,7 @@ Preferences
 </section>
 <section id="xfce-settings" class="level2">
 <h2 class="anchored" data-anchor-id="xfce-settings">4.3 Xfce Settings</h2>
-<p>Time for some housekeeping to make things look a little nicer. Xfce has a lot of tools for customization— go wild!<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<p>Time for some housekeeping to make things look a little nicer. Xfce has a lot of tools for customization— go wild!<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
 <p>Settings can be accessed by right-clicking on the Desktop and navigating <code>Applications</code> -&gt; <code>Settings</code>.</p>
 <section id="scroll-zoom" class="level3">
 <h3 class="anchored" data-anchor-id="scroll-zoom">Scroll Zoom</h3>
@@ -616,7 +621,7 @@ Preferences
 </section>
 <section id="screensaver" class="level3">
 <h3 class="anchored" data-anchor-id="screensaver">Screensaver</h3>
-<p>Xfce provides a nice screensaver app, but the performance benefit is questionable. It’s likely a better idea to use the phone’s regular screen timeout functionality (Settings App -&gt; <code>Display</code> -&gt; <code>Screen timeout</code>).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>Xfce provides a nice screensaver app, but the performance benefit is questionable. It’s likely a better idea to use the phone’s regular screen timeout functionality (Settings App -&gt; <code>Display</code> -&gt; <code>Screen timeout</code>).<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
 <p>If you do want to set up a screensaver, first go to Termux:X11’s preferences (see section 4.1) and enable <code>Output</code> -&gt; <code>Keep Screen On</code>.</p>
 <p>Then run <code>pkg install xfce4-screensaver</code>; you can now change screensaver settings by right-clicking on the desktop and going to <code>Applications</code> -&gt; <code>Settings</code> -&gt; <code>Xfce Screensaver</code>. You may have to disable <code>Lock Screen</code> -&gt; <code>Lock Screen</code>; I’m not sure if it works otherwise.</p>
 </section>
@@ -663,7 +668,7 @@ Preferences
 <p>Since connecting via USB to another computer gives access to the regular phone filesystem, I usually use the <code>storage</code> folder to move any Xfce files over so I can access them on another computer.</p>
 <section id="flashdrive-shenanigans" class="level3">
 <h3 class="anchored" data-anchor-id="flashdrive-shenanigans">Flashdrive Shenanigans</h3>
-<p>Need more storage? Instead of buying an expensive microsd card to put in the sim tray, I’m using this $5 <strong>128gb flashdrive</strong><a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> (casing removed) with a $1 USB-C adapter.</p>
+<p>Need more storage? Instead of buying an expensive microsd card to put in the sim tray, I’m using this $5 <strong>128gb flashdrive</strong><a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> (casing removed) with a $1 USB-C adapter.</p>
 <p>I think you could fit 6 (for &gt;800GB total incl.&nbsp;the phone’s internal storage) of these in this little window area if you really wanted to, and it would keep the same small profile. That’s some serious manual external storage…</p>
 <p>By including the USB-C adapter, it means I also have a <strong>portable adapter</strong> whenever I need it to connect a regular USB to the phone. (Which is much more useful than the extra storage, lol)</p>
 <p><img src="images/usb.jpeg" class="img-fluid quarto-figure quarto-figure-center" width="200"><img src="images/usbslot.jpeg" class="img-fluid quarto-figure quarto-figure-center" width="200"></p>
@@ -697,7 +702,7 @@ Termux Settings
 <section id="useful-packages" class="level2">
 <h2 class="anchored" data-anchor-id="useful-packages">5.2 Useful Packages</h2>
 <p>Termux uses its own package manager and repository. If you want to use packages not in the Termux repo, see the next section (5.3).</p>
-<p>Termux comes with <strong>python</strong><a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> and <strong>nodejs</strong> preinstalled!</p>
+<p>Termux comes with <strong>python</strong><a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> and <strong>nodejs</strong> preinstalled!</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Recommended Packages">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -713,18 +718,18 @@ Recommended Packages
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>mandoc</strong> lets you run <code>man</code> to view the documentation (manual) for any function. Surprised this isn’t installed by default.</p>
 <p><strong>micro</strong> is a <em>modern</em> lightweight text editor— it serves the same role as <code>nano</code>, but uses intuitive keybindings like <code>ctrl+s</code> to save and <code>ctrl+q</code> to quit. Much more convenient, imo.</p>
-<p><strong>tmux</strong><a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> is a “terminal multiplexer”, which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run <code>tmux</code> to start; once you’re in, all hotkeys will start with <code>ctrl+b</code>. Press <code>ctrl+b ?</code> (i.e.&nbsp;<code>ctrl+b shift+/</code>) to see a list of commands. The most important are <code>ctrl+b % or "</code> to split a pane horizontally/vertically, <code>ctrl+b &lt;arrow keys&gt;</code> to move around panes, and <code>ctrl+b x</code> or <code>exit</code> to close a pane.</p>
+<p><strong>tmux</strong><a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> is a “terminal multiplexer”, which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run <code>tmux</code> to start; once you’re in, all hotkeys will start with <code>ctrl+b</code>. Press <code>ctrl+b ?</code> (i.e.&nbsp;<code>ctrl+b shift+/</code>) to see a list of commands. The most important are <code>ctrl+b % or "</code> to split a pane horizontally/vertically, <code>ctrl+b &lt;arrow keys&gt;</code> to move around panes, and <code>ctrl+b x</code> or <code>exit</code> to close a pane.</p>
 <p><strong>timg</strong> lets you view images and video within the terminal by running <code>timg &lt;file&gt;</code>. Pretty useful if you encounter images while using the terminal.</p>
 <p><strong>cmus</strong> makes it easy to listen to music while using the terminal. Run it with <code>cmus</code>, add a playlist with <code>:add &lt;folder&gt;</code>, and navigate the songlist by pressing <code>2</code> and moving up and down with the arrow keys. <code>Enter</code> to play the song, <code>c</code> to pause/unpause, and <code>q</code> to quit.</p>
 <p><strong>cmatrix</strong> animates cascading green text; use it (run <code>cmatrix</code>) to show your friends what a cool hacker you are. Quit with <code>q</code>.</p>
 <p><strong>fastfetch</strong> and <strong>cpufetch</strong> print out information about your system and cpu cores respectively when you run <code>fastfetch</code>/<code>cpufetch</code> and look pretty neat.</p>
 </div>
 </div>
-<p><img src="images/tmux.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/fastfetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/cpufetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> A rather over-the-top tmux setup,<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> along with the output of <code>fastfetch</code> and <code>cpufetch</code>. Seeing CPU specs directly like this is pretty cool!</p>
+<p><img src="images/tmux.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/fastfetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> <img src="images/cpufetch.png" class="img-fluid quarto-figure quarto-figure-center" width="800"> A rather over-the-top tmux setup,<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> along with the output of <code>fastfetch</code> and <code>cpufetch</code>. Seeing CPU specs directly like this is pretty cool!</p>
 </section>
 <section id="proot-debian" class="level2">
 <h2 class="anchored" data-anchor-id="proot-debian">5.3 Proot Debian</h2>
-<p>If you want an installation that has root-like privileges (giving access to a lot more useful packages), or just want to use a specific Linux distro, you can use <strong>Proot-Distro</strong>. This simulates its own “pseudo-root” filesystem to give you something much closer to a regular distro than Termux.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a></p>
+<p>If you want an installation that has root-like privileges (giving access to a lot more useful packages), or just want to use a specific Linux distro, you can use <strong>Proot-Distro</strong>. This simulates its own “pseudo-root” filesystem to give you something much closer to a regular distro than Termux.<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a></p>
 <blockquote class="blockquote">
 <p>Warning: proot-distro installations typically run slower than anything run directly on Termux. I’d recommend using native Termux whenever possible, and only running proot when you really have to.</p>
 </blockquote>
@@ -737,7 +742,7 @@ Recommended Packages
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will set up a debian installation; launch the debian shell with <code>debian</code> and quit with <code>exit</code>. This also includes a folder (<code>termux</code>) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that’s more complicated).</p>
 <p>Proot debian can <strong>run anything already installed</strong> on Termux, but you can also use <code>apt</code> to install Debian packages that would otherwise be unavailable. I’ve had <a href="https://gbkorr.github.io/r-bites/flipphone-r/flipphone-r.html">great success</a> running the R language this way, for example.</p>
-<p>You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, <code>Create Launcher</code>, enable <code>Run in terminal</code>, and set the command to <code>proot-distro login debian</code><a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>. You can get an icon for the launcher <a href="www.debian.org/logos/">here</a> (use the SVG one for background transparency).</p>
+<p>You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, <code>Create Launcher</code>, enable <code>Run in terminal</code>, and set the command to <code>proot-distro login debian</code><a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>. You can get an icon for the launcher <a href="www.debian.org/logos/">here</a> (use the SVG one for background transparency).</p>
 </section>
 <section id="termux-api" class="level2">
 <h2 class="anchored" data-anchor-id="termux-api">5.4 Termux-API</h2>
@@ -763,22 +768,23 @@ Recommended Packages
 <li id="fn1"><p>(Mid-2020s)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Somehow they decided to <em>reduce</em> the computing power of the 2025 version, so I’d recommend the one from 2024.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Carrier-locked phones like these are pretty abundantly available (often selling for below MSRP), because who the heck would want to use one?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>The technology for ring-sized touchpads/trackballs is almost here, but cheap versions that work well aren’t available yet at the time of writing. Once they are, that’s what I’d recommend using— even a tiny touchpad is plenty of space to comfortably (if somewhat slowly) mouse a laptop on the go, and these things take up no space at all in your pocket.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>A “Targus Ergonomic Foldable Keyboard” or something like that.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>I believe Android 16 lets you change these, but I’m using Android 14.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Generally, the phone is better if you like switching between tabs while working, and the Xfce desktop is better if you prefer splitscreen/windows, as I do.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>The amount of which seems to increase ever year…<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>(we don’t want NetGuard losing uptime if it updates itself)<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><p>I learned how to do this <a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/Documentation/native/termux_native.md">here</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn11"><p><a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh">source</a> . Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p>The default configuration settings are quite powerful, and there are plenty of <a href="https://www.xfce-look.org">addons</a> you can download to change things more drastically.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn13"><p>You’ll have to input your password again if the phone turns off, but this can be done entirely from a bluetooth keyboard— just like if you were using a laptop.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn14"><p>Yes, I tested it and confirmed it’s legit. Soon these will be easier to find at this price, too.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn15"><p>Though some python packages need their own Termux package, like <code>pkg install python-numpy</code>, instead of pip.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn16"><p>While <em>Termux</em> is a portmanteau of “<strong>term</strong>inal” and “lin<strong>ux</strong>”, <em>tmux</em> literally abbreviates “<strong>t</strong>erminal <strong>mu</strong>ltiple<strong>x</strong>er”.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn17"><p>From left to right: terminal (just ran <code>ls -R</code>), <code>micro</code> editing a python file, terminal (just ran that python file), <code>cmus</code> playing music, and <code>cmatrix</code> looking cool.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn18"><p>It’s also possible to run Xfce from proot, giving you a rooted desktop, but I hear it runs a lot worse than just using Termux.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn19"><p>Apparently launcher commands can’t use bash aliases (like the <code>debian</code> one we just created), probably because they run off of shell instead of bash.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>The native “RAM boost” setting adds up to 8GB of swap memory.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>The technology for ring-sized touchpads/trackballs is almost here, but cheap versions that work well aren’t available yet at the time of writing. Once they are, that’s what I’d recommend using— even a tiny touchpad is plenty of space to comfortably (if somewhat slowly) mouse a laptop on the go, and these things take up no space at all in your pocket.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>A “Targus Ergonomic Foldable Keyboard” or something like that.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>I believe Android 16 lets you change these, but I’m using Android 14.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Generally, the phone is better if you like switching between tabs while working, and the Xfce desktop is better if you prefer splitscreen/windows, as I do.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>The amount of which seems to increase ever year…<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>(we don’t want NetGuard losing uptime if it updates itself)<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>I learned how to do this <a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/Documentation/native/termux_native.md">here</a>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh">source</a> . Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>The default configuration settings are quite powerful, and there are plenty of <a href="https://www.xfce-look.org">addons</a> you can download to change things more drastically.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>You’ll have to input your password again if the phone turns off, but this can be done entirely from a bluetooth keyboard— just like if you were using a laptop.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Yes, I tested it and confirmed it’s legit. Soon these will be easier to find at this price, too.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>Though some python packages need their own Termux package, like <code>pkg install python-numpy</code>, instead of pip.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>While <em>Termux</em> is a portmanteau of “<strong>term</strong>inal” and “lin<strong>ux</strong>”, <em>tmux</em> literally abbreviates “<strong>t</strong>erminal <strong>mu</strong>ltiple<strong>x</strong>er”.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>From left to right: terminal (just ran <code>ls -R</code>), <code>micro</code> editing a python file, terminal (just ran that python file), <code>cmus</code> playing music, and <code>cmatrix</code> looking cool.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>It’s also possible to run Xfce from proot, giving you a rooted desktop, but I hear it runs a lot worse than just using Termux.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>Apparently launcher commands can’t use bash aliases (like the <code>debian</code> one we just created), probably because they run off of shell instead of bash.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
