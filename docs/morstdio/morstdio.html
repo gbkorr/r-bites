@@ -180,7 +180,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
   <li><a href="#pmorse" id="toc-pmorse" class="nav-link" data-scroll-target="#pmorse">2. PMorse</a></li>
   <li><a href="#shell-script" id="toc-shell-script" class="nav-link" data-scroll-target="#shell-script">3. Shell Script</a></li>
-  <li><a href="#usage-guide" id="toc-usage-guide" class="nav-link" data-scroll-target="#usage-guide">4. Usage Guide</a></li>
+  <li><a href="#usage-guide" id="toc-usage-guide" class="nav-link" data-scroll-target="#usage-guide">4. Usage Guide</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">4.1 Setup</a></li>
+  <li><a href="#general-usage" id="toc-general-usage" class="nav-link" data-scroll-target="#general-usage">4.2 General Usage</a></li>
+  <li><a href="#commands" id="toc-commands" class="nav-link" data-scroll-target="#commands">4.3 Commands</a></li>
+  <li><a href="#tips-and-warnings" id="toc-tips-and-warnings" class="nav-link" data-scroll-target="#tips-and-warnings">4.4 Tips and Warnings</a></li>
+  </ul></li>
   <li><a href="#worlds-smallest-chatbot" id="toc-worlds-smallest-chatbot" class="nav-link" data-scroll-target="#worlds-smallest-chatbot">5. World’s smallest chatbot?</a></li>
   </ul>
 </nav>
@@ -289,7 +295,168 @@ morstdio.sh
 </section>
 <section id="usage-guide" class="level2">
 <h2 class="anchored" data-anchor-id="usage-guide">4. Usage Guide</h2>
-<p>&lt; <em>coming soon</em> &gt;</p>
+<p>&lt; <em>Usage Flowchart Coming Soon</em> &gt;</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">4.1 Setup</h3>
+<p>Connect to the board via adb, push <code>morstdio.sh</code> to /sdcard/, and run this to make morstdio run on startup with bash:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">". /sdcard/morstdio.sh &amp;&amp; listen"</span> <span class="op">&gt;&gt;</span> /etc/rc.local</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now when the device boots, it will run morstdio in bash directly out of /etc/rc.local.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> You can still interact with it via adb shell, which will open a separate shell.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Be careful editing <code>/etc/rc.local</code> or <code>morstdio.sh</code>— if /etc/rc.local crashes on startup, adb shell will be disabled and you’ll have to reflash the sd card.</p>
+</div>
+</div>
+</section>
+<section id="general-usage" class="level3">
+<h3 class="anchored" data-anchor-id="general-usage">4.2 General Usage</h3>
+<p>Morstdio opens a bash shell that you can type characters into via morse code.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Basic Usage">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Basic Usage
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>enter morse code by pressing the button; very short taps are dots and longer<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> presses are dashes</p></li>
+<li><p>if you delay<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> for a little between button presses, the system will start a new character and send a single short blink as confirmation</p></li>
+<li><p>to start a new word, hold the button for even longer<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. When it passes the threshold to be considered a space, it will send a single long blink as confirmation.</p></li>
+<li><p>Backspace is <code>-.-.-</code>, and does what you’d expect.</p></li>
+<li><p>Shift is <code>...---</code>, and cycles through <code>on</code>-&gt;<code>caps lock</code>-&gt;<code>off</code> if input repeatedly. Unless you lock it, shift will only capitalize the next character (and does nothing if it’s a symbol).</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="commands" class="level3">
+<h3 class="anchored" data-anchor-id="commands">4.3 Commands</h3>
+<p>Morsdtio has a <strong>modular command system</strong>. If you type <code>":s "</code> (delete word), for example, it will remove the characters <code>":s "</code> and execute the “delete word” command. If you type something that isn’t a command, like <code>":y "</code>, it will remain as plaintext.</p>
+<p>Commands are used for everything, including sending messages (<code>:w</code>) and repeating recent output (<code>:r</code>). When you successfully execute a command, it will flash a distinct pattern corresponding to the command— if you don’t get the flash feedback you were expecting, you mistyped! (And should run <code>:+</code> to clear up your mistake)</p>
+<p>Note that all commands <strong>start with a colon</strong> and end in a space, to minimize the likelihood of accidentally typing one. I like calling these “vim-like”, though the comparison is a bit silly in morse…</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Commands">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commands
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><code>:w</code></td>
+<td>Enter; execute the line you’ve typed.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>:s</code></td>
+<td>Delete word; delete the most recent word.</td>
+</tr>
+<tr class="even">
+<td><code>:sx</code></td>
+<td>Abort; delete everything you typed.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>:cp</code></td>
+<td>Cut message to clipboard.</td>
+</tr>
+<tr class="odd">
+<td><code>:cw</code></td>
+<td>Copy most recent word.</td>
+</tr>
+<tr class="even">
+<td><code>:p</code></td>
+<td>Paste.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>:r</code></td>
+<td>Flash last stdout in morse.</td>
+</tr>
+<tr class="odd">
+<td><code>:c</code></td>
+<td>Flash last stdin (useful to see if you mistyped).</td>
+</tr>
+<tr class="even">
+<td><code>:a</code></td>
+<td>Flash most recent word.</td>
+</tr>
+<tr class="odd">
+<td><code>:m</code></td>
+<td>Flash current line (that you’re typing).</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>:q</code></td>
+<td>Flash last stdout word-by-word (QRS).</td>
+</tr>
+<tr class="even">
+<td><code>:qm</code></td>
+<td>Flash current line word-by-word.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>:+</code></td>
+<td>Delete failed command<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>, if you mistyped.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>I decided commands based on a mix of intuitive letters (<code>:</code>, <code>r</code> for repeat, <code>q</code> for qrs<code>) and convenience of typing (</code>w<code>,</code>s`). I think the choice of symbols and letters could be improved.</p>
+<section id="receiving-stdout" class="level4">
+<h4 class="anchored" data-anchor-id="receiving-stdout">4.3.2 Receiving Stdout</h4>
+<p>When you enter your line of stdin with <code>:w</code>, morstdio will flash three times to indicate that it’s sending, turn off the light while it evaluates stdin, and then turn the light on when it’s finished. The light will remain on until you press the button, at which point it will blink out the stdout in morse. If an error was thrown, it will flash 7 times in rapid succession before blinking stdout. Three long flashes denote the end of stdout readout.</p>
+<p>Press the button once more to return to typing (whether or not the blinking in done). It will send one long flash followed by two short to confirm you have control. If you want to see stdout again, use the command <code>:r</code> (repeat stdout) or <code>:q</code> (repeat stdout word-by-word).</p>
+<p>Blink timings can be controlled by changing the variables <code>dotlength</code>, <code>dashlength</code>, <code>longlength</code>, <code>capitaldotlength</code>, and <code>captialdashlength</code> to slow down or tweak the speed of transmission.</p>
+</section>
+<section id="qrs-word-by-word-output" class="level4">
+<h4 class="anchored" data-anchor-id="qrs-word-by-word-output">4.3.3 QRS: Word-By-Word output</h4>
+<p>Parsing full-speed morse is difficult, so I recommend using the QRS (traditional morse abbreviation for “please send slower”) command. This will send the message word-by-word, only moving to the next word when you press the button.</p>
+<ul>
+<li>press quickly to see the next word</li>
+<li>press longer to repeat the current word (it will start with a long flash to acknowledge the repeat)</li>
+<li>press for two seconds to exit early</li>
+</ul>
+<p>One long flash followed by two short confirms the end of QRS and return to user control, like in the regular stdout readout.</p>
+</section>
+</section>
+<section id="tips-and-warnings" class="level3">
+<h3 class="anchored" data-anchor-id="tips-and-warnings">4.4 Tips and Warnings</h3>
+<p>This is <strong>not</strong> sending keyboard inputs, so any function that waits for user input (like <code>read</code> or <code>bash</code>) will hang morstdio (in which case, just unplug it and plug it back in).</p>
+<p>This means morstdio can’t take advantage of bash hotkeys like the arrow keys or <code>^C</code>. However, you can still navigate and edit messages to some extent by using the cut/copy/paste commands and bash shortcuts like “<a href="https://www.redhat.com/en/blog/bash-bang-commands">!!</a>”.</p>
+</section>
 </section>
 <section id="worlds-smallest-chatbot" class="level2">
 <h2 class="anchored" data-anchor-id="worlds-smallest-chatbot">5. World’s smallest chatbot?</h2>
@@ -298,11 +465,11 @@ morstdio.sh
 <p><img src="llamacpp.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="400"></p>
 </figure>
 </div>
-<p>I originally got the Lyra to see if it could run <a href="https://github.com/ggml-org/llama.cpp">Llama.cpp</a> (the standard LLM inferencer) with its measly <strong>128MB of RAM</strong>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Turns out it can!</p>
-<p>I was able to get it working by just building llama-cli from source<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> in a docker container with the same version of Ubuntu as the board (22.04) (and building for an ARM processor). It runs very slowly— around <strong>a token a minute</strong> after a long (~8 minute) startup for <a href="https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF">Qwen3.5-0.8B-Q4_0</a>, a small but surprisingly capable chatbot.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> It can run larger models too, albeit at an absolutely glacial pace.</p>
-<p>Anyway, let’s try running it with morstdio! I should be able to just call llama-cli, wait a while, and come back to <strong>read my message in flashed morse</strong>. I made a script<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> to facilitate this and pipe the response to stdout:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./llama-cli</span> <span class="at">-st</span> <span class="at">--simple-io</span> <span class="at">--reasoning</span> off <span class="at">-p</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">-m</span> <span class="st">"Qwen3.5-0.8B-Q4_0.gguf"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'/^&gt;/{f=1; next} /^\[/{f=0} f'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I originally got the Lyra to see if it could run <a href="https://github.com/ggml-org/llama.cpp">Llama.cpp</a> (the standard LLM inferencer) with its measly <strong>128MB of RAM</strong>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> Turns out it can!</p>
+<p>I was able to get it working by just building llama-cli from source<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> in a docker container with the same version of Ubuntu as the board (22.04) (and building for an ARM processor). It runs very slowly— around <strong>a token a minute</strong> after a long (~8 minute) startup for <a href="https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF">Qwen3.5-0.8B-Q4_0</a>, a small but surprisingly capable chatbot.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> It can run larger models too, albeit at an absolutely glacial pace.</p>
+<p>Anyway, let’s try running it with morstdio! I should be able to just call llama-cli, wait a while, and come back to <strong>read my message in flashed morse</strong>. I made a script<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> to facilitate this and pipe the response to stdout:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./llama-cli</span> <span class="at">-st</span> <span class="at">--simple-io</span> <span class="at">--reasoning</span> off <span class="at">-p</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">-m</span> <span class="st">"Qwen3.5-0.8B-Q4_0.gguf"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'/^&gt;/{f=1; next} /^\[/{f=0} f'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In this video I’m narrating the commands and output, since you probably don’t know morse :P. But it should be readable from the video itself as well, if you do.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Demonstration">
 <div class="callout-header d-flex align-content-center">
@@ -317,7 +484,7 @@ Demonstration
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="morstdio.mp4"></video></div>
 </div>
 </div>
-<p>Now, Luckfox (and competitors<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>) make a <a href="https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description">similar SBC</a> that’s half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) <strong>smallest self-contained chatbot</strong> anyone has ever made!<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>Now, Luckfox (and competitors<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a>) make a <a href="https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description">similar SBC</a> that’s half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) <strong>smallest self-contained chatbot</strong> anyone has ever made!<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a></p>
 
 
 </section>
@@ -333,12 +500,18 @@ Demonstration
 <li id="fn5"><p>A morse-based interface was always going to be inconvenient, but I think I settled on a command good flow and feedback that makes it feel somewhat natural to use.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>I’ll actually be using this for a much bigger project later this year, so this makes for a good test of it.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>E.g. <code>.... ..</code> &lt;hi&gt; has one charpause-length pause, between the h and i.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>You’re usually supposed to have, like, 8 to 24 gigs of RAM for this sort of thing.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>With help from Gemini… I can’t stand the C family :(. At least I know roughly what the cmake args are doing.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><p>I should note that running LLMs is far from the intended use case of this sort of SBC, and there are much better options for this kind of AI application. This was just a fun little experiment for giggles.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn11"><p>Yeesh, llamacpp args are a mess. The convenient ones for getting stdout have been deprecated with no good replacement, so I have to use awk to manually isolate the response. awk snippet genned by Qwen3.6-35B…<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p>The LicheeRV Nano is slightly larger but has much more RAM (256MB). But size is what matters here!<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn13"><p>Though to officially claim that title, I should hook it up to a properly small battery.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>I know this because I ran <code>echo $0</code>, and it told me (in morse) that the shell was <code>/etc/rc.local</code>! Which makes sense, of course.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p><code>dashdur</code> variable, 100ms by default<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><code>chardur</code> variable, 200ms by default. Increase this if you have trouble finishing letters in time.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><code>spacedur</code> variable, 400ms by default. Increase this if you keep accidentally getting spaces when you just want a dash.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Equivalent to <code>^U</code> or <code>^C</code> in a regular shell.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Specifically, this deletes all text since the last <code>:</code> (excluding the <code>:</code> in <code>:+</code>)<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>You’re usually supposed to have, like, 8 to 24 gigs of RAM for this sort of thing.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>With help from Gemini… I can’t stand the C family :(. At least I know roughly what the cmake args are doing.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>I should note that running LLMs is far from the intended use case of this sort of SBC, and there are much better options for this kind of AI application. This was just a fun little experiment for giggles.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>Yeesh, llamacpp args are a mess. The convenient ones for getting stdout have been deprecated with no good replacement, so I have to use awk to manually isolate the response. awk snippet genned by Qwen3.6-35B…<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>The LicheeRV Nano is slightly larger but has much more RAM (256MB). But size is what matters here!<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>Though to officially claim that title, I should hook it up to a properly small battery.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

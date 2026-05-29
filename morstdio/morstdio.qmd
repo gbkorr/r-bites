@@ -77,7 +77,99 @@ The script (`morstdio.sh`) is available on [its repo](github.com/gbkorr/morstudi
 
 ## 4. Usage Guide
 
-\< *coming soon* \>
+\< *Usage Flowchart Coming Soon* \>
+
+### 4.1 Setup
+Connect to the board via adb, push `morstdio.sh` to /sdcard/, and run this to make morstdio run on startup with bash:
+
+```sh
+echo ". /sdcard/morstdio.sh && listen" >> /etc/rc.local
+```
+
+Now when the device boots, it will run morstdio in bash directly out of /etc/rc.local.[^science] You can still interact with it via adb shell, which will open a separate shell.
+
+:::{.callout-warning}
+Be careful editing `/etc/rc.local` or `morstdio.sh`— if /etc/rc.local crashes on startup, adb shell will be disabled and you'll have to reflash the sd card.
+:::
+
+[^science]: I know this because I ran `echo $0`, and it told me (in morse) that the shell was `/etc/rc.local`! Which makes sense, of course.
+
+### 4.2 General Usage
+
+Morstdio opens a bash shell that you can type characters into via morse code.
+
+:::{.callout-note title="Basic Usage"}
+- enter morse code by pressing the button; very short taps are dots and longer[^dashdur] presses are dashes
+- if you delay[^chardur] for a little between button presses, the system will start a new character and send a single short blink as confirmation
+- to start a new word, hold the button for even longer[^spacedur]. When it passes the threshold to be considered a space, it will send a single long blink as confirmation.
+
+- Backspace is `-.-.-`, and does what you'd expect.
+- Shift is `...---`, and cycles through `on`->`caps lock`->`off` if input repeatedly. Unless you lock it, shift will only capitalize the next character (and does nothing if it's a symbol).
+:::
+
+[^dashdur]: `dashdur` variable, 100ms by default
+[^chardur]: `chardur` variable, 200ms by default. Increase this if you have trouble finishing letters in time.
+[^spacedur]: `spacedur` variable, 400ms by default. Increase this if you keep accidentally getting spaces when you just want a dash.
+
+### 4.3 Commands
+
+Morsdtio has a **modular command system**. If you type `":s "` (delete word), for example, it will remove the characters `":s "` and execute the "delete word" command. If you type something that isn't a command, like `":y "`, it will remain as plaintext.
+
+Commands are used for everything, including sending messages (`:w`) and repeating recent output (`:r`). When you successfully execute a command, it will flash a distinct pattern corresponding to the command— if you don't get the flash feedback you were expecting, you mistyped! (And should run `:+` to clear up your mistake)
+
+Note that all commands **start with a colon** and end in a space, to minimize the likelihood of accidentally typing one. I like calling these "vim-like", though the comparison is a bit silly in morse...
+
+:::{.callout-tip title="Commands" collapse=true}
+|||
+|-|-|
+|`:w`| Enter; execute the line you've typed. |
+|||
+|`:s`| Delete word; delete the most recent word.  |
+|`:sx`| Abort; delete everything you typed.[^shel] |
+|||
+|`:cp`| Cut message to clipboard.   |
+|`:cw`| Copy most recent word.  |
+|`:p`| Paste.  |
+|||
+|`:r`| Flash last stdout in morse.  |
+|`:c`| Flash last stdin (useful to see if you mistyped).  |
+|`:a`| Flash most recent word.  |
+|`:m`| Flash current line (that you're typing).   |
+|||
+|`:q`| Flash last stdout word-by-word (QRS).  |
+|`:qm`| Flash current line word-by-word.  |
+|||
+|`:+`| Delete failed command[^spec], if you mistyped. |
+:::
+
+[^shel]: Equivalent to `^U` or `^C` in a regular shell.
+[^spec]: Specifically, this deletes all text since the last `:` (excluding the `:` in `:+`)
+
+I decided commands based on a mix of intuitive letters (`:`, `r` for repeat, `q` for qrs`) and convenience of typing (`w`, `s`). I think the choice of symbols and letters could be improved.
+
+#### 4.3.2 Receiving Stdout
+
+When you enter your line of stdin with `:w`, morstdio will flash three times to indicate that it's sending, turn off the light while it evaluates stdin, and then turn the light on when it's finished. The light will remain on until you press the button, at which point it will blink out the stdout in morse. If an error was thrown, it will flash 7 times in rapid succession before blinking stdout. Three long flashes denote the end of stdout readout.
+
+Press the button once more to return to typing (whether or not the blinking in done). It will send one long flash followed by two short to confirm you have control. If you want to see stdout again, use the command `:r` (repeat stdout) or `:q` (repeat stdout word-by-word).
+
+Blink timings can be controlled by changing the variables `dotlength`, `dashlength`, `longlength`, `capitaldotlength`, and `captialdashlength` to slow down or tweak the speed of transmission.
+
+#### 4.3.3 QRS: Word-By-Word output
+
+Parsing full-speed morse is difficult, so I recommend using the QRS (traditional morse abbreviation for "please send slower") command. This will send the message word-by-word, only moving to the next word when you press the button.
+
+- press quickly to see the next word
+- press longer to repeat the current word (it will start with a long flash to acknowledge the repeat)
+- press for two seconds to exit early
+
+One long flash followed by two short confirms the end of QRS and return to user control, like in the regular stdout readout.
+
+### 4.4 Tips and Warnings
+
+This is **not** sending keyboard inputs, so any function that waits for user input (like `read` or `bash`) will hang morstdio (in which case, just unplug it and plug it back in).
+
+This means morstdio can't take advantage of bash hotkeys like the arrow keys or `^C`. However, you can still navigate and edit messages to some extent by using the cut/copy/paste commands and bash shortcuts like "[!!](https://www.redhat.com/en/blog/bash-bang-commands)".
 
 ## 5. World's smallest chatbot?
 
