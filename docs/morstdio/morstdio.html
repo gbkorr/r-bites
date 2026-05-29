@@ -187,7 +187,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#commands" id="toc-commands" class="nav-link" data-scroll-target="#commands">4.3 Commands</a></li>
   <li><a href="#tips-and-warnings" id="toc-tips-and-warnings" class="nav-link" data-scroll-target="#tips-and-warnings">4.4 Tips and Warnings</a></li>
   </ul></li>
-  <li><a href="#worlds-smallest-chatbot" id="toc-worlds-smallest-chatbot" class="nav-link" data-scroll-target="#worlds-smallest-chatbot">5. World’s smallest chatbot?</a></li>
+  <li><a href="#worlds-smallest-chatbot" id="toc-worlds-smallest-chatbot" class="nav-link" data-scroll-target="#worlds-smallest-chatbot">5. World’s smallest chatbot?</a>
+  <ul class="collapse">
+  <li><a href="#demo-video" id="toc-demo-video" class="nav-link" data-scroll-target="#demo-video">5.1 Demo Video</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -470,6 +473,8 @@ Commands
 <p>Anyway, let’s try running it with morstdio! I should be able to just call llama-cli, wait a while, and come back to <strong>read my message in flashed morse</strong>. I made a script<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> to facilitate this and pipe the response to stdout:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./llama-cli</span> <span class="at">-st</span> <span class="at">--simple-io</span> <span class="at">--reasoning</span> off <span class="at">-p</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">-m</span> <span class="st">"Qwen3.5-0.8B-Q4_0.gguf"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'/^&gt;/{f=1; next} /^\[/{f=0} f'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="demo-video" class="level3">
+<h3 class="anchored" data-anchor-id="demo-video">5.1 Demo Video</h3>
 <p>In this video I’m narrating the commands and output, since you probably don’t know morse :P. But it should be readable from the video itself as well, if you do.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Demonstration">
 <div class="callout-header d-flex align-content-center">
@@ -487,6 +492,7 @@ Demonstration
 <p>Now, Luckfox (and competitors<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a>) make a <a href="https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description">similar SBC</a> that’s half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) <strong>smallest self-contained chatbot</strong> anyone has ever made!<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a></p>
 
 
+</section>
 </section>
 
 

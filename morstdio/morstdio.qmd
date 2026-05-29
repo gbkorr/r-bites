@@ -194,6 +194,8 @@ Anyway, let's try running it with morstdio! I should be able to just call llama-
 ./llama-cli -st --simple-io --reasoning off -p "$1" -m "Qwen3.5-0.8B-Q4_0.gguf" | awk '/^>/{f=1; next} /^\[/{f=0} f'
 ```
 
+### 5.1 Demo Video
+
 In this video I'm narrating the commands and output, since you probably don't know morse :P. But it should be readable from the video itself as well, if you do.
 
 ::: {.callout-note title="Demonstration"}
