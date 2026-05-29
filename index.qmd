@@ -14,6 +14,14 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 #### *Recent Articles*:
 
+*May*
+
+<img class='thumbnail' src=images/morstdio.jpg>
+
+A **morse code i/o** for headless linux, and the **world's smallest chatbot**. [link](morstdio/morstdio.qmd)
+
+<br clear="left">
+
 *April*
 
 <img class='thumbnail' src=images/linux.jpeg>
