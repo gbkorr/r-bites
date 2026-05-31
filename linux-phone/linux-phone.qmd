@@ -219,10 +219,9 @@ pkg install termux-api x11-repo termux-x11-nightly pulseaudio xfce4
 nano ~/startxfce4_termux.sh
 ```
 
-3. Paste this script[^sorc] and save the file (tap and hold and select paste, then `ctrl+s ctrl+x` to save and exit.)
+3. Paste this script ([original source](https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh))[^sorc] and save the file (tap and hold and select paste, then `ctrl+s ctrl+x` to save and exit.)
 
-[^sorc]: [source](https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh)
-. Normally I'd just say "copy from this link", but there was a Termux guide once that did this and had a broken link!
+[^sorc]: Normally I'd just say "copy from this link", but there was a Termux guide once that did this and had a broken link!
 
 :::{.callout-note title="~/startxfce4_termux.sh"}
 ```bash
@@ -442,7 +441,7 @@ pkg install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch
 
 ![](images/tmux.png){width=800 fig-align="center"}
 ![](images/fastfetch.png){width=800 fig-align="center"}
-![](images/cpufetch){width=800 fig-align="center"}
+![](images/cpufetch.png){width=800 fig-align="center"}
 A rather over-the-top tmux setup,[^tmux2] along with the output of `fastfetch` and `cpufetch`. Seeing CPU specs directly like this is pretty cool! 
 
 [^tmux2]: From left to right: terminal (just ran `ls -R`), `micro` editing a python file, terminal (just ran that python file), `cmus` playing music, and `cmatrix` looking cool.
@@ -471,11 +470,11 @@ apt update
 
 This will set up a debian installation; launch the debian shell with `debian` and quit with `exit`. This also includes a folder (`termux`) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that's more complicated).
 
-Proot debian can **run anything already installed** on Termux, but you can also use `apt` to install Debian packages that would otherwise be unavailable. I've had [great success](https://gbkorr.github.io/r-bites/flipphone-r/flipphone-r.html) running the R language this way, for example.
+Proot debian can **run anything already installed** on Termux, but you can also use `apt` to install Debian packages that would otherwise be unavailable. I've had [great success](/flipphone-r/flipphone-r.qmd) running the R language this way, for example.
 
 You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, `Create Launcher`, enable `Run in terminal`, and set the command to `proot-distro login debian`[^aww]. You can get an icon for the launcher [here](www.debian.org/logos/) (use the SVG one for background transparency).
 
-[^aww]: Apparently launcher commands can't use bash aliases (like the `debian` one we just created), probably because they run off of shell instead of bash.
+[^aww]: Apparently launcher commands can't use bash aliases (like the `debian` one we just created), probably because they don't run .bashrc before executing.
 
 
 
@@ -496,9 +495,91 @@ date +"%A; %B %dth %Y" | termux-tts-speak
 It also offers some pretty powerful tools for using your phone as a sensor, with commands like `termux-location` (GPS), `termux-torch` (flashlight), and `termux-sensor` (gyroscope et al.).
 
 
-# **6. Closing Thoughts**
+# **6. Augmented Reality**
 
-I don't have too much to close on— TLDR, you can get a cheap-but-powerful carrier-locked smartphone for under $50 and use it as a highly capable and feature-rich Linux desktop. I'm fairly certain this has better specs than other options (e.g. old chromebooks) at this price point, and it has some other distinct advantages— I'm not sure it's possible to make a more portable computer.
+:::{.callout-warning}
+### Warning: this section is **highly experimental**.
+:::
+
+![This was a live video view from the phone camera!](images/AR.png){width=800 fig-align="center"}
+
+With so much control over the phone, one of the things I wanted to try was **streaming the phone's camera onto the desktop**. This would allow you to have a (very shoddy!) monitor-glasses-like experience if you attached the phone to your face— but since even the lowest-priced monitor glasses are $300+, it'd be a fun gimmick! A simple cardboard box with a fresnel lens should work to get the phone on your head (and focused+magnified), but I haven't gotten around to making one yet.
+
+So I hacked together a way to put the camera on the desktop. This has some **rough edges**— it's certainly not in a complete state— but it does work, and it's pretty fun to mess around with.
+
+## 6.1 Setup
+
+First, install the [RemoteCam](https://github.com/Ruddle/RemoteCam) apk. This will stream the camera to a local IP address (I can't figure out how to point it to localhost ☹), which we can pick up from the desktop.
+
+Now install the dependencies in termux:
+```bash
+pkg install mpv gstreamer xdotool wmctrl
+```
+
+And make a new .sh file with this script I wrote:
+
+:::{.callout-note title="~/cameramirror.sh" collapse=true}
+```bash
+#!/bin/bash
+
+width=2400
+height=1080
+
+mpv --title="vstream" --demuxer-lavf-format=mjpeg --profile=low-latency --untimed "http://$1" &
+sleep 3
+mxid="$(xdotool search --name "vstream" | head -n 1)"
+wmctrl -i -r "$mxid" -b add,below,skip_taskbar,skip_pager
+gst-launch-1.0 ximagesrc xid="$mxid" show-pointer=false ! \
+	videoconvert ! \
+	videoscale method=0 ! \
+	"video/x-raw,width=$width,height=$height" ! \
+	ximagesink &
+sleep 1
+
+pid=$(pgrep gst-launch-1.0)
+xid=$(xdotool search --pid "$pid" | head -n 1)
+wmctrl -i -r "$xid" -b add,below,skip_taskbar,skip_pager
+wmctrl -i -r "$xid" -b add,maximized_vert,maximized_horz
+
+closeup() {
+	killall gst-launch-1.0 mpv
+}
+
+trap closeup SIGINT
+```
+:::
+
+## 6.2 Usage
+
+1. Start the RemoteCam app.
+
+2. Select a camera (the wide-angle one works well), resolution[^resol] (I recommend 1280x720), and change the quality to "10". 
+
+[^resol]: Higher resolutions/quality will increase the latency of the stream. Below 720p, I get less than a quarter-second of delay, which is pretty passable for moving around.
+
+3. Turn off preview and turn on the stream. Copy the stream's IP/URL (something like `192.1.../cam.mjpeg`).
+
+4. Open up a terminal window in Xfce, and run the script with that IP in an Xfce terminal:
+
+```bash
+. ~/cameramirror.sh <COPIED_URL>
+```
+
+5. If all goes well, the script should open the stream and project it onto a background window. Now you can continue using the desktop as normal, and you'll be able to see the phone camera output behind everything.
+
+6. To close the stream, enter ^C into the original terminal window, and then close the window.
+
+---
+
+:::{.callout-caution}
+This is mainly a proof of concept, so it hasn't received much testing or polish. The closing behavior in particular is somewhat buggy— when in doubt, a full phone restart will fix anything amiss.
+:::
+
+It may be worth messing with window opacity in Xfce's `Window Manager Tweaks` menu to make it easier to see the camera behind windows.
+
+# **7. Closing Thoughts**
+
+I don't have too much to close on— TLDR, you can get a **cheap-but-powerful** carrier-locked smartphone for under $50 and use it as a **highly capable and feature-rich Linux desktop**. I'm fairly certain this has better specs than other options (e.g. old chromebooks) at this price point, and it has some other distinct advantages— I'm not sure it's possible to make a more portable computer.
 
 
 

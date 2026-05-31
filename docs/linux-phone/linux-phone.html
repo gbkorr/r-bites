@@ -233,7 +233,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#proot-debian" id="toc-proot-debian" class="nav-link" data-scroll-target="#proot-debian">5.3 Proot Debian</a></li>
   <li><a href="#termux-api" id="toc-termux-api" class="nav-link" data-scroll-target="#termux-api">5.4 Termux-API</a></li>
   </ul></li>
-  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts"><strong>6. Closing Thoughts</strong></a></li>
+  <li><a href="#augmented-reality" id="toc-augmented-reality" class="nav-link" data-scroll-target="#augmented-reality"><strong>6. Augmented Reality</strong></a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">6.1 Setup</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">6.2 Usage</a></li>
+  </ul></li>
+  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts"><strong>7. Closing Thoughts</strong></a></li>
   </ul>
 </nav>
     </div>
@@ -514,7 +519,7 @@ App Sleuthing
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/startxfce4_termux.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
-<li>Paste this script<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> and save the file (tap and hold and select paste, then <code>ctrl+s ctrl+x</code> to save and exit.)</li>
+<li>Paste this script (<a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh">original source</a>)<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> and save the file (tap and hold and select paste, then <code>ctrl+s ctrl+x</code> to save and exit.)</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled" title="~/startxfce4_termux.sh">
 <div class="callout-header d-flex align-content-center">
@@ -741,7 +746,7 @@ Recommended Packages
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /data/data/com.termux/files/home termux</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will set up a debian installation; launch the debian shell with <code>debian</code> and quit with <code>exit</code>. This also includes a folder (<code>termux</code>) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that’s more complicated).</p>
-<p>Proot debian can <strong>run anything already installed</strong> on Termux, but you can also use <code>apt</code> to install Debian packages that would otherwise be unavailable. I’ve had <a href="https://gbkorr.github.io/r-bites/flipphone-r/flipphone-r.html">great success</a> running the R language this way, for example.</p>
+<p>Proot debian can <strong>run anything already installed</strong> on Termux, but you can also use <code>apt</code> to install Debian packages that would otherwise be unavailable. I’ve had <a href="../flipphone-r/flipphone-r.html">great success</a> running the R language this way, for example.</p>
 <p>You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, <code>Create Launcher</code>, enable <code>Run in terminal</code>, and set the command to <code>proot-distro login debian</code><a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>. You can get an icon for the launcher <a href="www.debian.org/logos/">here</a> (use the SVG one for background transparency).</p>
 </section>
 <section id="termux-api" class="level2">
@@ -754,9 +759,112 @@ Recommended Packages
 <p>It also offers some pretty powerful tools for using your phone as a sensor, with commands like <code>termux-location</code> (GPS), <code>termux-torch</code> (flashlight), and <code>termux-sensor</code> (gyroscope et al.).</p>
 </section>
 </section>
+<section id="augmented-reality" class="level1">
+<h1><strong>6. Augmented Reality</strong></h1>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning: this section is <strong>highly experimental</strong>.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/AR.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>This was a live video view from the phone camera!</figcaption>
+</figure>
+</div>
+<p>With so much control over the phone, one of the things I wanted to try was <strong>streaming the phone’s camera onto the desktop</strong>. This would allow you to have a (very shoddy!) monitor-glasses-like experience if you attached the phone to your face— but since even the lowest-priced monitor glasses are $300+, it’d be a fun gimmick! A simple cardboard box with a fresnel lens should work to get the phone on your head (and focused+magnified), but I haven’t gotten around to making one yet.</p>
+<p>So I hacked together a way to put the camera on the desktop. This has some <strong>rough edges</strong>— it’s certainly not in a complete state— but it does work, and it’s pretty fun to mess around with.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">6.1 Setup</h2>
+<p>First, install the <a href="https://github.com/Ruddle/RemoteCam">RemoteCam</a> apk. This will stream the camera to a local IP address (I can’t figure out how to point it to localhost ☹), which we can pick up from the desktop.</p>
+<p>Now install the dependencies in termux:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mpv gstreamer xdotool wmctrl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And make a new .sh file with this script I wrote:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="~/cameramirror.sh">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+~/cameramirror.sh
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="va">width</span><span class="op">=</span>2400</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="va">height</span><span class="op">=</span>1080</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">mpv</span> <span class="at">--title</span><span class="op">=</span><span class="st">"vstream"</span> <span class="at">--demuxer-lavf-format</span><span class="op">=</span>mjpeg <span class="at">--profile</span><span class="op">=</span>low-latency <span class="at">--untimed</span> <span class="st">"http://</span><span class="va">$1</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="va">mxid</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--name</span> <span class="st">"vstream"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">gst-launch-1.0</span> ximagesrc xid=<span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> show-pointer=false ! <span class="dt">\</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    videoconvert ! <span class="dt">\</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    videoscale method=0 ! <span class="dt">\</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"video/x-raw,width=</span><span class="va">$width</span><span class="st">,height=</span><span class="va">$height</span><span class="st">"</span> ! <span class="dt">\</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    ximagesink <span class="kw">&amp;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="va">pid</span><span class="op">=</span><span class="va">$(</span><span class="ex">pgrep</span> gst-launch-1.0<span class="va">)</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="va">xid</span><span class="op">=</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--pid</span> <span class="st">"</span><span class="va">$pid</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,maximized_vert,maximized_horz</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">closeup()</span> <span class="kw">{</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">killall</span> gst-launch-1.0 mpv</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="bu">trap</span> closeup SIGINT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">6.2 Usage</h2>
+<ol type="1">
+<li><p>Start the RemoteCam app.</p></li>
+<li><p>Select a camera (the wide-angle one works well), resolution<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> (I recommend 1280x720), and change the quality to “10”.</p></li>
+</ol>
+<ol start="3" type="1">
+<li><p>Turn off preview and turn on the stream. Copy the stream’s IP/URL (something like <code>192.1.../cam.mjpeg</code>).</p></li>
+<li><p>Open up a terminal window in Xfce, and run the script with that IP in an Xfce terminal:</p></li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> ~/cameramirror.sh <span class="op">&lt;</span>COPIED_URL<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li><p>If all goes well, the script should open the stream and project it onto a background window. Now you can continue using the desktop as normal, and you’ll be able to see the phone camera output behind everything.</p></li>
+<li><p>To close the stream, enter ^C into the original terminal window, and then close the window.</p></li>
+</ol>
+<hr>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is mainly a proof of concept, so it hasn’t received much testing or polish. The closing behavior in particular is somewhat buggy— when in doubt, a full phone restart will fix anything amiss.</p>
+</div>
+</div>
+<p>It may be worth messing with window opacity in Xfce’s <code>Window Manager Tweaks</code> menu to make it easier to see the camera behind windows.</p>
+</section>
+</section>
 <section id="closing-thoughts" class="level1">
-<h1><strong>6. Closing Thoughts</strong></h1>
-<p>I don’t have too much to close on— TLDR, you can get a cheap-but-powerful carrier-locked smartphone for under $50 and use it as a highly capable and feature-rich Linux desktop. I’m fairly certain this has better specs than other options (e.g.&nbsp;old chromebooks) at this price point, and it has some other distinct advantages— I’m not sure it’s possible to make a more portable computer.</p>
+<h1><strong>7. Closing Thoughts</strong></h1>
+<p>I don’t have too much to close on— TLDR, you can get a <strong>cheap-but-powerful</strong> carrier-locked smartphone for under $50 and use it as a <strong>highly capable and feature-rich Linux desktop</strong>. I’m fairly certain this has better specs than other options (e.g.&nbsp;old chromebooks) at this price point, and it has some other distinct advantages— I’m not sure it’s possible to make a more portable computer.</p>
 
 
 </section>
@@ -776,7 +884,7 @@ Recommended Packages
 <li id="fn9"><p>The amount of which seems to increase ever year…<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn10"><p>(we don’t want NetGuard losing uptime if it updates itself)<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn11"><p>I learned how to do this <a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/Documentation/native/termux_native.md">here</a>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p><a href="https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/scripts/termux_native/startxfce4_termux.sh">source</a> . Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Normally I’d just say “copy from this link”, but there was a Termux guide once that did this and had a broken link!<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn13"><p>The default configuration settings are quite powerful, and there are plenty of <a href="https://www.xfce-look.org">addons</a> you can download to change things more drastically.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn14"><p>You’ll have to input your password again if the phone turns off, but this can be done entirely from a bluetooth keyboard— just like if you were using a laptop.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn15"><p>Yes, I tested it and confirmed it’s legit. Soon these will be easier to find at this price, too.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -784,7 +892,8 @@ Recommended Packages
 <li id="fn17"><p>While <em>Termux</em> is a portmanteau of “<strong>term</strong>inal” and “lin<strong>ux</strong>”, <em>tmux</em> literally abbreviates “<strong>t</strong>erminal <strong>mu</strong>ltiple<strong>x</strong>er”.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn18"><p>From left to right: terminal (just ran <code>ls -R</code>), <code>micro</code> editing a python file, terminal (just ran that python file), <code>cmus</code> playing music, and <code>cmatrix</code> looking cool.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn19"><p>It’s also possible to run Xfce from proot, giving you a rooted desktop, but I hear it runs a lot worse than just using Termux.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn20"><p>Apparently launcher commands can’t use bash aliases (like the <code>debian</code> one we just created), probably because they run off of shell instead of bash.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>Apparently launcher commands can’t use bash aliases (like the <code>debian</code> one we just created), probably because they don’t run .bashrc before executing.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p>Higher resolutions/quality will increase the latency of the stream. Below 720p, I get less than a quarter-second of delay, which is pretty passable for moving around.<a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

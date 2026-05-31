@@ -145,7 +145,7 @@ Note that all commands **start with a colon** and end in a space, to minimize th
 [^shel]: Equivalent to `^U` or `^C` in a regular shell.
 [^spec]: Specifically, this deletes all text since the last `:` (excluding the `:` in `:+`)
 
-I decided commands based on a mix of intuitive letters (`:`, `r` for repeat, `q` for qrs`) and convenience of typing (`w`, `s`). I think the choice of symbols and letters could be improved.
+I decided commands based on a mix of intuitive letters (`:`, `r` for repeat, `q` for qrs) and convenience of typing (`w`, `s`). I think the choice of symbols and letters could be improved.
 
 #### 4.3.2 Receiving Stdout
 
@@ -203,7 +203,7 @@ In this video I'm narrating the commands and output, since you probably don't kn
 :::
 
 
-Now, Luckfox (and competitors[^lichee]) make a [similar SBC](https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description) that's half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) **smallest self-contained chatbot** anyone has ever made![^oops]
+Now, Luckfox (and competitors)[^lichee] make a [similar SBC](https://www.luckfox.com/Luckfox-Pico/Luckfox-Pico-Mini-A/#tab-description) that's half the length (and quite a bit weaker). But until someone goes through this process on it, I think my project here is the (physically) **smallest self-contained chatbot** anyone has ever made![^oops]
 
 [^oops]: Though to officially claim that title, I should hook it up to a properly small battery.
 [^lichee]: The LicheeRV Nano is slightly larger but has much more RAM (256MB). But size is what matters here!
