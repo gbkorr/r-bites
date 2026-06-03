@@ -188,6 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#s3-access" id="toc-s3-access" class="nav-link" data-scroll-target="#s3-access">S3 Access</a></li>
   <li><a href="#vercel-and-faas" id="toc-vercel-and-faas" class="nav-link" data-scroll-target="#vercel-and-faas">Vercel and FaaS</a></li>
   <li><a href="#the-s3-script" id="toc-the-s3-script" class="nav-link" data-scroll-target="#the-s3-script">The S3 Script</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
   </ul></li>
   <li><a href="#the-frontend" id="toc-the-frontend" class="nav-link" data-scroll-target="#the-frontend">The Frontend</a>
   <ul class="collapse">
@@ -366,7 +367,7 @@ Path Structure
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>s3://eodata/CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2</code><strong>/YYYY/MM/DD/</strong><code>c_gls_LST_</code><strong>YYYYMMDDHHHH</strong><code>_GLOBE_GEO_V2.2.1_nc/</code></p>
+<p><code>s3://eodata/CLMS/bio-geophysical/land_surface_temperature/lst_global_3km_hourly_v3</code><strong>/YYYY/MM/DD/</strong><code>c_gls_LST_</code><strong>YYYYMMDDHHHH</strong><code>_GLOBE_GEO_V3.0.1_nc/</code></p>
 <p>Where HHHH is the (military) hour, e.g.&nbsp;1300 for 1:00 PM.</p>
 <p>There’s also plenty of ways to grep these files or find the most recent, but this approach is most convenient.</p>
 </div>
@@ -418,7 +419,7 @@ get_s3.py
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    file_obj <span class="op">=</span> s3.get_object(</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>      Bucket <span class="op">=</span> <span class="st">'eodata'</span>,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      Key <span class="op">=</span> <span class="ss">f'CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2/</span><span class="sc">{</span>pathcode<span class="sc">}</span><span class="ss">/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V2.2.1_nc/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V2.2.1.nc'</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      Key <span class="op">=</span> <span class="ss">f'CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2/</span><span class="sc">{</span>pathcode<span class="sc">}</span><span class="ss">/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V3.0.1_nc/c_gls_LST_</span><span class="sc">{</span>filecode<span class="sc">}</span><span class="ss">_GLOBE_GEO_V3.0.1.nc'</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.send_response(<span class="dv">200</span>)</span>
@@ -434,6 +435,10 @@ get_s3.py
 </div>
 </div>
 </div>
+</section>
+<section id="limitations" class="level3">
+<h3 class="anchored" data-anchor-id="limitations">Limitations</h3>
+<p>A month after I uploaded this project, Copernicus switched to their new v3 hourly Land Surface Temperature system<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> (v2 was adopted in 2021). This <strong>broke the pipeline</strong>— I was able to fix it easily, but realized that the system version number (currently 3.0.1) is baked into the filepath. This shows that simple procedural-query approach was a bad idea, and until I switch to a more robust system (which would have been better in the first place…), the pipeline is liable to break every time they update the LST service.</p>
 </section>
 </section>
 <section id="the-frontend" class="level2">
@@ -566,7 +571,7 @@ HTML Block
 <h3 class="anchored" data-anchor-id="style">Style</h3>
 <p><strong>All my writing is my own</strong>, and I would never use an LLM to write. It makes me a bit sad that that’s even possible :(</p>
 <p>Luckily, writing is often about <strong>explaining your thought process</strong>— something that, if I’m the one writing the code, an LLM can only speculate on. There’s also… quite a bit of satisfaction to be gotten out of reading things that you know a human wrote.</p>
-<p>I’ve been experimenting more lately with the (over)use of <strong>bold text</strong>, which, in my opinion, adds a huge amount to skimmability and generally improves the reading experience. It’s something I’ve picked up from various R-affiliated data science bloggers<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, though I doubt I’ve found the balance between benefits and distraction yet.</p>
+<p>I’ve been experimenting more lately with the (over)use of <strong>bold text</strong>, which, in my opinion, adds a huge amount to skimmability and generally improves the reading experience. It’s something I’ve picked up from various R-affiliated data science bloggers<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, though I doubt I’ve found the balance between benefits and distraction yet.</p>
 
 
 </section>
@@ -579,7 +584,8 @@ HTML Block
 <li id="fn1"><p>All personal location info is handled client-side, so your location never leaves your computer. Fear not!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Learning about AWS for this project, it’s quite interesting that this company provides such services. I wonder if the goal is to use Amazon’s wealth to improve global efficiency, or to achieve technological dominance wherein great amounts of organizations rely completely on it.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>And used the settings to change the project name and URL, though that’s technically not necessary.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Such as <a href="https://www.yan-holtz.com/">Yan Holtz</a>, a great figure in that space.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Increasing the resolution from 5km to 3!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Such as <a href="https://www.yan-holtz.com/">Yan Holtz</a>, a great figure in that space.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

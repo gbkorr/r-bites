@@ -155,7 +155,7 @@ I looked around the bucket a bit by running `aws s3 ls` in my terminal until I f
 
 :::{.callout-tip title='Path Structure' collapse='true'}
 
-`s3://eodata/CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2`**/YYYY/MM/DD/**`c_gls_LST_`**YYYYMMDDHHHH**`_GLOBE_GEO_V2.2.1_nc/`
+`s3://eodata/CLMS/bio-geophysical/land_surface_temperature/lst_global_3km_hourly_v3`**/YYYY/MM/DD/**`c_gls_LST_`**YYYYMMDDHHHH**`_GLOBE_GEO_V3.0.1_nc/`
 
 Where HHHH is the (military) hour, e.g. 1300 for 1:00 PM.
 
@@ -202,7 +202,7 @@ class handler(BaseHTTPRequestHandler):
     
     file_obj = s3.get_object(
       Bucket = 'eodata',
-      Key = f'CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2/{pathcode}/c_gls_LST_{filecode}_GLOBE_GEO_V2.2.1_nc/c_gls_LST_{filecode}_GLOBE_GEO_V2.2.1.nc'
+      Key = f'CLMS/bio-geophysical/land_surface_temperature/lst_global_5km_hourly_v2/{pathcode}/c_gls_LST_{filecode}_GLOBE_GEO_V3.0.1_nc/c_gls_LST_{filecode}_GLOBE_GEO_V3.0.1.nc'
     )
 
     self.send_response(200)
@@ -218,6 +218,11 @@ class handler(BaseHTTPRequestHandler):
 ```
 :::
 
+### Limitations
+
+A month after I uploaded this project, Copernicus switched to their new v3 hourly Land Surface Temperature system[^cool] (v2 was adopted in 2021). This **broke the pipeline**— I was able to fix it easily, but realized that the system version number (currently 3.0.1) is baked into the filepath. This shows that simple procedural-query approach was a bad idea, and until I switch to a more robust system (which would have been better in the first place...), the pipeline is liable to break every time they update the LST service.
+
+[^cool]: Increasing the resolution from 5km to 3!
 
 ## The Frontend
 This webpage was created with [Quarto](https://quarto.org/), a clean markdown renderer based on Rmarkdown, and running a block of HTML near the beginning to work with the satellite data.
