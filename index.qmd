@@ -59,3 +59,7 @@ Running **R on a flip phone**, and pushing to github from it. [link](flipphone-r
 A lightweight set of functions to **render video in the RStudio console** at native framerate. [link](video-player/video-player.qmd)
 
 <br clear="left"/>
+
+---
+
+Why doesn't this page use the regular RSS listing format? Hindsight is 20/20...

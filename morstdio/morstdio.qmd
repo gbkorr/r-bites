@@ -37,10 +37,9 @@ I'll need symbols to interact with the shell, and morse code traditionally doesn
 
 [^div3]: I'll actually be using this for a much bigger project later this year, so this makes for a good test of it.
 
-\< *pmorse chart coming soon* \>
-
-:::{.callout-tip title="placeholder chart" collapse=true}
-![](pmorse.jpeg)
+:::{.callout-tip title="pmorse dictionary" collapse=true}
+![At some point, I'd like to make a clean (and more compact) vector-art version of this.](pmorse.jpeg)
+The bottom/right section indicates the light flashing feedback in response to certain actions.
 :::
 
 Traditional morse is also somewhat difficult to parse programatically (without making it a pain for the user), surprisingly. To counterract this, pmorse uses **long dashes** to denote spaces, which completely removes the ambiguity of pause timing and lets you pause mid-word for however long you want.
