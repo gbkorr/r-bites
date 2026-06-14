@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "4-Button Keyboard"
+            icon: keyboard
+            href: rollingwater/rollingwater.qmd
           - text: "Morse Code Headless Linux"
             icon: lightbulb-off
             href: morstdio/morstdio.qmd

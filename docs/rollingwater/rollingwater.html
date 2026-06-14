@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>&nbsp;&nbsp;R Bites</title>
+<title>&nbsp;&nbsp;R Bites - Rollingwater: a Full Keyboard in 4 Keys</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -142,22 +142,86 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basic-idea" id="toc-basic-idea" class="nav-link active" data-scroll-target="#basic-idea">Basic Idea</a></li>
+  <li><a href="#ergonomics" id="toc-ergonomics" class="nav-link" data-scroll-target="#ergonomics">Ergonomics</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Rollingwater: a Full Keyboard in 4 Keys</h1>
+</div>
 
 
 
-<p>I do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of some recent ones that didn’t pan out, despite several weeks of effort for each one.</p>
-<hr>
-<p><strong>awkme</strong> (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.</p>
-<p><strong>tunnelvision</strong> (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was moustache distortion, funnily enough…</p>
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
-</main> <!-- /main -->
+
+<p>Last summer, I got quite interested in <a href="https://docs.google.com/document/d/1W0jhfqJI2ueJ2FNseR4YAFpNfsUM-_FlREHbpNGmC2o">alternative keyboard layouts</a>, as well as alternative input methods in general. During that time, I came up with my own to fill an open niche: how do you bridge the gap between morse code (1 or 2-button input), and a <a href="https://en.wikipedia.org/wiki/Chorded_keyboard">chording keyboard</a> (6+ keys)?</p>
+<p>My answer was to come up with an input device with just four keys, using the <strong>order they’re pressed</strong> to get around the otherwise-too-few chording combinations. You can try it out at the bottom of this page!</p>
+<section id="basic-idea" class="level2">
+<h2 class="anchored" data-anchor-id="basic-idea">Basic Idea</h2>
+<p>In a chording keyboard, like those used by stenographers, the user presses a <strong>specific combination of keys</strong>, and upon release, a letter or string of letters is entered based on the combination and some internal logic (the chording <em>dictionary</em> for that particular device). Usually, the point of such devices is to enable <strong>significantly faster typing</strong> than a regular keyboard, as is the case for stenography. In other cases, including here, the purpose is to allow a device to be used as a full keyboard despite having fewer than 26 keys.</p>
+<p>Because chording uses key <strong>combinations</strong>, a chording keyboard with <em>n</em> keys has 2<sup><em>n</em></sup> key combinations. You can also double or triple the number of combos by using <em>layers</em>— like the shift key on a normal keyboard— which change the set of symbols the combos produce (but this adds an effort overhead every time you have to switch layers).</p>
+<p>Anyway, you’ll notice that 2<sup>4</sup> = 16 isn’t anywhere near enough combinations for a full set of letters, capitals, and symbols, even with several layers. So instead of just using combinations, Rollingwater uses the <strong>first key of each combo</strong> to break ties, so <strong>A</strong>BCD ≠ <strong>B</strong>ACD ≠ <strong>C</strong>ABD (but <strong>A</strong>BCD = <strong>A</strong>CDB = <strong>A</strong>DBC). This bumps the total combo count up to 4x2<sup>3</sup> = 32, which is enough to fit the alphabet onto one layer— perfect!</p>
+<p>I initially wanted to include every permutation of buttons (i.e., ordered combo), but realized this was both uncomfortable and unnecessary; tracking only the first was much easier to perform and was already enough for the full keyboard I wanted.</p>
+</section>
+<section id="ergonomics" class="level2">
+<h2 class="anchored" data-anchor-id="ergonomics">Ergonomics</h2>
+<p>Keyboards with around one key per finger have a particular advantage that makes them easier to use than keyboards with slightly more keys— because you <strong>never have to move your fingers</strong> to a different key, the entire positional— responsible for most of the kinesthetic effort in typing— is entirely removed. This gives it and morse code a surprise speed boost that helps recoup some of the disadvantages and complexity demanded by fewer keys.</p>
+<p>Naturally, I made the simplest and most comfortable combos map to the most frequently used letters and symbols, like any good interface would. I like following the interface design principle of <strong>intuition</strong>— wherin a more <em>intuitive</em> keyboard layout, like one where all the vowels are grouped together, is superior to one where the vowels are randomly distributed to be slightly more ergonomically optimal. Intuitive layouts make onboarding <em>feel</em> much more comfortable (and fun!), and are satisfying from a design point of view. This principle manifests in Rollingwater with the non-symbol combos— space, backspace, and the layer keys— using all or almost all the keys, while letters almost always use three or less keys. This gives the utility combos a more distinct <strong>muscle memory footprint</strong>, and makes the system a bit easier to learn.</p>
+<p>I’ve found it to be quite comfortable to learn and type with. For speed, about 2 characters (combos) per second (<strong>24 words per minute</strong>) is reasonable as soon as you learn all the keys. With lots of practice and a set of buttons optimized for the job (regular keyboard keys are too slow for 5+ presses per second), you could get <strong>upwards of 6 cps</strong> or 72 wpm. This is a little faster than Morse (20 wpm for a novice, upwards of 60 for experts), but with three times the amount of symbols— morse has no capitals! Unlike morse, this can function as a <strong>full keyboard interface</strong>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>(For reference, the average typing speed on a regular keyboard is 40 wpm, with around 100 being achievable with some practice. But the world record is <a href="https://www.youtube.com/watch?v=zb_npyHwfNg">300</a>!)</p>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<p>Using rollingwater is quite straightforward. To use a certain combo, press its primary key (blue) followed by its secondary keys (green). A combo is executed once all keys are released.</p>
+<p>There are four layers: <strong>lowercase</strong> (white), <strong>uppercase</strong> (yellow), <strong>symbols1</strong> (blue), and <strong>symbols2</strong> (magenta). Each layer has its characters, the SPACE and BACKSPACE combos, and combos for changing layers. Layers are “sticky”; if you press, for example, CAPS, the next character will use the caps layer, after which it will go back to the regular lowercase characters. This behavior is inverted if you instead lock caps by pressing CAPS twice in a row. Symbols follow this same behavior, and having both CAPS and SYMBOLS active lets you access symbols2. There’s also a few <strong>macros</strong>, like STOP (period + space + caps, for starting a new sentence) and DELETEWORD (deletes the last word). The symbols layer has some commands like cut/copy/paste/undo/arrow keys (and plenty of room for more), but they aren’t implemented in the demo. In real hardware, it would be quite easy to map these to the equivalent keyboard input.</p>
+</section>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">Demo</h2>
+<p>I made<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> this tool a year ago in p5.js, since it was the most convenient way to implement it quickly for a demonstration. It provides <strong>two sets of keys</strong>— one for each hand, which can also be used in tandem<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. The dictionary on the right is for the right hand; the left hand is <strong>mirrored</strong>. The tool also shows some indicators for currently pressed keys, the last combo, and the currently active or locked layers (arrows + colored circle next to the input display).</p>
+<p>Just click on the window and start “typing”!</p>
+<div style="overflow-x: hidden">
+<iframe src="https://openprocessing.org/sketch/2706541/embed/" style="width: 1600px; height: 800px; transform: scale(0.5); transform-origin: top left;"></iframe>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>If all the necessary layers are added. I haven’t made a layer with <code>pagedown</code> yet, since I don’t really need it…<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>By hand, thank you very much. But seriously— for something like this, it would take more work just to confirm that an LLM has interpreted your wishes correctly, even if it were a perfect coder!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Although layers are specific to each hand, which I think was a poor choice in retrospect.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

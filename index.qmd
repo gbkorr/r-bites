@@ -16,11 +16,19 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 #### *Recent Articles*:
 
+*June*
+
+<img class='thumbnail' src=images/rollingwater.png>
+
+A full keyboard interface with **just four buttons!** [link](rollingwater/rollingwater.qmd)
+
+<br clear="left">
+
 *May*
 
 <img class='thumbnail' src=images/morstdio.jpg>
 
-A **morse code i/o** for headless linux, and the **world's smallest chatbot**. [link](morstdio/morstdio.qmd)
+A **morse code interface** for headless linux, and the **world's smallest chatbot**. [link](morstdio/morstdio.qmd)
 
 <br clear="left">
 

@@ -1,0 +1,52 @@
+---
+title: "Rollingwater: a Full Keyboard in 4 Keys"
+date: June 2026
+date-format: 'MMMM YYYY'
+format: 
+  html:
+    toc: true
+---
+
+Last summer, I got quite interested in [alternative keyboard layouts](https://docs.google.com/document/d/1W0jhfqJI2ueJ2FNseR4YAFpNfsUM-_FlREHbpNGmC2o), as well as alternative input methods in general. During that time, I came up with my own to fill an open niche: how do you bridge the gap between morse code (1 or 2-button input), and a [chording keyboard](https://en.wikipedia.org/wiki/Chorded_keyboard) (6+ keys)?
+
+My answer was to come up with an input device with just four keys, using the **order they're pressed** to get around the otherwise-too-few chording combinations. You can try it out at the bottom of this page!
+
+## Basic Idea
+In a chording keyboard, like those used by stenographers, the user presses a **specific combination of keys**, and upon release, a letter or string of letters is entered based on the combination and some internal logic (the chording *dictionary* for that particular device). Usually, the point of such devices is to enable **significantly faster typing** than a regular keyboard, as is the case for stenography. In other cases, including here, the purpose is to allow a device to be used as a full keyboard despite having fewer than 26 keys.
+
+Because chording uses key **combinations**, a chording keyboard with *n* keys has 2^*n*^ key combinations. You can also double or triple the number of combos by using *layers*— like the shift key on a normal keyboard— which change the set of symbols the combos produce (but this adds an effort overhead every time you have to switch layers).
+
+Anyway, you'll notice that 2^4^ = 16 isn't anywhere near enough combinations for a full set of letters, capitals, and symbols, even with several layers. So instead of just using combinations, Rollingwater uses the **first key of each combo** to break ties, so **A**BCD ≠ **B**ACD ≠ **C**ABD (but **A**BCD = **A**CDB = **A**DBC). This bumps the total combo count up to 4x2^3^ = 32, which is enough to fit the alphabet onto one layer— perfect!
+
+I initially wanted to include every permutation of buttons (i.e., ordered combo), but realized this was both uncomfortable and unnecessary; tracking only the first was much easier to perform and was already enough for the full keyboard I wanted.
+
+## Ergonomics
+Keyboards with around one key per finger have a particular advantage that makes them easier to use than keyboards with slightly more keys— because you **never have to move your fingers** to a different key, the entire positional— responsible for most of the kinesthetic effort in typing— is entirely removed. This gives it and morse code a surprise speed boost that helps recoup some of the disadvantages and complexity demanded by fewer keys.
+
+Naturally, I made the simplest and most comfortable combos map to the most frequently used letters and symbols, like any good interface would. I like following the interface design principle of **intuition**— wherin a more *intuitive* keyboard layout, like one where all the vowels are grouped together, is superior to one where the vowels are randomly distributed to be slightly more ergonomically optimal. Intuitive layouts make onboarding *feel* much more comfortable (and fun!), and are satisfying from a design point of view. This principle manifests in Rollingwater with the non-symbol combos— space, backspace, and the layer keys— using all or almost all the keys, while letters almost always use three or less keys. This gives the utility combos a more distinct **muscle memory footprint**, and makes the system a bit easier to learn.
+
+I've found it to be quite comfortable to learn and type with. For speed, about 2 characters (combos) per second (**24 words per minute**) is reasonable as soon as you learn all the keys. With lots of practice and a set of buttons optimized for the job (regular keyboard keys are too slow for 5+ presses per second), you could get **upwards of 6 cps** or 72 wpm. This is a little faster than Morse (20 wpm for a novice, upwards of 60 for experts), but with three times the amount of symbols— morse has no capitals! Unlike morse, this can function as a **full keyboard interface**.[^caveat]
+
+[^caveat]: If all the necessary layers are added. I haven't made a layer with `pagedown` yet, since I don't really need it...
+
+(For reference, the average typing speed on a regular keyboard is 40 wpm, with around 100 being achievable with some practice. But the world record is [300](https://www.youtube.com/watch?v=zb_npyHwfNg)!)
+
+## Usage
+Using rollingwater is quite straightforward. To use a certain combo, press its primary key (blue) followed by its secondary keys (green). A combo is executed once all keys are released.
+
+There are four layers: **lowercase** (white), **uppercase** (yellow), **symbols1** (blue), and **symbols2** (magenta). Each layer has its characters, the SPACE and BACKSPACE combos, and combos for changing layers. Layers are "sticky"; if you press, for example, CAPS, the next character will use the caps layer, after which it will go back to the regular lowercase characters. This behavior is inverted if you instead lock caps by pressing CAPS twice in a row. Symbols follow this same behavior, and having both CAPS and SYMBOLS active lets you access symbols2.
+There's also a few **macros**, like STOP (period + space + caps, for starting a new sentence) and DELETEWORD (deletes the last word). The symbols layer has some commands like cut/copy/paste/undo/arrow keys (and plenty of room for more), but they aren't implemented in the demo. In real hardware, it would be quite easy to map these to the equivalent keyboard input.
+
+## Demo
+I made[^noai] this tool a year ago in p5.js, since it was the most convenient way to implement it quickly for a demonstration. It provides **two sets of keys**— one for each hand, which can also be used in tandem[^capsoops]. The dictionary on the right is for the right hand; the left hand is **mirrored**. The tool also shows some indicators for currently pressed keys, the last combo, and the currently active or locked layers (arrows + colored circle next to the input display).
+
+Just click on the window and start "typing"!
+
+[^capsoops]: Although layers are specific to each hand, which I think was a poor choice in retrospect.
+[^noai]: By hand, thank you very much. But seriously— for something like this, it would take more work just to confirm that an LLM has interpreted your wishes correctly, even if it were a perfect coder!
+
+::: {style="overflow-x: hidden"}
+```{=html}
+<iframe src="https://openprocessing.org/sketch/2706541/embed/" style="width: 1600px; height: 800px; transform: scale(0.5); transform-origin: top left;"></iframe>
+```
+:::
