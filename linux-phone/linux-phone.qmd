@@ -516,7 +516,7 @@ Now install the dependencies in termux:
 pkg install mpv gstreamer xdotool wmctrl
 ```
 
-And make a new .sh file with this script I wrote:
+And make a new .sh file with this script:
 
 :::{.callout-note title="~/cameramirror.sh" collapse=true}
 ```bash

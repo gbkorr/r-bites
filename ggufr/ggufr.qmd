@@ -1,0 +1,631 @@
+---
+title: "TITLE"
+date: June 2026
+date-format: 'MMMM YYYY'
+format: 
+  html:
+    toc: true
+---
+
+I WANT AN ACTUAL OVERVIEW OF GGUF STRUCTURE
+
+this should go play-by-play integrating structure and how to use— they can read it while it's loading!
+
+
+(this is automatically loaded when you run `library(ggufr)`; I'm putting it here for ease of reading)
+
+
+# setup
+download_model and model = read_ggufr()
+this requires 30gb of free space
+GGUF is saved in r directory (delete with delete_model), weights are in tempdir and deleted when r session ends
+
+```{r eval=FALSE}
+devtools::install_github("gbkorr/ggufr")
+library(ggufr)
+path = paste0(tools::R_user_dir('ggufr'),"/SmolLM3-3B-Q8_0.gguf")
+download_model(path)
+model = read_gguf(path)
+```
+
+while that's running, continue reading!
+
+# read_gguf
+binary file and raw reading in R
+structure: a bunch of metadata, then the raw tensors
+quantizing and unpacking/caching tensors
+
+# tokenization
+let's make a prompt: who is Hadley Wickham?
+before feeding this into the model, we have to tokenize it (I'm sure you're familiar with this already— if not, plenty of guides online)
+many LLMs in 2026 use BPE based on a merge dictionary, which is very convenient to implement
+[how bpe works w/ the gguf tokens+merges]
+now we take our token ids and use them to look up in the embedding matrix (what do the embeds represent? info at different ~~dims, why?). this is what we feed into transformer to start
+
+# inference
+so what will we do?
+[what's prefilling, then afterwards generation]
+feed embedded state into transformer
+pass that through 36 layers
+this is prefill so slice off the end. now we have an end state matrix, and we use it to get the next token
+"choose" token from logits after multiplying with the original embedding matrix; this makes sense— since we're multiplying element-wise, a vector will be highest value if it matches the embedding matrix
+
+so what's the math on each layer?
+
+#transformation
+for the first piece of math, we do the entire matrix, this is called prefilling
+
+afterwards for prediction we just do this with single vectors, which is much easier. uses the same math too
+
+
+
+# Introduction
+
+
+
+
+
+# 1. Setup
+
+This one's been a long time in the making. It's a bit of a personal endeavor— not the most novel thing, but very gratifying. AI can be scary, but being able to "make one" yourself really demystifies it!
+
+Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run inference (interactive chatbot) with a specific LLM. It all runs **natively in base R**— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
+
+[^isit]: I'm not sure it really counts as a package— just a set of mostly undocumented functions you can use.
+
+This writeup will be a bit more casual than they usually are, since this topic has been covered to death— I don't have as much reason to formally document it.
+
+
+# 2. GGUF Files
+
+## 2.1 Structure
+GGUFs are LLMs' **all-in-one filetype** for running inference, designed to replace the mess of files we had to use a few years ago. A GGUF contains info on how a the LLM should be run— important metadata, rules for tokenizing, and a chat template the chatbot was trained to use — as well as the model weights themselves (compressed to reduce filesize).
+
+GGUFs are **stored as raw bytes**, which means you'll have to manually write a script to interpret them as the numbers and letters they intend to represent. Most coding languages have tools for reading user-defined raw filestructures, but R is unfortunately lacking in this regard; I had to manually write a number of functions to interpret the raw bytes correctly.
+
+GGUFs follow a **relatively simple structure**: first, a short, fixed-length set of header variables; then, some number of metadata entries; next, information on the size and location of the model weights; and finally, after a small amount of padding to make the index a multiple of 32, all the weights, one after another. The header defines how many metadata and tensor entries there are.
+
+GGUFs include a few non-standard raw data types in addition to the usual `uint32` et al.. `gguf_string` is used for all text, and simply consists of a uint32 (32-bit unsigned integer, a binary number from 0 to 4,294,967,295) indicating the length of the text string, and then that many bytes of raw UTF-8 characters. So "hello" shows up as `05 00 00 00` `68 65 6c 6c 6f`; the number 5 (taking up four bytes as a uint32) followed by 5 characters corresponding to each letter in "hello". GGUFs also use a custom datatype for arrays, and store tensors in a special number format discussed in the next section.
+
+Here's a **blueprint** I made to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we'll be using:
+
+:::{.callout-note title="GGUF raw format" collapse=true}
+```
+#Header
+(47 47 55 46) Magic Number
+(uint32) GGUF Version
+(uint64) # of Tensors (n_tensors)
+(uint64) # of Metadata Entries (n_metadata)
+
+#Metadata: Repeat for # of Metadata Entries
+(gguf_metadata x n_metadata):
+    (gguf_string) Name
+    (uint32) Data Type
+    [type] Data
+    
+    #Example Metadata Entry:
+    (gguf_string):
+        (uint32) String Length = 18
+        (18-byte UTF-8) String = smollm3.vocab_size
+    (uint32) Data Type = 4 (int32)
+    (int32) Value = 128256
+    
+    #Template Array Entry
+    (gguf_string) Name
+    (uint32) Data Type = 9 (array)
+    (gguf_array):
+        (uint32) Data Type
+        (uint64) # of Array Entries (n_entries)
+        [type x n_entries] Data
+        
+    #Example Array Entry
+    (gguf_string) Name = general.languages
+    (uint32) Data Type = 9 (array)
+    (gguf_array):
+        (uint32) Data Type = 8 (string)
+        (uint64) # of Array Entries = 8
+        (gguf_string x 8):
+            (gguf_string) "en"
+            (gguf_string) "fr"
+            (gguf_string) "es"
+            (gguf_string) "it"
+            (gguf_string) "pt"
+            (gguf_string) "zh"
+            (gguf_string) "ar"
+            (gguf_string) "ru"
+
+#Tensor Info: Repeat for # of Tensors
+(gguf_tensor x n_tensors): 
+    (gguf_string) Name
+    (uint32) Dimensions (1 or 2)
+    (uint64) # of Columns
+    [if Dimensions > 1]:
+      (uint64) # of Rows
+    (uint32) Tensor Data Type (different from metadata)
+    (uint64) Offset in bytes from Blob
+    
+    #Example Tensor Entry
+    (gguf_string) Name = token_embd.weight
+    (uint32) Dimensions = 2
+    (uint64) Columns = 2048
+    (uint64) Rows = 128256
+    (uint32) Tensor Data Type = 8 (Q8_0)
+    (uint64) Offset = 8192
+    
+[padding until position is a multiple of 32]
+#Blob is here: start of tensor values
+
+#Example F32 Tensor: output_norm.weight (1 row, 2048 columns)
+(float32 x 2048) Values
+
+#Example Q8_0 Tensor: blk.0.ffn_gate.weight (11008 rows, 2048 columns)
+(Q8_0 x 2048/32 x 11008): #64 Q8_0 chunks per row, for 11008 rows 
+#2048 values per row @ 32 values per chunk = 2048/32 = 64 chunks per row
+    (Q8_0 x 64): #row 1
+      (Q8_0):
+        (float16) Chunk Weight
+        (int8 x 32) Chunk Values
+      (Q8_0)
+      (Q8_0)
+      ... #64 times
+    (Q8_0 x 64) #row 2
+    (Q8_0 x 64) #row 3
+    ... #11008 times
+```
+::::
+
+And here's an example of the parsed header, metadata, and tensor data from SmolLM3. This is a neatened view of what you'll get by running `view(model)`, since `read_gguf` stores all this info in a single R object.
+
+:::{.callout-note title="Header" collapse=true}
+```{r echo=F}
+header = c('GGUF',3,326,38) |> as.data.frame()
+colnames(header) = 'value'
+rownames(header) = c('magic', 'gguf_version', 'tensor_count', 'metadata_count')
+knitr::kable(header)
+```
+:::
+
+:::{.callout-note title="Metadata" collapse=true}
+```{r echo=F}
+metadata = structure(list("string", "string", "string", "string", "string", 
+    "string", "string", "string", "int32", "string", "string", 
+    "string", "array", "array", "int32", "int32", "int32", "int32", 
+    "int32", "int32", "float32", "float32", "int32", "int32", 
+    "string", "string", "array", "array", "array", "int32", "int32", 
+    "string", "int32", "int32", "string", "string", "int32", 
+    "int32", 56, 95, 132, 178, 228, 273, 310, 356, 430, 471, 
+    534, 596, 675, 731, 854, 892, 932, 975, 1019, 1066, 1104, 
+    1160, 1194, 1238, 1274, 1316, 1366, 2100690, 2613759, 7818575, 
+    7818622, 7818661, 7824715, 7824748, 7824785, 7824864, 7824948, 
+    7824993, "smollm3", "model", "Smollm3-3B", "Smollm3-3B", 
+    "Unsloth", "3B", "apache-2.0", "https://huggingface.co/unsloth", 
+    1, "SmolLM3 3B", "HuggingFaceTB", "https://huggingface.co/HuggingFaceTB/SmolLM3-3B", 
+    "(1) unsloth", "(8) en, fr, es, it, pt, zh, ar, ru", 36, 
+    65536, 2048, 11008, 16, 4, 5e+06, 9.99999997475243e-07, 128256, 
+    128, "gpt2", "smaug-bpe", "(128256) !, \", #, $, %, &, ', (, ), *, +, ,, -, ., /, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9", 
+    "(128256) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1", 
+    "(280147) Ġ Ġ, Ġ ĠĠĠ, ĠĠ ĠĠ, ĠĠĠ Ġ, i n, Ġ t, Ġ ĠĠĠĠĠĠĠ, ĠĠ ĠĠĠĠĠĠ, ĠĠĠĠ ĠĠĠĠ, ĠĠĠ ĠĠĠĠĠ, ĠĠĠĠĠĠĠ Ġ, ĠĠĠĠĠ ĠĠĠ, ĠĠĠĠĠĠ ĠĠ, e r, Ġ ĠĠ, ĠĠ Ġ, o n, Ġ a, r e, a t, s t, e n, o r, Ġ th, Ġt h", 
+    128012, 128004, "{#- Copyright 2025-present the Unsloth team...", 
+    2, 7, "SmolLM3-3B-GGUF/imatrix_unsloth.dat", "unsloth_calibration_SmolLM3-3B.txt", 
+    252, 505), dim = c(38L, 3L), dimnames = list(c("general.architecture", 
+"general.type", "general.name", "general.basename", "general.quantized_by", 
+"general.size_label", "general.license", "general.repo_url", 
+"general.base_model.count", "general.base_model.0.name", "general.base_model.0.organization", 
+"general.base_model.0.repo_url", "general.tags", "general.languages", 
+"smollm3.block_count", "smollm3.context_length", "smollm3.embedding_length", 
+"smollm3.feed_forward_length", "smollm3.attention.head_count", 
+"smollm3.attention.head_count_kv", "smollm3.rope.freq_base", 
+"smollm3.attention.layer_norm_rms_epsilon", "smollm3.vocab_size", 
+"smollm3.rope.dimension_count", "tokenizer.ggml.model", "tokenizer.ggml.pre", 
+"tokenizer.ggml.tokens", "tokenizer.ggml.token_type", "tokenizer.ggml.merges", 
+"tokenizer.ggml.eos_token_id", "tokenizer.ggml.padding_token_id", 
+"tokenizer.chat_template", "general.quantization_version", "general.file_type", 
+"quantize.imatrix.file", "quantize.imatrix.dataset", "quantize.imatrix.entries_count", 
+"quantize.imatrix.chunks_count"), c("type", "start", "value")))
+
+knitr::kable(metadata[,-2])
+```
+:::
+
+:::{.callout-note title="Tensor Info" collapse=true}
+```{r echo=F}
+tensors = structure(list(2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    2048, 11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 
+    11008, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 2048, 
+    2048, 2048, 2048, 2048, 11008, 2048, 2048, 2048, 1, 128256, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 
+    2048, 512, 2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 
+    2048, 11008, 1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 
+    1, 11008, 512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, 
+    512, 1, 2048, 2048, 512, 2048, 11008, 1, 11008, "F32", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "F32", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "F32", "Q8_0", "Q8_0", "F32", "Q8_0", "Q8_0", "Q8_0", 
+    "Q8_0", "Q8_0", "F32", "Q8_0", 0, 8192, 279093248, 280207360, 
+    280215552, 284672000, 289128448, 290242560, 314195968, 338149376, 
+    338157568, 362110976, 363225088, 363233280, 367689728, 372146176, 
+    373260288, 397213696, 421167104, 421175296, 445128704, 446242816, 
+    446251008, 450707456, 455163904, 456278016, 480231424, 504184832, 
+    504193024, 528146432, 529260544, 529268736, 533725184, 538181632, 
+    539295744, 563249152, 587202560, 587210752, 611164160, 612278272, 
+    612286464, 616742912, 621199360, 622313472, 646266880, 670220288, 
+    670228480, 694181888, 695296000, 695304192, 699760640, 704217088, 
+    705331200, 729284608, 753238016, 753246208, 777199616, 778313728, 
+    778321920, 782778368, 787234816, 788348928, 812302336, 836255744, 
+    836263936, 860217344, 861331456, 861339648, 865796096, 870252544, 
+    871366656, 895320064, 919273472, 919281664, 943235072, 944349184, 
+    944357376, 948813824, 953270272, 954384384, 978337792, 1002291200, 
+    1002299392, 1026252800, 1027366912, 1027375104, 1031831552, 
+    1036288000, 1037402112, 1061355520, 1085308928, 1085317120, 
+    1109270528, 1110384640, 1110392832, 1114849280, 1119305728, 
+    1120419840, 1144373248, 1168326656, 1168334848, 1192288256, 
+    1193402368, 1193410560, 1197867008, 1202323456, 1203437568, 
+    1227390976, 1251344384, 1251352576, 1275305984, 1276420096, 
+    1276428288, 1280884736, 1285341184, 1286455296, 1310408704, 
+    1334362112, 1334370304, 1358323712, 1359437824, 1359446016, 
+    1363902464, 1368358912, 1369473024, 1393426432, 1417379840, 
+    1417388032, 1441341440, 1442455552, 1442463744, 1446920192, 
+    1451376640, 1452490752, 1476444160, 1500397568, 1500405760, 
+    1524359168, 1525473280, 1525481472, 1529937920, 1534394368, 
+    1535508480, 1559461888, 1583415296, 1583423488, 1607376896, 
+    1608491008, 1608499200, 1612955648, 1617412096, 1618526208, 
+    1642479616, 1666433024, 1666441216, 1690394624, 1691508736, 
+    1691516928, 1695973376, 1700429824, 1701543936, 1725497344, 
+    1749450752, 1749458944, 1773412352, 1774526464, 1774534656, 
+    1778991104, 1783447552, 1784561664, 1808515072, 1832468480, 
+    1832476672, 1856430080, 1857544192, 1857552384, 1862008832, 
+    1866465280, 1867579392, 1891532800, 1915486208, 1915494400, 
+    1939447808, 1940561920, 1940570112, 1945026560, 1949483008, 
+    1950597120, 1974550528, 1998503936, 1998512128, 2022465536, 
+    2023579648, 2023587840, 2028044288, 2032500736, 2033614848, 
+    2057568256, 2081521664, 2081529856, 2105483264, 2106597376, 
+    2106605568, 2111062016, 2115518464, 2116632576, 2140585984, 
+    2164539392, 2164547584, 2188500992, 2189615104, 2189623296, 
+    2194079744, 2198536192, 2199650304, 2223603712, 2247557120, 
+    2247565312, 2271518720, 2272632832, 2272641024, 2277097472, 
+    2281553920, 2282668032, 2306621440, 2330574848, 2330583040, 
+    2354536448, 2355650560, 2355658752, 2360115200, 2364571648, 
+    2365685760, 2389639168, 2413592576, 2413600768, 2437554176, 
+    2438668288, 2438676480, 2443132928, 2447589376, 2448703488, 
+    2472656896, 2496610304, 2496618496, 2520571904, 2521686016, 
+    2521694208, 2526150656, 2530607104, 2531721216, 2555674624, 
+    2579628032, 2579636224, 2603589632, 2604703744, 2604711936, 
+    2609168384, 2613624832, 2614738944, 2638692352, 2662645760, 
+    2662653952, 2686607360, 2687721472, 2687729664, 2692186112, 
+    2696642560, 2697756672, 2721710080, 2745663488, 2745671680, 
+    2769625088, 2770739200, 2770747392, 2775203840, 2779660288, 
+    2780774400, 2804727808, 2828681216, 2828689408, 2852642816, 
+    2853756928, 2853765120, 2858221568, 2862678016, 2863792128, 
+    2887745536, 2911698944, 2911707136, 2935660544, 2936774656, 
+    2936782848, 2941239296, 2945695744, 2946809856, 2970763264, 
+    2994716672, 2994724864, 3018678272, 3019792384, 3019800576, 
+    3024257024, 3028713472, 3029827584, 3053780992, 3077734400, 
+    3077742592, 3101696000, 3102810112, 3102818304, 3107274752, 
+    3111731200, 3112845312, 3136798720, 3160752128, 3160760320, 
+    3184713728, 3185827840, 3185836032, 3190292480, 3194748928, 
+    3195863040, 3219816448, 3243769856, 3243778048), dim = c(326L, 
+4L), dimnames = list(c("output_norm.weight", "token_embd.weight", 
+"blk.0.attn_k.weight", "blk.0.attn_norm.weight", "blk.0.attn_output.weight", 
+"blk.0.attn_q.weight", "blk.0.attn_v.weight", "blk.0.ffn_down.weight", 
+"blk.0.ffn_gate.weight", "blk.0.ffn_norm.weight", "blk.0.ffn_up.weight", 
+"blk.1.attn_k.weight", "blk.1.attn_norm.weight", "blk.1.attn_output.weight", 
+"blk.1.attn_q.weight", "blk.1.attn_v.weight", "blk.1.ffn_down.weight", 
+"blk.1.ffn_gate.weight", "blk.1.ffn_norm.weight", "blk.1.ffn_up.weight", 
+"blk.2.attn_k.weight", "blk.2.attn_norm.weight", "blk.2.attn_output.weight", 
+"blk.2.attn_q.weight", "blk.2.attn_v.weight", "blk.2.ffn_down.weight", 
+"blk.2.ffn_gate.weight", "blk.2.ffn_norm.weight", "blk.2.ffn_up.weight", 
+"blk.3.attn_k.weight", "blk.3.attn_norm.weight", "blk.3.attn_output.weight", 
+"blk.3.attn_q.weight", "blk.3.attn_v.weight", "blk.3.ffn_down.weight", 
+"blk.3.ffn_gate.weight", "blk.3.ffn_norm.weight", "blk.3.ffn_up.weight", 
+"blk.4.attn_k.weight", "blk.4.attn_norm.weight", "blk.4.attn_output.weight", 
+"blk.4.attn_q.weight", "blk.4.attn_v.weight", "blk.4.ffn_down.weight", 
+"blk.4.ffn_gate.weight", "blk.4.ffn_norm.weight", "blk.4.ffn_up.weight", 
+"blk.5.attn_k.weight", "blk.5.attn_norm.weight", "blk.5.attn_output.weight", 
+"blk.5.attn_q.weight", "blk.5.attn_v.weight", "blk.5.ffn_down.weight", 
+"blk.5.ffn_gate.weight", "blk.5.ffn_norm.weight", "blk.5.ffn_up.weight", 
+"blk.6.attn_k.weight", "blk.6.attn_norm.weight", "blk.6.attn_output.weight", 
+"blk.6.attn_q.weight", "blk.6.attn_v.weight", "blk.6.ffn_down.weight", 
+"blk.6.ffn_gate.weight", "blk.6.ffn_norm.weight", "blk.6.ffn_up.weight", 
+"blk.7.attn_k.weight", "blk.7.attn_norm.weight", "blk.7.attn_output.weight", 
+"blk.7.attn_q.weight", "blk.7.attn_v.weight", "blk.7.ffn_down.weight", 
+"blk.7.ffn_gate.weight", "blk.7.ffn_norm.weight", "blk.7.ffn_up.weight", 
+"blk.8.attn_k.weight", "blk.8.attn_norm.weight", "blk.8.attn_output.weight", 
+"blk.8.attn_q.weight", "blk.8.attn_v.weight", "blk.8.ffn_down.weight", 
+"blk.8.ffn_gate.weight", "blk.8.ffn_norm.weight", "blk.8.ffn_up.weight", 
+"blk.9.attn_k.weight", "blk.9.attn_norm.weight", "blk.9.attn_output.weight", 
+"blk.9.attn_q.weight", "blk.9.attn_v.weight", "blk.9.ffn_down.weight", 
+"blk.9.ffn_gate.weight", "blk.9.ffn_norm.weight", "blk.9.ffn_up.weight", 
+"blk.10.attn_k.weight", "blk.10.attn_norm.weight", "blk.10.attn_output.weight", 
+"blk.10.attn_q.weight", "blk.10.attn_v.weight", "blk.10.ffn_down.weight", 
+"blk.10.ffn_gate.weight", "blk.10.ffn_norm.weight", "blk.10.ffn_up.weight", 
+"blk.11.attn_k.weight", "blk.11.attn_norm.weight", "blk.11.attn_output.weight", 
+"blk.11.attn_q.weight", "blk.11.attn_v.weight", "blk.11.ffn_down.weight", 
+"blk.11.ffn_gate.weight", "blk.11.ffn_norm.weight", "blk.11.ffn_up.weight", 
+"blk.12.attn_k.weight", "blk.12.attn_norm.weight", "blk.12.attn_output.weight", 
+"blk.12.attn_q.weight", "blk.12.attn_v.weight", "blk.12.ffn_down.weight", 
+"blk.12.ffn_gate.weight", "blk.12.ffn_norm.weight", "blk.12.ffn_up.weight", 
+"blk.13.attn_k.weight", "blk.13.attn_norm.weight", "blk.13.attn_output.weight", 
+"blk.13.attn_q.weight", "blk.13.attn_v.weight", "blk.13.ffn_down.weight", 
+"blk.13.ffn_gate.weight", "blk.13.ffn_norm.weight", "blk.13.ffn_up.weight", 
+"blk.14.attn_k.weight", "blk.14.attn_norm.weight", "blk.14.attn_output.weight", 
+"blk.14.attn_q.weight", "blk.14.attn_v.weight", "blk.14.ffn_down.weight", 
+"blk.14.ffn_gate.weight", "blk.14.ffn_norm.weight", "blk.14.ffn_up.weight", 
+"blk.15.attn_k.weight", "blk.15.attn_norm.weight", "blk.15.attn_output.weight", 
+"blk.15.attn_q.weight", "blk.15.attn_v.weight", "blk.15.ffn_down.weight", 
+"blk.15.ffn_gate.weight", "blk.15.ffn_norm.weight", "blk.15.ffn_up.weight", 
+"blk.16.attn_k.weight", "blk.16.attn_norm.weight", "blk.16.attn_output.weight", 
+"blk.16.attn_q.weight", "blk.16.attn_v.weight", "blk.16.ffn_down.weight", 
+"blk.16.ffn_gate.weight", "blk.16.ffn_norm.weight", "blk.16.ffn_up.weight", 
+"blk.17.attn_k.weight", "blk.17.attn_norm.weight", "blk.17.attn_output.weight", 
+"blk.17.attn_q.weight", "blk.17.attn_v.weight", "blk.17.ffn_down.weight", 
+"blk.17.ffn_gate.weight", "blk.17.ffn_norm.weight", "blk.17.ffn_up.weight", 
+"blk.18.attn_k.weight", "blk.18.attn_norm.weight", "blk.18.attn_output.weight", 
+"blk.18.attn_q.weight", "blk.18.attn_v.weight", "blk.18.ffn_down.weight", 
+"blk.18.ffn_gate.weight", "blk.18.ffn_norm.weight", "blk.18.ffn_up.weight", 
+"blk.19.attn_k.weight", "blk.19.attn_norm.weight", "blk.19.attn_output.weight", 
+"blk.19.attn_q.weight", "blk.19.attn_v.weight", "blk.19.ffn_down.weight", 
+"blk.19.ffn_gate.weight", "blk.19.ffn_norm.weight", "blk.19.ffn_up.weight", 
+"blk.20.attn_k.weight", "blk.20.attn_norm.weight", "blk.20.attn_output.weight", 
+"blk.20.attn_q.weight", "blk.20.attn_v.weight", "blk.20.ffn_down.weight", 
+"blk.20.ffn_gate.weight", "blk.20.ffn_norm.weight", "blk.20.ffn_up.weight", 
+"blk.21.attn_k.weight", "blk.21.attn_norm.weight", "blk.21.attn_output.weight", 
+"blk.21.attn_q.weight", "blk.21.attn_v.weight", "blk.21.ffn_down.weight", 
+"blk.21.ffn_gate.weight", "blk.21.ffn_norm.weight", "blk.21.ffn_up.weight", 
+"blk.22.attn_k.weight", "blk.22.attn_norm.weight", "blk.22.attn_output.weight", 
+"blk.22.attn_q.weight", "blk.22.attn_v.weight", "blk.22.ffn_down.weight", 
+"blk.22.ffn_gate.weight", "blk.22.ffn_norm.weight", "blk.22.ffn_up.weight", 
+"blk.23.attn_k.weight", "blk.23.attn_norm.weight", "blk.23.attn_output.weight", 
+"blk.23.attn_q.weight", "blk.23.attn_v.weight", "blk.23.ffn_down.weight", 
+"blk.23.ffn_gate.weight", "blk.23.ffn_norm.weight", "blk.23.ffn_up.weight", 
+"blk.24.attn_k.weight", "blk.24.attn_norm.weight", "blk.24.attn_output.weight", 
+"blk.24.attn_q.weight", "blk.24.attn_v.weight", "blk.24.ffn_down.weight", 
+"blk.24.ffn_gate.weight", "blk.24.ffn_norm.weight", "blk.24.ffn_up.weight", 
+"blk.25.attn_k.weight", "blk.25.attn_norm.weight", "blk.25.attn_output.weight", 
+"blk.25.attn_q.weight", "blk.25.attn_v.weight", "blk.25.ffn_down.weight", 
+"blk.25.ffn_gate.weight", "blk.25.ffn_norm.weight", "blk.25.ffn_up.weight", 
+"blk.26.attn_k.weight", "blk.26.attn_norm.weight", "blk.26.attn_output.weight", 
+"blk.26.attn_q.weight", "blk.26.attn_v.weight", "blk.26.ffn_down.weight", 
+"blk.26.ffn_gate.weight", "blk.26.ffn_norm.weight", "blk.26.ffn_up.weight", 
+"blk.27.attn_k.weight", "blk.27.attn_norm.weight", "blk.27.attn_output.weight", 
+"blk.27.attn_q.weight", "blk.27.attn_v.weight", "blk.27.ffn_down.weight", 
+"blk.27.ffn_gate.weight", "blk.27.ffn_norm.weight", "blk.27.ffn_up.weight", 
+"blk.28.attn_k.weight", "blk.28.attn_norm.weight", "blk.28.attn_output.weight", 
+"blk.28.attn_q.weight", "blk.28.attn_v.weight", "blk.28.ffn_down.weight", 
+"blk.28.ffn_gate.weight", "blk.28.ffn_norm.weight", "blk.28.ffn_up.weight", 
+"blk.29.attn_k.weight", "blk.29.attn_norm.weight", "blk.29.attn_output.weight", 
+"blk.29.attn_q.weight", "blk.29.attn_v.weight", "blk.29.ffn_down.weight", 
+"blk.29.ffn_gate.weight", "blk.29.ffn_norm.weight", "blk.29.ffn_up.weight", 
+"blk.30.attn_k.weight", "blk.30.attn_norm.weight", "blk.30.attn_output.weight", 
+"blk.30.attn_q.weight", "blk.30.attn_v.weight", "blk.30.ffn_down.weight", 
+"blk.30.ffn_gate.weight", "blk.30.ffn_norm.weight", "blk.30.ffn_up.weight", 
+"blk.31.attn_k.weight", "blk.31.attn_norm.weight", "blk.31.attn_output.weight", 
+"blk.31.attn_q.weight", "blk.31.attn_v.weight", "blk.31.ffn_down.weight", 
+"blk.31.ffn_gate.weight", "blk.31.ffn_norm.weight", "blk.31.ffn_up.weight", 
+"blk.32.attn_k.weight", "blk.32.attn_norm.weight", "blk.32.attn_output.weight", 
+"blk.32.attn_q.weight", "blk.32.attn_v.weight", "blk.32.ffn_down.weight", 
+"blk.32.ffn_gate.weight", "blk.32.ffn_norm.weight", "blk.32.ffn_up.weight", 
+"blk.33.attn_k.weight", "blk.33.attn_norm.weight", "blk.33.attn_output.weight", 
+"blk.33.attn_q.weight", "blk.33.attn_v.weight", "blk.33.ffn_down.weight", 
+"blk.33.ffn_gate.weight", "blk.33.ffn_norm.weight", "blk.33.ffn_up.weight", 
+"blk.34.attn_k.weight", "blk.34.attn_norm.weight", "blk.34.attn_output.weight", 
+"blk.34.attn_q.weight", "blk.34.attn_v.weight", "blk.34.ffn_down.weight", 
+"blk.34.ffn_gate.weight", "blk.34.ffn_norm.weight", "blk.34.ffn_up.weight", 
+"blk.35.attn_k.weight", "blk.35.attn_norm.weight", "blk.35.attn_output.weight", 
+"blk.35.attn_q.weight", "blk.35.attn_v.weight", "blk.35.ffn_down.weight", 
+"blk.35.ffn_gate.weight", "blk.35.ffn_norm.weight", "blk.35.ffn_up.weight"
+), c("cols", "rows", "type", "offset")))
+knitr::kable(tensors)
+```
+:::
+
+## 2.2 Tensors
+"Tensors" are a term thrown around everywhere in AI, which frustrates me because... a tensor is just an n-dimensional array, and **LLM inference only involves vectors and matrices!** Sure, you could call vectors and matrices 1D and 2D tensors, but it just makes the whole thing feel less familiar and approachable. Higher-dimension tensors are used in training LLMs, but even there they're not anything special.
+
+LLMs using a simple transformer architecture (i.e. the structure of the inference math) will have some amount of layers (SmolLM3 has 36), where each layer contains the same set of tensors used in the math; to run inference, we'll pass a matrix through the layers one-by-one and have the exact same math applied to it 36 times in a row— but the weights will be different on each layer.
+
+Anyway, a GGUF contains a compressed version of its LLM's **weights**, which compose the aforementioned tensors (matrices and vectors) needed to run inference. Models are trained using floats of a specific precision (often 32-bit), but it turns out that if you approximate these 32-bit "pure" weights with reasonably close numbers, the LLM still performs quite well. This is the idea behind **quantization**— if you come up with a format for approximating those weights that makes the math faster or (most importantly) lets you store all the weights using less memory, you can run the model significantly faster with minimal intelligence loss.
+
+There's something like 30 common ways of quantizing model weights, and they aren't too special— just different ways of lossily compressing the matrix weights to varying degrees. However, in our case, decompressing complex quants just adds unnecessary overhead, because we're just going to do the math with **R's native 64-bit floats** (unlike some clever programs, which use custom instructions to run the math directly on the compressed weights). So I opted to use Q8_0 quantification, which is one of the simplest formats to unpack.
+
+The blueprint in the previous section outlines the structure of Q8_0 weights. As you may have seen in the Tensor Info block, Q8_0 GGUFs only store their tensors as Q8_0 or 32-bit floats (F32), making them quite convenient to work with. In comparison, something like Q4_K_M often uses 4 or 5 different types of quantization for its weights! (That lets you give impactful tensors a higher precision, while highly compressing tensors that don't have as signficant an impact on the math.)
+
+But the bottom line is that we want to unpack these weights into regular numeric data to use in R. But... **it's a lot of data!** Uncompressed and cast into R's numeric type, the weights take up a whopping 25 gigabytes of memory. In order to efficiently load this data when we do the math, I opted to save each layer of tensors as its own R object, in an `.rds` file in `tempdir()`. These files will be discussed further in section [4. Inferencing](#inferencing), where they get used.
+
+## 2.3 read_gguf
+Everything I discussed in this section is performed by one function: `read_gguf`. Here it is for your reading convenience or curiosity:
+
+:::{.callout-tip title="read_gguf.R" collapse=true}
+```{=html}
+<iframe frameborder="0" scrolling="no" style="width:100%; height:7159px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+
+
+:::{.callout-tip title="tokenizer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" scrolling="no" style="width:100%; height:4261px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+:::{.callout-tip title="inferencer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2329px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+:::{.callout-tip title="transformer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" scrolling="no" style="width:100%; height:3904px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+
+# 3. Tokenizing
+
+# 4. Inferencing
+ When I do the math in, I load the `.rds` object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is **the primary bottleneck in running an LLM** in almost every situation, and it's no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.
+
+
+
+
+# 1. Usage and Such
+
+# 1.1 Setup
+You can download the package with:
+```
+devtools::install_github("gbkorr/ggufr")
+library(ggufr)
+```
+Then run this function to download the LLM. It's about 3GB, and it'll be saved in your R directory; run `delete_model()` if you want to get rid of it.
+```
+download_model()
+```
+
+# 1.2 Loading the Model
+To run inference, we first have to unpack the GGUF so that R can work with it. The GGUF is a raw binary file with its own special format, so I had to write a big function to read it properly and extract its data.
+
+:::{.callout-warning}
+Warning: fully unpacking the weights (which are required to run inference) will take up around 25GB. Make sure your computer has some free space!
+These files will be deleted when you close R, since they're stored in `tempdir()`.
+:::
+
+Run this, which will take a while (up to 30 minutes):
+```
+model = read_gguf()
+```
+
+This will load the. 
+
+If you have a different GGUF file you'd like to look at, this package can't run it but can 
+
+# 1.2.1 Loading Details
+In the background, this function parses the GGUF (using custom byte-reading code— R is quite bad at handling raw binary...) and uses parsed info to extract the model's tensors. It saves these numbers— 3 billion weights in total!— to `tempdir()`, with an 
+
+
+
+
+# 2. learning process
+
+I took a unique approach to learning for thsi rpoject
+
+Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023[^egguide] and 2024, where it's hard to tell what is and isn't outdated.
+
+[^egguide]: E.g. [https://www.youtube.com/watch?v=kCc8FmEb1nY](https://www.youtube.com/watch?v=kCc8FmEb1nY)
+
+I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to **learn from an LLM**. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing **recent, relevant sources** on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for **broad, bigger-picture questions** like these, I've found LLMs to answer quite well.[^test]
+
+[^test]: Including when I ask them a broad question about something I'm quite experienced with.
+
+I ended up structuring this project **almost like a class**: I would ask Gemini to describe a part of the LLM implementation, and then implement it entirely on my own, occasionally asking for clarification and advice—but not code!—when needed.
+
+
+
+This lecture -> try it out -> ask clarif was quite similar to tehe structure of classes, and worked tremendously well for me— because I was trying things out, I was building the important experience and understanding myself, and my own testing ironed out any innacuracies in the "teacher's" teaching.
+
+focus on: implementing yourself is where ypou actually get a good grasp of the implementation
+
+
+
+# the learning process (give this a good, article-like section header
+
+learning
+executing
+debugging (gave up, impressed by gemini finding **implementation-level typos**, which requires a pretty deep understanding of how the code works and how that relates to the thing I'm trying to accomplish
+(I've spent a lot of time debugging and know how to do it effectively— but when I know it's , this just seems to be far more effective. I'm not sure if I should adopt it going forward; maybe only when it matters)
+
+
+**never any code written by AI**, but all knowledge was from AI, and it was used to debug
+
+
+

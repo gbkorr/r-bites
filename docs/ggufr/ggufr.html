@@ -1,0 +1,3538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>&nbsp;&nbsp;R Bites - TITLE</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title"><i class="bi bi-hexagon"></i>&nbsp;&nbsp;R Bites</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../rollingwater/rollingwater.html"><i class="bi bi-keyboard" role="img">
+</i> 
+ <span class="dropdown-text">4-Button Keyboard</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../morstdio/morstdio.html"><i class="bi bi-lightbulb-off" role="img">
+</i> 
+ <span class="dropdown-text">Morse Code Headless Linux</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
+</i> 
+ <span class="dropdown-text">Linux Desktop on a Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
+</i> 
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
+</i> 
+ <span class="dropdown-text">Video Conference inside R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
+</i> 
+ <span class="dropdown-text">R on a Flip Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">setup</a></li>
+  <li><a href="#read_gguf" id="toc-read_gguf" class="nav-link" data-scroll-target="#read_gguf">read_gguf</a></li>
+  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">tokenization</a></li>
+  <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference">inference</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">1. Setup</a></li>
+  <li><a href="#gguf-files" id="toc-gguf-files" class="nav-link" data-scroll-target="#gguf-files">2. GGUF Files</a>
+  <ul class="collapse">
+  <li><a href="#structure" id="toc-structure" class="nav-link" data-scroll-target="#structure">2.1 Structure</a></li>
+  <li><a href="#tensors" id="toc-tensors" class="nav-link" data-scroll-target="#tensors">2.2 Tensors</a></li>
+  <li><a href="#read_gguf-1" id="toc-read_gguf-1" class="nav-link" data-scroll-target="#read_gguf-1">2.3 read_gguf</a></li>
+  </ul></li>
+  <li><a href="#tokenizing" id="toc-tokenizing" class="nav-link" data-scroll-target="#tokenizing">3. Tokenizing</a></li>
+  <li><a href="#inferencing" id="toc-inferencing" class="nav-link" data-scroll-target="#inferencing">4. Inferencing</a></li>
+  <li><a href="#usage-and-such" id="toc-usage-and-such" class="nav-link" data-scroll-target="#usage-and-such">1. Usage and Such</a></li>
+  <li><a href="#setup-2" id="toc-setup-2" class="nav-link" data-scroll-target="#setup-2">1.1 Setup</a></li>
+  <li><a href="#loading-the-model" id="toc-loading-the-model" class="nav-link" data-scroll-target="#loading-the-model">1.2 Loading the Model</a></li>
+  <li><a href="#loading-details" id="toc-loading-details" class="nav-link" data-scroll-target="#loading-details">1.2.1 Loading Details</a></li>
+  <li><a href="#learning-process" id="toc-learning-process" class="nav-link" data-scroll-target="#learning-process">2. learning process</a></li>
+  <li><a href="#the-learning-process-give-this-a-good-article-like-section-header" id="toc-the-learning-process-give-this-a-good-article-like-section-header" class="nav-link" data-scroll-target="#the-learning-process-give-this-a-good-article-like-section-header">the learning process (give this a good, article-like section header</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TITLE</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>I WANT AN ACTUAL OVERVIEW OF GGUF STRUCTURE</p>
+<p>this should go play-by-play integrating structure and how to use— they can read it while it’s loading!</p>
+<p>(this is automatically loaded when you run <code>library(ggufr)</code>; I’m putting it here for ease of reading)</p>
+<section id="setup" class="level1">
+<h1>setup</h1>
+<p>download_model and model = read_ggufr() this requires 30gb of free space GGUF is saved in r directory (delete with delete_model), weights are in tempdir and deleted when r session ends</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gbkorr/ggufr"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggufr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>path <span class="ot">=</span> <span class="fu">paste0</span>(tools<span class="sc">::</span><span class="fu">R_user_dir</span>(<span class="st">'ggufr'</span>),<span class="st">"/SmolLM3-3B-Q8_0.gguf"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download_model</span>(path)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">read_gguf</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>while that’s running, continue reading!</p>
+</section>
+<section id="read_gguf" class="level1">
+<h1>read_gguf</h1>
+<p>binary file and raw reading in R structure: a bunch of metadata, then the raw tensors quantizing and unpacking/caching tensors</p>
+</section>
+<section id="tokenization" class="level1">
+<h1>tokenization</h1>
+<p>let’s make a prompt: who is Hadley Wickham? before feeding this into the model, we have to tokenize it (I’m sure you’re familiar with this already— if not, plenty of guides online) many LLMs in 2026 use BPE based on a merge dictionary, which is very convenient to implement [how bpe works w/ the gguf tokens+merges] now we take our token ids and use them to look up in the embedding matrix (what do the embeds represent? info at different ~~dims, why?). this is what we feed into transformer to start</p>
+</section>
+<section id="inference" class="level1">
+<h1>inference</h1>
+<p>so what will we do? [what’s prefilling, then afterwards generation] feed embedded state into transformer pass that through 36 layers this is prefill so slice off the end. now we have an end state matrix, and we use it to get the next token “choose” token from logits after multiplying with the original embedding matrix; this makes sense— since we’re multiplying element-wise, a vector will be highest value if it matches the embedding matrix</p>
+<p>so what’s the math on each layer?</p>
+<p>#transformation for the first piece of math, we do the entire matrix, this is called prefilling</p>
+<p>afterwards for prediction we just do this with single vectors, which is much easier. uses the same math too</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+</section>
+<section id="setup-1" class="level1">
+<h1>1. Setup</h1>
+<p>This one’s been a long time in the making. It’s a bit of a personal endeavor— not the most novel thing, but very gratifying. AI can be scary, but being able to “make one” yourself really demystifies it!</p>
+<p>Anyway, this article is about a little R package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I wrote to parse GGUF files and run inference (interactive chatbot) with a specific LLM. It all runs <strong>natively in base R</strong>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3</p>
+<p>This writeup will be a bit more casual than they usually are, since this topic has been covered to death— I don’t have as much reason to formally document it.</p>
+</section>
+<section id="gguf-files" class="level1">
+<h1>2. GGUF Files</h1>
+<section id="structure" class="level2">
+<h2 class="anchored" data-anchor-id="structure">2.1 Structure</h2>
+<p>GGUFs are LLMs’ <strong>all-in-one filetype</strong> for running inference, designed to replace the mess of files we had to use a few years ago. A GGUF contains info on how a the LLM should be run— important metadata, rules for tokenizing, and a chat template the chatbot was trained to use — as well as the model weights themselves (compressed to reduce filesize).</p>
+<p>GGUFs are <strong>stored as raw bytes</strong>, which means you’ll have to manually write a script to interpret them as the numbers and letters they intend to represent. Most coding languages have tools for reading user-defined raw filestructures, but R is unfortunately lacking in this regard; I had to manually write a number of functions to interpret the raw bytes correctly.</p>
+<p>GGUFs follow a <strong>relatively simple structure</strong>: first, a short, fixed-length set of header variables; then, some number of metadata entries; next, information on the size and location of the model weights; and finally, after a small amount of padding to make the index a multiple of 32, all the weights, one after another. The header defines how many metadata and tensor entries there are.</p>
+<p>GGUFs include a few non-standard raw data types in addition to the usual <code>uint32</code> et al.. <code>gguf_string</code> is used for all text, and simply consists of a uint32 (32-bit unsigned integer, a binary number from 0 to 4,294,967,295) indicating the length of the text string, and then that many bytes of raw UTF-8 characters. So “hello” shows up as <code>05 00 00 00</code> <code>68 65 6c 6c 6f</code>; the number 5 (taking up four bytes as a uint32) followed by 5 characters corresponding to each letter in “hello”. GGUFs also use a custom datatype for arrays, and store tensors in a special number format discussed in the next section.</p>
+<p>Here’s a <strong>blueprint</strong> I made to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we’ll be using:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="GGUF raw format">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+GGUF raw format
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>#Header
+(47 47 55 46) Magic Number
+(uint32) GGUF Version
+(uint64) # of Tensors (n_tensors)
+(uint64) # of Metadata Entries (n_metadata)
+
+#Metadata: Repeat for # of Metadata Entries
+(gguf_metadata x n_metadata):
+    (gguf_string) Name
+    (uint32) Data Type
+    [type] Data
+    
+    #Example Metadata Entry:
+    (gguf_string):
+        (uint32) String Length = 18
+        (18-byte UTF-8) String = smollm3.vocab_size
+    (uint32) Data Type = 4 (int32)
+    (int32) Value = 128256
+    
+    #Template Array Entry
+    (gguf_string) Name
+    (uint32) Data Type = 9 (array)
+    (gguf_array):
+        (uint32) Data Type
+        (uint64) # of Array Entries (n_entries)
+        [type x n_entries] Data
+        
+    #Example Array Entry
+    (gguf_string) Name = general.languages
+    (uint32) Data Type = 9 (array)
+    (gguf_array):
+        (uint32) Data Type = 8 (string)
+        (uint64) # of Array Entries = 8
+        (gguf_string x 8):
+            (gguf_string) "en"
+            (gguf_string) "fr"
+            (gguf_string) "es"
+            (gguf_string) "it"
+            (gguf_string) "pt"
+            (gguf_string) "zh"
+            (gguf_string) "ar"
+            (gguf_string) "ru"
+
+#Tensor Info: Repeat for # of Tensors
+(gguf_tensor x n_tensors): 
+    (gguf_string) Name
+    (uint32) Dimensions (1 or 2)
+    (uint64) # of Columns
+    [if Dimensions &gt; 1]:
+      (uint64) # of Rows
+    (uint32) Tensor Data Type (different from metadata)
+    (uint64) Offset in bytes from Blob
+    
+    #Example Tensor Entry
+    (gguf_string) Name = token_embd.weight
+    (uint32) Dimensions = 2
+    (uint64) Columns = 2048
+    (uint64) Rows = 128256
+    (uint32) Tensor Data Type = 8 (Q8_0)
+    (uint64) Offset = 8192
+    
+[padding until position is a multiple of 32]
+#Blob is here: start of tensor values
+
+#Example F32 Tensor: output_norm.weight (1 row, 2048 columns)
+(float32 x 2048) Values
+
+#Example Q8_0 Tensor: blk.0.ffn_gate.weight (11008 rows, 2048 columns)
+(Q8_0 x 2048/32 x 11008): #64 Q8_0 chunks per row, for 11008 rows 
+#2048 values per row @ 32 values per chunk = 2048/32 = 64 chunks per row
+    (Q8_0 x 64): #row 1
+      (Q8_0):
+        (float16) Chunk Weight
+        (int8 x 32) Chunk Values
+      (Q8_0)
+      (Q8_0)
+      ... #64 times
+    (Q8_0 x 64) #row 2
+    (Q8_0 x 64) #row 3
+    ... #11008 times</code></pre>
+</div>
+</div>
+</div>
+<p>And here’s an example of the parsed header, metadata, and tensor data from SmolLM3. This is a neatened view of what you’ll get by running <code>view(model)</code>, since <code>read_gguf</code> stores all this info in a single R object.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Header">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Header
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">magic</td>
+<td style="text-align: left;">GGUF</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gguf_version</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tensor_count</td>
+<td style="text-align: left;">326</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">metadata_count</td>
+<td style="text-align: left;">38</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Metadata">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Metadata
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 3%">
+<col style="width: 79%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">type</th>
+<th style="text-align: left;">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">general.architecture</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">smollm3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.type</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">model</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.name</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Smollm3-3B</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.basename</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Smollm3-3B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.quantized_by</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Unsloth</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.size_label</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">3B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.license</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">apache-2.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.repo_url</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">https://huggingface.co/unsloth</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.base_model.count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.base_model.0.name</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">SmolLM3 3B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.base_model.0.organization</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">HuggingFaceTB</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.base_model.0.repo_url</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">https://huggingface.co/HuggingFaceTB/SmolLM3-3B</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.tags</td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">(1) unsloth</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.languages</td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">(8) en, fr, es, it, pt, zh, ar, ru</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">smollm3.block_count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">smollm3.context_length</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">65536</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">smollm3.embedding_length</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">2048</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">smollm3.feed_forward_length</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">11008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">smollm3.attention.head_count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">smollm3.attention.head_count_kv</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">smollm3.rope.freq_base</td>
+<td style="text-align: left;">float32</td>
+<td style="text-align: left;">5e+06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">smollm3.attention.layer_norm_rms_epsilon</td>
+<td style="text-align: left;">float32</td>
+<td style="text-align: left;">9.99999997475243e-07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">smollm3.vocab_size</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">128256</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">smollm3.rope.dimension_count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tokenizer.ggml.model</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">gpt2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tokenizer.ggml.pre</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">smaug-bpe</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tokenizer.ggml.tokens</td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">(128256) !, “, #, $, %, &amp;, ’, (, ), *, +, ,, -, ., /, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tokenizer.ggml.token_type</td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">(128256) 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tokenizer.ggml.merges</td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">(280147) Ġ Ġ, Ġ ĠĠĠ, ĠĠ ĠĠ, ĠĠĠ Ġ, i n, Ġ t, Ġ ĠĠĠĠĠĠĠ, ĠĠ ĠĠĠĠĠĠ, ĠĠĠĠ ĠĠĠĠ, ĠĠĠ ĠĠĠĠĠ, ĠĠĠĠĠĠĠ Ġ, ĠĠĠĠĠ ĠĠĠ, ĠĠĠĠĠĠ ĠĠ, e r, Ġ ĠĠ, ĠĠ Ġ, o n, Ġ a, r e, a t, s t, e n, o r, Ġ th, Ġt h</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tokenizer.ggml.eos_token_id</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">128012</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tokenizer.ggml.padding_token_id</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">128004</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tokenizer.chat_template</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">{#- Copyright 2025-present the Unsloth team…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">general.quantization_version</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">general.file_type</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">quantize.imatrix.file</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">SmolLM3-3B-GGUF/imatrix_unsloth.dat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">quantize.imatrix.dataset</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">unsloth_calibration_SmolLM3-3B.txt</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">quantize.imatrix.entries_count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">252</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">quantize.imatrix.chunks_count</td>
+<td style="text-align: left;">int32</td>
+<td style="text-align: left;">505</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Tensor Info">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tensor Info
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">cols</th>
+<th style="text-align: left;">rows</th>
+<th style="text-align: left;">type</th>
+<th style="text-align: left;">offset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">output_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">token_embd.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">128256</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">8192</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.0.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">279093248</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.0.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">280207360</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.0.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">280215552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.0.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">284672000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.0.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">289128448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.0.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">290242560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.0.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">314195968</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.0.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">338149376</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.0.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">338157568</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.1.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">362110976</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.1.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">363225088</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.1.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">363233280</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.1.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">367689728</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.1.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">372146176</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.1.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">373260288</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.1.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">397213696</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.1.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">421167104</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.1.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">421175296</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.2.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">445128704</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.2.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">446242816</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.2.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">446251008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.2.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">450707456</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.2.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">455163904</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.2.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">456278016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.2.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">480231424</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.2.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">504184832</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.2.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">504193024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.3.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">528146432</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.3.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">529260544</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.3.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">529268736</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.3.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">533725184</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.3.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">538181632</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.3.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">539295744</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.3.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">563249152</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.3.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">587202560</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.3.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">587210752</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.4.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">611164160</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.4.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">612278272</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.4.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">612286464</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.4.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">616742912</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.4.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">621199360</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.4.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">622313472</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.4.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">646266880</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.4.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">670220288</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.4.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">670228480</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.5.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">694181888</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.5.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">695296000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.5.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">695304192</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.5.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">699760640</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.5.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">704217088</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.5.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">705331200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.5.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">729284608</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.5.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">753238016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.5.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">753246208</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.6.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">777199616</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.6.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">778313728</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.6.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">778321920</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.6.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">782778368</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.6.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">787234816</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.6.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">788348928</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.6.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">812302336</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.6.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">836255744</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.6.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">836263936</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.7.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">860217344</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.7.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">861331456</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.7.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">861339648</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.7.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">865796096</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.7.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">870252544</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.7.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">871366656</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.7.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">895320064</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.7.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">919273472</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.7.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">919281664</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.8.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">943235072</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.8.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">944349184</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.8.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">944357376</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.8.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">948813824</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.8.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">953270272</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.8.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">954384384</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.8.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">978337792</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.8.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1002291200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.8.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1002299392</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.9.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1026252800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.9.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1027366912</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.9.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1027375104</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.9.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1031831552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.9.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1036288000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.9.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1037402112</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.9.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1061355520</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.9.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1085308928</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.9.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1085317120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.10.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1109270528</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.10.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1110384640</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.10.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1110392832</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.10.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1114849280</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.10.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1119305728</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.10.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1120419840</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.10.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1144373248</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.10.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1168326656</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.10.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1168334848</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.11.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1192288256</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.11.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1193402368</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.11.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1193410560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.11.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1197867008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.11.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1202323456</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.11.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1203437568</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.11.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1227390976</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.11.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1251344384</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.11.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1251352576</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.12.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1275305984</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.12.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1276420096</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.12.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1276428288</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.12.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1280884736</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.12.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1285341184</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.12.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1286455296</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.12.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1310408704</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.12.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1334362112</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.12.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1334370304</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.13.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1358323712</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.13.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1359437824</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.13.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1359446016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.13.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1363902464</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.13.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1368358912</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.13.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1369473024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.13.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1393426432</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.13.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1417379840</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.13.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1417388032</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.14.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1441341440</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.14.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1442455552</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.14.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1442463744</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.14.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1446920192</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.14.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1451376640</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.14.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1452490752</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.14.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1476444160</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.14.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1500397568</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.14.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1500405760</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.15.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1524359168</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.15.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1525473280</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.15.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1525481472</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.15.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1529937920</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.15.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1534394368</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.15.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1535508480</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.15.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1559461888</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.15.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1583415296</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.15.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1583423488</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.16.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1607376896</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.16.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1608491008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.16.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1608499200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.16.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1612955648</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.16.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1617412096</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.16.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1618526208</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.16.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1642479616</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.16.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1666433024</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.16.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1666441216</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.17.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1690394624</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.17.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1691508736</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.17.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1691516928</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.17.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1695973376</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.17.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1700429824</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.17.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1701543936</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.17.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1725497344</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.17.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1749450752</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.17.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1749458944</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.18.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1773412352</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.18.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1774526464</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.18.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1774534656</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.18.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1778991104</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.18.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1783447552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.18.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1784561664</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.18.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1808515072</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.18.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1832468480</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.18.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1832476672</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.19.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1856430080</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.19.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1857544192</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.19.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1857552384</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.19.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1862008832</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.19.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1866465280</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.19.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1867579392</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.19.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1891532800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.19.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1915486208</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.19.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1915494400</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.20.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1939447808</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.20.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1940561920</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.20.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1940570112</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.20.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1945026560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.20.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1949483008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.20.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1950597120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.20.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1974550528</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.20.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">1998503936</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.20.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">1998512128</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.21.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2022465536</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.21.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2023579648</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.21.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2023587840</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.21.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2028044288</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.21.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2032500736</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.21.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2033614848</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.21.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2057568256</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.21.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2081521664</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.21.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2081529856</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.22.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2105483264</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.22.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2106597376</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.22.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2106605568</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.22.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2111062016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.22.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2115518464</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.22.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2116632576</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.22.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2140585984</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.22.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2164539392</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.22.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2164547584</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.23.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2188500992</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.23.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2189615104</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.23.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2189623296</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.23.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2194079744</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.23.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2198536192</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.23.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2199650304</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.23.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2223603712</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.23.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2247557120</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.23.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2247565312</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.24.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2271518720</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.24.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2272632832</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.24.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2272641024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.24.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2277097472</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.24.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2281553920</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.24.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2282668032</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.24.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2306621440</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.24.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2330574848</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.24.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2330583040</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.25.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2354536448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.25.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2355650560</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.25.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2355658752</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.25.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2360115200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.25.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2364571648</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.25.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2365685760</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.25.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2389639168</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.25.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2413592576</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.25.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2413600768</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.26.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2437554176</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.26.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2438668288</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.26.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2438676480</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.26.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2443132928</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.26.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2447589376</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.26.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2448703488</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.26.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2472656896</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.26.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2496610304</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.26.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2496618496</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.27.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2520571904</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.27.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2521686016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.27.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2521694208</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.27.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2526150656</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.27.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2530607104</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.27.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2531721216</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.27.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2555674624</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.27.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2579628032</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.27.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2579636224</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.28.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2603589632</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.28.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2604703744</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.28.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2604711936</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.28.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2609168384</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.28.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2613624832</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.28.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2614738944</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.28.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2638692352</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.28.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2662645760</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.28.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2662653952</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.29.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2686607360</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.29.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2687721472</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.29.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2687729664</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.29.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2692186112</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.29.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2696642560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.29.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2697756672</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.29.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2721710080</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.29.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2745663488</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.29.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2745671680</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.30.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2769625088</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.30.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2770739200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.30.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2770747392</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.30.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2775203840</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.30.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2779660288</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.30.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2780774400</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.30.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2804727808</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.30.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2828681216</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.30.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2828689408</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.31.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2852642816</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.31.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2853756928</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.31.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2853765120</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.31.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2858221568</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.31.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2862678016</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.31.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2863792128</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.31.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2887745536</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.31.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2911698944</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.31.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2911707136</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.32.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2935660544</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.32.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2936774656</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.32.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2936782848</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.32.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2941239296</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.32.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2945695744</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.32.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2946809856</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.32.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2970763264</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.32.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">2994716672</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.32.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">2994724864</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.33.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3018678272</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.33.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3019792384</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.33.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3019800576</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.33.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3024257024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.33.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3028713472</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.33.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3029827584</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.33.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3053780992</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.33.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3077734400</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.33.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3077742592</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.34.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3101696000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.34.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3102810112</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.34.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3102818304</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.34.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3107274752</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.34.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3111731200</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.34.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3112845312</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.34.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3136798720</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.34.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3160752128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.34.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3160760320</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.35.attn_k.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3184713728</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.35.attn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3185827840</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.35.attn_output.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3185836032</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.35.attn_q.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3190292480</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.35.attn_v.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">512</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3194748928</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.35.ffn_down.weight</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3195863040</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.35.ffn_gate.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3219816448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blk.35.ffn_norm.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">F32</td>
+<td style="text-align: left;">3243769856</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blk.35.ffn_up.weight</td>
+<td style="text-align: left;">2048</td>
+<td style="text-align: left;">11008</td>
+<td style="text-align: left;">Q8_0</td>
+<td style="text-align: left;">3243778048</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="tensors" class="level2">
+<h2 class="anchored" data-anchor-id="tensors">2.2 Tensors</h2>
+<p>“Tensors” are a term thrown around everywhere in AI, which frustrates me because… a tensor is just an n-dimensional array, and <strong>LLM inference only involves vectors and matrices!</strong> Sure, you could call vectors and matrices 1D and 2D tensors, but it just makes the whole thing feel less familiar and approachable. Higher-dimension tensors are used in training LLMs, but even there they’re not anything special.</p>
+<p>LLMs using a simple transformer architecture (i.e.&nbsp;the structure of the inference math) will have some amount of layers (SmolLM3 has 36), where each layer contains the same set of tensors used in the math; to run inference, we’ll pass a matrix through the layers one-by-one and have the exact same math applied to it 36 times in a row— but the weights will be different on each layer.</p>
+<p>Anyway, a GGUF contains a compressed version of its LLM’s <strong>weights</strong>, which compose the aforementioned tensors (matrices and vectors) needed to run inference. Models are trained using floats of a specific precision (often 32-bit), but it turns out that if you approximate these 32-bit “pure” weights with reasonably close numbers, the LLM still performs quite well. This is the idea behind <strong>quantization</strong>— if you come up with a format for approximating those weights that makes the math faster or (most importantly) lets you store all the weights using less memory, you can run the model significantly faster with minimal intelligence loss.</p>
+<p>There’s something like 30 common ways of quantizing model weights, and they aren’t too special— just different ways of lossily compressing the matrix weights to varying degrees. However, in our case, decompressing complex quants just adds unnecessary overhead, because we’re just going to do the math with <strong>R’s native 64-bit floats</strong> (unlike some clever programs, which use custom instructions to run the math directly on the compressed weights). So I opted to use Q8_0 quantification, which is one of the simplest formats to unpack.</p>
+<p>The blueprint in the previous section outlines the structure of Q8_0 weights. As you may have seen in the Tensor Info block, Q8_0 GGUFs only store their tensors as Q8_0 or 32-bit floats (F32), making them quite convenient to work with. In comparison, something like Q4_K_M often uses 4 or 5 different types of quantization for its weights! (That lets you give impactful tensors a higher precision, while highly compressing tensors that don’t have as signficant an impact on the math.)</p>
+<p>But the bottom line is that we want to unpack these weights into regular numeric data to use in R. But… <strong>it’s a lot of data!</strong> Uncompressed and cast into R’s numeric type, the weights take up a whopping 25 gigabytes of memory. In order to efficiently load this data when we do the math, I opted to save each layer of tensors as its own R object, in an <code>.rds</code> file in <code>tempdir()</code>. These files will be discussed further in section <a href="#inferencing">4. Inferencing</a>, where they get used.</p>
+</section>
+<section id="read_gguf-1" class="level2">
+<h2 class="anchored" data-anchor-id="read_gguf-1">2.3 read_gguf</h2>
+<p>Everything I discussed in this section is performed by one function: <code>read_gguf</code>. Here it is for your reading convenience or curiosity:</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="read_gguf.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+read_gguf.R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:7159px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="tokenizer.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+tokenizer.R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:4261px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="inferencer.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+inferencer.R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2329px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="transformer.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transformer.R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:3904px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="tokenizing" class="level1">
+<h1>3. Tokenizing</h1>
+</section>
+<section id="inferencing" class="level1">
+<h1>4. Inferencing</h1>
+<p>When I do the math in, I load the <code>.rds</code> object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is <strong>the primary bottleneck in running an LLM</strong> in almost every situation, and it’s no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.</p>
+</section>
+<section id="usage-and-such" class="level1">
+<h1>1. Usage and Such</h1>
+</section>
+<section id="setup-2" class="level1">
+<h1>1.1 Setup</h1>
+<p>You can download the package with:</p>
+<pre><code>devtools::install_github("gbkorr/ggufr")
+library(ggufr)</code></pre>
+<p>Then run this function to download the LLM. It’s about 3GB, and it’ll be saved in your R directory; run <code>delete_model()</code> if you want to get rid of it.</p>
+<pre><code>download_model()</code></pre>
+</section>
+<section id="loading-the-model" class="level1">
+<h1>1.2 Loading the Model</h1>
+<p>To run inference, we first have to unpack the GGUF so that R can work with it. The GGUF is a raw binary file with its own special format, so I had to write a big function to read it properly and extract its data.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Warning: fully unpacking the weights (which are required to run inference) will take up around 25GB. Make sure your computer has some free space! These files will be deleted when you close R, since they’re stored in <code>tempdir()</code>.</p>
+</div>
+</div>
+<p>Run this, which will take a while (up to 30 minutes):</p>
+<pre><code>model = read_gguf()</code></pre>
+<p>This will load the.</p>
+<p>If you have a different GGUF file you’d like to look at, this package can’t run it but can</p>
+</section>
+<section id="loading-details" class="level1">
+<h1>1.2.1 Loading Details</h1>
+<p>In the background, this function parses the GGUF (using custom byte-reading code— R is quite bad at handling raw binary…) and uses parsed info to extract the model’s tensors. It saves these numbers— 3 billion weights in total!— to <code>tempdir()</code>, with an</p>
+</section>
+<section id="learning-process" class="level1">
+<h1>2. learning process</h1>
+<p>I took a unique approach to learning for thsi rpoject</p>
+<p>Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
+<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>I ended up structuring this project <strong>almost like a class</strong>: I would ask Gemini to describe a part of the LLM implementation, and then implement it entirely on my own, occasionally asking for clarification and advice—but not code!—when needed.</p>
+<p>This lecture -&gt; try it out -&gt; ask clarif was quite similar to tehe structure of classes, and worked tremendously well for me— because I was trying things out, I was building the important experience and understanding myself, and my own testing ironed out any innacuracies in the “teacher’s” teaching.</p>
+<p>focus on: implementing yourself is where ypou actually get a good grasp of the implementation</p>
+</section>
+<section id="the-learning-process-give-this-a-good-article-like-section-header" class="level1">
+<h1>the learning process (give this a good, article-like section header</h1>
+<p>learning executing debugging (gave up, impressed by gemini finding <strong>implementation-level typos</strong>, which requires a pretty deep understanding of how the code works and how that relates to the thing I’m trying to accomplish (I’ve spent a lot of time debugging and know how to do it effectively— but when I know it’s , this just seems to be far more effective. I’m not sure if I should adopt it going forward; maybe only when it matters)</p>
+<p><strong>never any code written by AI</strong>, but all knowledge was from AI, and it was used to debug</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m not sure it really counts as a package— just a set of mostly undocumented functions you can use.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<hr>
+<p>© Gabriel Broussard Korr — 2026<br><a href="mailto:mantis9877@gmail.com">mantis9877@gmail.com</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

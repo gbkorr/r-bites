@@ -70,7 +70,7 @@ The script (`morstdio.sh`) is available on [its repo](github.com/gbkorr/morstudi
 
 :::{.callout-tip collapse=true title="morstdio.sh"}
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:9592px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fmorstdio%2Fblob%2Fmain%2Fmorstdio.sh&style=default&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:9999px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fmorstdio%2Fblob%2Fmain%2Fmorstdio.sh&style=docco&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 ```
 :::
 
