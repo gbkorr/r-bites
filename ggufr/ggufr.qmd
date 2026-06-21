@@ -62,19 +62,36 @@ afterwards for prediction we just do this with single vectors, which is much eas
 # Introduction
 
 
+This one's been a long time in the making. It's a bit of a **personal endeavor**— AI can be scary, but being able to "make one" yourself really demystifies it! I'd say the technical content here is old news, but I haven't actually seen any inferencer-from-scratch writeups recently.[^more]
 
+[^more]: I can't even find many from-scratch projects, let alone writeups! [This](https://github.com/matrixsmaster/ligguf) project is perhaps the closest, and worth a look if you're good with C.
 
-
-# 1. Setup
-
-This one's been a long time in the making. It's a bit of a personal endeavor— not the most novel thing, but very gratifying. AI can be scary, but being able to "make one" yourself really demystifies it!
-
-Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run inference (interactive chatbot) with a specific LLM. It all runs **natively in base R**— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
+Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
 
 [^isit]: I'm not sure it really counts as a package— just a set of mostly undocumented functions you can use.
 
-This writeup will be a bit more casual than they usually are, since this topic has been covered to death— I don't have as much reason to formally document it.
+The package inferences off of [SmolLM3](https://huggingface.co/blog/smollm3)— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— *the* platform for sharing locally-run LLMs— and has a nice writeup about how it was created. Sidenote: if you weren't aware, local models have improved significantly in the past year (2025-2026). They're comparable to last year's online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g. my PC with a GPU from 2016), and some can even run well on your phone!
 
+This writeup is somewhat casual— there's plenty of formal resources out there on these topics.
+
+:::{.callout-note title="Note [click to expand]" collapse=true}
+This article contains a bunch of foldable infoboxes like this one!
+:::
+
+## Big Picture
+In order to perform inference with an LLM, you need a **prompt**, the model's **weights**, and information about the model's **architecture**— the math you're supposed to use for that particular model. Locally-run models these days (2026) come in a **single .gguf file** ([Section 2](#gguf-files)), which contains the weights and some metadata telling you which architecture to use.
+
+Generative inference works in **three key steps**. First, a word\*[^tok] is **tokenized** ([Section 3](#tokenizing))— turned into an ID corresponding to a word in the model's vocabulary, which is stored in the GGUF— and then **embedded**— turned into a large vector corresponding to that word. Each word's vector is different; and but they all have the same length— 2048, in the case of SmolLM3 and many other models.
+
+[^tok]: Token, but the nuance isn't relevant until later.
+
+Then, this vector is passed through a bunch of math— the **transformer** (a specialized neural network; [Section 5](#transforming))— based on the model architecture. This is usually a bunch of simple matrix operations, involving the **model weights** and a set of saved vectors from **all previous words** in the prompt and predictions this session. These operations are applied over and over in series with different weights— SmolLM3 applies them 36 times per prediction.
+
+Finally, the resulting vector after all this math is compared with the original set of embeddings (the vectors for every word in the vocabulary) to see **which words' vectors it most closely resembles**. This produces a set of probabilities, which are used to **pick which word to predict** ([Section 4](#inferencing)). Then, the picked word gets fed right back into the first step, tokenized and passed through the transformer! This repeats ad nauseum.
+
+Before text generation starts, the model runs this process with the entire prompt (chat template + user message) as one big matrix instead of a vector— but the math is the same.
+
+# 1. Setup todo
 
 # 2. GGUF Files
 
@@ -87,12 +104,14 @@ GGUFs follow a **relatively simple structure**: first, a short, fixed-length set
 
 GGUFs include a few non-standard raw data types in addition to the usual `uint32` et al.. `gguf_string` is used for all text, and simply consists of a uint32 (32-bit unsigned integer, a binary number from 0 to 4,294,967,295) indicating the length of the text string, and then that many bytes of raw UTF-8 characters. So "hello" shows up as `05 00 00 00` `68 65 6c 6c 6f`; the number 5 (taking up four bytes as a uint32) followed by 5 characters corresponding to each letter in "hello". GGUFs also use a custom datatype for arrays, and store tensors in a special number format discussed in the next section.
 
-Here's a **blueprint** I made to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we'll be using:
+Here's a **blueprint** I made[^byhand] to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we'll be using:
+
+[^byhand]: By hand; no text or code on this page was AI-generated! That's what makes it fun, you see.
 
 :::{.callout-note title="GGUF raw format" collapse=true}
 ```
 #Header
-(47 47 55 46) Magic Number
+(47 47 55 46) Magic Number ("GGUF" in UTF-8)
 (uint32) GGUF Version
 (uint64) # of Tensors (n_tensors)
 (uint64) # of Metadata Entries (n_metadata)
@@ -125,14 +144,14 @@ Here's a **blueprint** I made to show the exact byte format of a GGUF, with exam
         (uint32) Data Type = 8 (string)
         (uint64) # of Array Entries = 8
         (gguf_string x 8):
-            (gguf_string) "en"
-            (gguf_string) "fr"
-            (gguf_string) "es"
-            (gguf_string) "it"
-            (gguf_string) "pt"
-            (gguf_string) "zh"
-            (gguf_string) "ar"
-            (gguf_string) "ru"
+            (gguf_string) String = "en"
+            (gguf_string) String = "fr"
+            (gguf_string) String = "es"
+            (gguf_string) String = "it"
+            (gguf_string) String = "pt"
+            (gguf_string) String = "zh"
+            (gguf_string) String = "ar"
+            (gguf_string) String = "ru"
 
 #Tensor Info: Repeat for # of Tensors
 (gguf_tensor x n_tensors): 
@@ -163,7 +182,7 @@ Here's a **blueprint** I made to show the exact byte format of a GGUF, with exam
 #2048 values per row @ 32 values per chunk = 2048/32 = 64 chunks per row
     (Q8_0 x 64): #row 1
       (Q8_0):
-        (float16) Chunk Weight
+        (float16) Chunk Multiplier
         (int8 x 32) Chunk Values
       (Q8_0)
       (Q8_0)
@@ -174,7 +193,7 @@ Here's a **blueprint** I made to show the exact byte format of a GGUF, with exam
 ```
 ::::
 
-And here's an example of the parsed header, metadata, and tensor data from SmolLM3. This is a neatened view of what you'll get by running `view(model)`, since `read_gguf` stores all this info in a single R object.
+And here's the **parsed header, metadata, and tensor data** from the SmolLM3 GGUF. This is a neatened view of what you'll get by running `view(model)`, since `read_gguf` stores all this info in a single R object. The **Metadata** section is particularly interesting to look through to get a feel for what's included in a GGUF.
 
 :::{.callout-note title="Header" collapse=true}
 ```{r echo=F}
@@ -227,7 +246,7 @@ knitr::kable(metadata[,-2])
 ```
 :::
 
-:::{.callout-note title="Tensor Info" collapse=true}
+:::{.callout-note title="Tensor Info (scroll)" collapse=true style="max-height: 300px; overflow-y: auto;"}
 ```{r echo=F}
 tensors = structure(list(2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 
     2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 11008, 2048, 
@@ -522,40 +541,47 @@ The blueprint in the previous section outlines the structure of Q8_0 weights. As
 But the bottom line is that we want to unpack these weights into regular numeric data to use in R. But... **it's a lot of data!** Uncompressed and cast into R's numeric type, the weights take up a whopping 25 gigabytes of memory. In order to efficiently load this data when we do the math, I opted to save each layer of tensors as its own R object, in an `.rds` file in `tempdir()`. These files will be discussed further in section [4. Inferencing](#inferencing), where they get used.
 
 ## 2.3 read_gguf
-Everything I discussed in this section is performed by one function: `read_gguf`. Here it is for your reading convenience or curiosity:
+Everything I discussed in this section is performed by one function: `read_gguf`. Here it is, if you're curious: (all code is also in the [ggufr repo](https://github.com/gbkorr/ggufr/tree/master/R))
 
-:::{.callout-tip title="read_gguf.R" collapse=true}
+:::{.callout-note title="read_gguf.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:7159px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
 
-
-:::{.callout-tip title="tokenizer.R" collapse=true}
+:::{.callout-note title="tokenizer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:4261px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
-:::{.callout-tip title="inferencer.R" collapse=true}
+:::{.callout-note title="inferencer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:2329px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
-:::{.callout-tip title="transformer.R" collapse=true}
+:::{.callout-note title="transformer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:3904px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
 
 # 3. Tokenizing
+what are tokens
+regex chunking
+merge rules— this way, you'll always end up with tokenss (instead of needing to rely on the old <unk>)
+deterministic! that's important, probably
+actually merging is done with the raw bytes, which is convenient because of how it's stored
+
+I actually save the raw bytes separately in the model object to facilitate this, but you could just as easily read from the GGUF
 
 # 4. Inferencing
  When I do the math in, I load the `.rds` object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is **the primary bottleneck in running an LLM** in almost every situation, and it's no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.
 
+# 5. Transforming
 
 
 

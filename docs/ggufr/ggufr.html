@@ -184,8 +184,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#read_gguf" id="toc-read_gguf" class="nav-link" data-scroll-target="#read_gguf">read_gguf</a></li>
   <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">tokenization</a></li>
   <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference">inference</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">1. Setup</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#big-picture" id="toc-big-picture" class="nav-link" data-scroll-target="#big-picture">Big Picture</a></li>
+  </ul></li>
+  <li><a href="#setup-todo" id="toc-setup-todo" class="nav-link" data-scroll-target="#setup-todo">1. Setup todo</a></li>
   <li><a href="#gguf-files" id="toc-gguf-files" class="nav-link" data-scroll-target="#gguf-files">2. GGUF Files</a>
   <ul class="collapse">
   <li><a href="#structure" id="toc-structure" class="nav-link" data-scroll-target="#structure">2.1 Structure</a></li>
@@ -194,8 +197,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#tokenizing" id="toc-tokenizing" class="nav-link" data-scroll-target="#tokenizing">3. Tokenizing</a></li>
   <li><a href="#inferencing" id="toc-inferencing" class="nav-link" data-scroll-target="#inferencing">4. Inferencing</a></li>
+  <li><a href="#transforming" id="toc-transforming" class="nav-link" data-scroll-target="#transforming">5. Transforming</a></li>
   <li><a href="#usage-and-such" id="toc-usage-and-such" class="nav-link" data-scroll-target="#usage-and-such">1. Usage and Such</a></li>
-  <li><a href="#setup-2" id="toc-setup-2" class="nav-link" data-scroll-target="#setup-2">1.1 Setup</a></li>
+  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">1.1 Setup</a></li>
   <li><a href="#loading-the-model" id="toc-loading-the-model" class="nav-link" data-scroll-target="#loading-the-model">1.2 Loading the Model</a></li>
   <li><a href="#loading-details" id="toc-loading-details" class="nav-link" data-scroll-target="#loading-details">1.2.1 Loading Details</a></li>
   <li><a href="#learning-process" id="toc-learning-process" class="nav-link" data-scroll-target="#learning-process">2. learning process</a></li>
@@ -263,12 +267,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
+<p>This one’s been a long time in the making. It’s a bit of a <strong>personal endeavor</strong>— AI can be scary, but being able to “make one” yourself really demystifies it! I’d say the technical content here is old news, but I haven’t actually seen any inferencer-from-scratch writeups recently.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Anyway, this article is about a little R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all <strong>runs natively in base R</strong>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3</p>
+<p>The package inferences off of <a href="https://huggingface.co/blog/smollm3">SmolLM3</a>— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— <em>the</em> platform for sharing locally-run LLMs— and has a nice writeup about how it was created. Sidenote: if you weren’t aware, local models have improved significantly in the past year (2025-2026). They’re comparable to last year’s online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g.&nbsp;my PC with a GPU from 2016), and some can even run well on your phone!</p>
+<p>This writeup is somewhat casual— there’s plenty of formal resources out there on these topics.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Note [click to expand]">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note [click to expand]
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This article contains a bunch of foldable infoboxes like this one!</p>
+</div>
+</div>
+</div>
+<section id="big-picture" class="level2">
+<h2 class="anchored" data-anchor-id="big-picture">Big Picture</h2>
+<p>In order to perform inference with an LLM, you need a <strong>prompt</strong>, the model’s <strong>weights</strong>, and information about the model’s <strong>architecture</strong>— the math you’re supposed to use for that particular model. Locally-run models these days (2026) come in a <strong>single .gguf file</strong> (<a href="#gguf-files">Section 2</a>), which contains the weights and some metadata telling you which architecture to use.</p>
+<p>Generative inference works in <strong>three key steps</strong>. First, a word*<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> is <strong>tokenized</strong> (<a href="#tokenizing">Section 3</a>)— turned into an ID corresponding to a word in the model’s vocabulary, which is stored in the GGUF— and then <strong>embedded</strong>— turned into a large vector corresponding to that word. Each word’s vector is different; and but they all have the same length— 2048, in the case of SmolLM3 and many other models.</p>
+<p>Then, this vector is passed through a bunch of math— the <strong>transformer</strong> (a specialized neural network; <a href="#transforming">Section 5</a>)— based on the model architecture. This is usually a bunch of simple matrix operations, involving the <strong>model weights</strong> and a set of saved vectors from <strong>all previous words</strong> in the prompt and predictions this session. These operations are applied over and over in series with different weights— SmolLM3 applies them 36 times per prediction.</p>
+<p>Finally, the resulting vector after all this math is compared with the original set of embeddings (the vectors for every word in the vocabulary) to see <strong>which words’ vectors it most closely resembles</strong>. This produces a set of probabilities, which are used to <strong>pick which word to predict</strong> (<a href="#inferencing">Section 4</a>). Then, the picked word gets fed right back into the first step, tokenized and passed through the transformer! This repeats ad nauseum.</p>
+<p>Before text generation starts, the model runs this process with the entire prompt (chat template + user message) as one big matrix instead of a vector— but the math is the same.</p>
 </section>
-<section id="setup-1" class="level1">
-<h1>1. Setup</h1>
-<p>This one’s been a long time in the making. It’s a bit of a personal endeavor— not the most novel thing, but very gratifying. AI can be scary, but being able to “make one” yourself really demystifies it!</p>
-<p>Anyway, this article is about a little R package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I wrote to parse GGUF files and run inference (interactive chatbot) with a specific LLM. It all runs <strong>natively in base R</strong>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3</p>
-<p>This writeup will be a bit more casual than they usually are, since this topic has been covered to death— I don’t have as much reason to formally document it.</p>
+</section>
+<section id="setup-todo" class="level1">
+<h1>1. Setup todo</h1>
 </section>
 <section id="gguf-files" class="level1">
 <h1>2. GGUF Files</h1>
@@ -278,9 +307,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>GGUFs are <strong>stored as raw bytes</strong>, which means you’ll have to manually write a script to interpret them as the numbers and letters they intend to represent. Most coding languages have tools for reading user-defined raw filestructures, but R is unfortunately lacking in this regard; I had to manually write a number of functions to interpret the raw bytes correctly.</p>
 <p>GGUFs follow a <strong>relatively simple structure</strong>: first, a short, fixed-length set of header variables; then, some number of metadata entries; next, information on the size and location of the model weights; and finally, after a small amount of padding to make the index a multiple of 32, all the weights, one after another. The header defines how many metadata and tensor entries there are.</p>
 <p>GGUFs include a few non-standard raw data types in addition to the usual <code>uint32</code> et al.. <code>gguf_string</code> is used for all text, and simply consists of a uint32 (32-bit unsigned integer, a binary number from 0 to 4,294,967,295) indicating the length of the text string, and then that many bytes of raw UTF-8 characters. So “hello” shows up as <code>05 00 00 00</code> <code>68 65 6c 6c 6f</code>; the number 5 (taking up four bytes as a uint32) followed by 5 characters corresponding to each letter in “hello”. GGUFs also use a custom datatype for arrays, and store tensors in a special number format discussed in the next section.</p>
-<p>Here’s a <strong>blueprint</strong> I made to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we’ll be using:</p>
+<p>Here’s a <strong>blueprint</strong> I made<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we’ll be using:</p>
 <div class="callout callout-style-default callout-note callout-titled" title="GGUF raw format">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -289,10 +318,10 @@ GGUF raw format
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <pre><code>#Header
-(47 47 55 46) Magic Number
+(47 47 55 46) Magic Number ("GGUF" in UTF-8)
 (uint32) GGUF Version
 (uint64) # of Tensors (n_tensors)
 (uint64) # of Metadata Entries (n_metadata)
@@ -325,14 +354,14 @@ GGUF raw format
         (uint32) Data Type = 8 (string)
         (uint64) # of Array Entries = 8
         (gguf_string x 8):
-            (gguf_string) "en"
-            (gguf_string) "fr"
-            (gguf_string) "es"
-            (gguf_string) "it"
-            (gguf_string) "pt"
-            (gguf_string) "zh"
-            (gguf_string) "ar"
-            (gguf_string) "ru"
+            (gguf_string) String = "en"
+            (gguf_string) String = "fr"
+            (gguf_string) String = "es"
+            (gguf_string) String = "it"
+            (gguf_string) String = "pt"
+            (gguf_string) String = "zh"
+            (gguf_string) String = "ar"
+            (gguf_string) String = "ru"
 
 #Tensor Info: Repeat for # of Tensors
 (gguf_tensor x n_tensors): 
@@ -363,7 +392,7 @@ GGUF raw format
 #2048 values per row @ 32 values per chunk = 2048/32 = 64 chunks per row
     (Q8_0 x 64): #row 1
       (Q8_0):
-        (float16) Chunk Weight
+        (float16) Chunk Multiplier
         (int8 x 32) Chunk Values
       (Q8_0)
       (Q8_0)
@@ -374,9 +403,9 @@ GGUF raw format
 </div>
 </div>
 </div>
-<p>And here’s an example of the parsed header, metadata, and tensor data from SmolLM3. This is a neatened view of what you’ll get by running <code>view(model)</code>, since <code>read_gguf</code> stores all this info in a single R object.</p>
+<p>And here’s the <strong>parsed header, metadata, and tensor data</strong> from the SmolLM3 GGUF. This is a neatened view of what you’ll get by running <code>view(model)</code>, since <code>read_gguf</code> stores all this info in a single R object. The <strong>Metadata</strong> section is particularly interesting to look through to get a feel for what’s included in a GGUF.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Header">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -385,7 +414,7 @@ Header
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="cell-output-display">
@@ -421,7 +450,7 @@ Header
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Metadata">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -430,7 +459,7 @@ Metadata
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="cell-output-display">
@@ -645,17 +674,17 @@ Metadata
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Tensor Info">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="Tensor Info (scroll)" style="max-height: 300px; overflow-y: auto;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tensor Info
+Tensor Info (scroll)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="cell-output-display">
@@ -2971,9 +3000,9 @@ Tensor Info
 </section>
 <section id="read_gguf-1" class="level2">
 <h2 class="anchored" data-anchor-id="read_gguf-1">2.3 read_gguf</h2>
-<p>Everything I discussed in this section is performed by one function: <code>read_gguf</code>. Here it is for your reading convenience or curiosity:</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="read_gguf.R">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<p>Everything I discussed in this section is performed by one function: <code>read_gguf</code>. Here it is, if you’re curious: (all code is also in the <a href="https://github.com/gbkorr/ggufr/tree/master/R">ggufr repo</a>)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="read_gguf.R" style="max-height: 600px; overflow-y: auto;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2982,14 +3011,14 @@ read_gguf.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:7159px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="tokenizer.R">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="tokenizer.R" style="max-height: 600px; overflow-y: auto;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2998,14 +3027,14 @@ tokenizer.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:4261px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="inferencer.R">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="inferencer.R" style="max-height: 600px; overflow-y: auto;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3014,14 +3043,14 @@ inferencer.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:2329px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="transformer.R">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="transformer.R" style="max-height: 600px; overflow-y: auto;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3030,9 +3059,9 @@ transformer.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:3904px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
 </div>
 </div>
@@ -3040,15 +3069,20 @@ transformer.R
 </section>
 <section id="tokenizing" class="level1">
 <h1>3. Tokenizing</h1>
+<p>what are tokens regex chunking merge rules— this way, you’ll always end up with tokenss (instead of needing to rely on the old <unk>) deterministic! that’s important, probably actually merging is done with the raw bytes, which is convenient because of how it’s stored</unk></p>
+<p>I actually save the raw bytes separately in the model object to facilitate this, but you could just as easily read from the GGUF</p>
 </section>
 <section id="inferencing" class="level1">
 <h1>4. Inferencing</h1>
 <p>When I do the math in, I load the <code>.rds</code> object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is <strong>the primary bottleneck in running an LLM</strong> in almost every situation, and it’s no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.</p>
 </section>
+<section id="transforming" class="level1">
+<h1>5. Transforming</h1>
+</section>
 <section id="usage-and-such" class="level1">
 <h1>1. Usage and Such</h1>
 </section>
-<section id="setup-2" class="level1">
+<section id="setup-1" class="level1">
 <h1>1.1 Setup</h1>
 <p>You can download the package with:</p>
 <pre><code>devtools::install_github("gbkorr/ggufr")
@@ -3084,8 +3118,8 @@ Warning
 <section id="learning-process" class="level1">
 <h1>2. learning process</h1>
 <p>I took a unique approach to learning for thsi rpoject</p>
-<p>Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
-<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
+<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 <p>I ended up structuring this project <strong>almost like a class</strong>: I would ask Gemini to describe a part of the LLM implementation, and then implement it entirely on my own, occasionally asking for clarification and advice—but not code!—when needed.</p>
 <p>This lecture -&gt; try it out -&gt; ask clarif was quite similar to tehe structure of classes, and worked tremendously well for me— because I was trying things out, I was building the important experience and understanding myself, and my own testing ironed out any innacuracies in the “teacher’s” teaching.</p>
 <p>focus on: implementing yourself is where ypou actually get a good grasp of the implementation</p>
@@ -3102,9 +3136,12 @@ Warning
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>I’m not sure it really counts as a package— just a set of mostly undocumented functions you can use.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I can’t even find many from-scratch projects, let alone writeups! <a href="https://github.com/matrixsmaster/ligguf">This</a> project is perhaps the closest, and worth a look if you’re good with C.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I’m not sure it really counts as a package— just a set of mostly undocumented functions you can use.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Token, but the nuance isn’t relevant until later.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>By hand; no text or code on this page was AI-generated! That’s what makes it fun, you see.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
