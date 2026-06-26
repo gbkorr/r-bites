@@ -7,28 +7,17 @@ format:
     toc: true
 ---
 
-I WANT AN ACTUAL OVERVIEW OF GGUF STRUCTURE
+>>>>
 
-this should go play-by-play integrating structure and how to use— they can read it while it's loading!
+I also wanted to get familiar enough to be able to implement an inferencer in stranger contexts— like on an arduino, or perhaps minecraft. after it I'm now confident in being able to make it in a different lanugage, but it ONLY works if vectorized math is available! otherwise the matrix mults are too slow
 
+>>>
 
-(this is automatically loaded when you run `library(ggufr)`; I'm putting it here for ease of reading)
+RUN usethis::use_package("re") IN GGUFR PROJECT
 
 
 # setup
-download_model and model = read_ggufr()
-this requires 30gb of free space
-GGUF is saved in r directory (delete with delete_model), weights are in tempdir and deleted when r session ends
 
-```{r eval=FALSE}
-devtools::install_github("gbkorr/ggufr")
-library(ggufr)
-path = paste0(tools::R_user_dir('ggufr'),"/SmolLM3-3B-Q8_0.gguf")
-download_model(path)
-model = read_gguf(path)
-```
-
-while that's running, continue reading!
 
 # read_gguf
 binary file and raw reading in R
@@ -66,19 +55,22 @@ This one's been a long time in the making. It's a bit of a **personal endeavor**
 
 [^more]: I can't even find many from-scratch projects, let alone writeups! [This](https://github.com/matrixsmaster/ligguf) project is perhaps the closest, and worth a look if you're good with C.
 
-Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
+Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**[^re]— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
 
+[^re]: Except for tokenizing, which needs the `re` package to perform one extended regex.
 [^isit]: I'm not sure it really counts as a package— just a set of mostly undocumented functions you can use.
 
-The package inferences off of [SmolLM3](https://huggingface.co/blog/smollm3)— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— *the* platform for sharing locally-run LLMs— and has a nice writeup about how it was created. Sidenote: if you weren't aware, local models have improved significantly in the past year (2025-2026). They're comparable to last year's online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g. my PC with a GPU from 2016), and some can even run well on your phone!
+The package inferences off of [SmolLM3](https://huggingface.co/blog/smollm3)— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— *the* platform for sharing locally-run LLMs— and has a nice [writeup](https://huggingface.co/blog/smollm3) about how it was created. Sidenote: if you weren't aware, local models have improved significantly in the past year (2025-2026). They're comparable to last year's online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g. my PC with a GPU from 2016), and some can even run well on a mobile phone. SmolLM3 isn't great at facts or coding (it's the second-smallest model I could find!), but it certainly passes the Turing test.
 
-This writeup is somewhat casual— there's plenty of formal resources out there on these topics.
+This writeup is somewhat casual— there's plenty of formal resources out there on these topics. The first five sections go over how inferencing works (and how I do it in the package), [section 6](#the-ggufr-package) explains how to use the package to run inference yourself in R, and the [last section](#learning-process) talks about the interesting process of how I learned all this.
+
+If you want to try the package out for yourself, skip to [Section 6](#the-ggufr-package) and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)
 
 :::{.callout-note title="Note [click to expand]" collapse=true}
 This article contains a bunch of foldable infoboxes like this one!
 :::
 
-## Big Picture
+# 1. Big Picture
 In order to perform inference with an LLM, you need a **prompt**, the model's **weights**, and information about the model's **architecture**— the math you're supposed to use for that particular model. Locally-run models these days (2026) come in a **single .gguf file** ([Section 2](#gguf-files)), which contains the weights and some metadata telling you which architecture to use.
 
 Generative inference works in **three key steps**. First, a word\*[^tok] is **tokenized** ([Section 3](#tokenizing))— turned into an ID corresponding to a word in the model's vocabulary, which is stored in the GGUF— and then **embedded**— turned into a large vector corresponding to that word. Each word's vector is different; and but they all have the same length— 2048, in the case of SmolLM3 and many other models.
@@ -90,8 +82,6 @@ Then, this vector is passed through a bunch of math— the **transformer** (a sp
 Finally, the resulting vector after all this math is compared with the original set of embeddings (the vectors for every word in the vocabulary) to see **which words' vectors it most closely resembles**. This produces a set of probabilities, which are used to **pick which word to predict** ([Section 4](#inferencing)). Then, the picked word gets fed right back into the first step, tokenized and passed through the transformer! This repeats ad nauseum.
 
 Before text generation starts, the model runs this process with the entire prompt (chat template + user message) as one big matrix instead of a vector— but the math is the same.
-
-# 1. Setup todo
 
 # 2. GGUF Files
 
@@ -540,29 +530,23 @@ The blueprint in the previous section outlines the structure of Q8_0 weights. As
 
 But the bottom line is that we want to unpack these weights into regular numeric data to use in R. But... **it's a lot of data!** Uncompressed and cast into R's numeric type, the weights take up a whopping 25 gigabytes of memory. In order to efficiently load this data when we do the math, I opted to save each layer of tensors as its own R object, in an `.rds` file in `tempdir()`. These files will be discussed further in section [4. Inferencing](#inferencing), where they get used.
 
-## 2.3 read_gguf
-Everything I discussed in this section is performed by one function: `read_gguf`. Here it is, if you're curious: (all code is also in the [ggufr repo](https://github.com/gbkorr/ggufr/tree/master/R))
+## 2.3 read_gguf.R
+Everything I discussed in this section is performed by one function: `read_gguf()`. Here it is, if you're curious: (all code is also in the [ggufr repo](https://github.com/gbkorr/ggufr/tree/master/R))
 
-:::{.callout-note title="read_gguf.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
+:::{.callout-note title="read_gguf.R" collapse=true}
 ```{=html}
 <iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Fread_gguf.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
 
-:::{.callout-note title="tokenizer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
-```{=html}
-<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
-```
-:::
-
-:::{.callout-note title="inferencer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
+:::{.callout-note title="inferencer.R" collapse=true}
 ```{=html}
 <iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
 :::
 
-:::{.callout-note title="transformer.R" collapse=true style="max-height: 600px; overflow-y: auto;"}
+:::{.callout-note title="transformer.R" collapse=true}
 ```{=html}
 <iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
 ```
@@ -570,22 +554,117 @@ Everything I discussed in this section is performed by one function: `read_gguf`
 
 
 # 3. Tokenizing
-what are tokens
-regex chunking
-merge rules— this way, you'll always end up with tokenss (instead of needing to rely on the old <unk>)
-deterministic! that's important, probably
-actually merging is done with the raw bytes, which is convenient because of how it's stored
 
-I actually save the raw bytes separately in the model object to facilitate this, but you could just as easily read from the GGUF
+## 3.1 Purpose
+In order to predict text based on a prompt, we need to **turn the prompt into a set of vectors** that we can perform the math on. The first step in that is to tokenize it— turn it into a bunch of IDs corresponding to the vectors to use.
+
+Ideally, we'd want every word to be a token, but because we want this model to work for multiple language and not crash when it receives a string like "fovriegfivnvoihuev", we need another approach— allowing word fragments and letters to be their own token. Modern models have a fixed **vocabulary** of tokens, which includes which includes **every common unicode character** along with a bunch of words. This means that, even if a word isn't in the vocabulary, it can still be broken up into smaller tokens. SmolLM3 has a vocabulary of 128k tokens— quite a lot!
+
+So how do we break things up? First, we use a regex pattern to **split the prompt into individual words** and symbols, keeping spaces at the start of each word: "How", " are", " you", "?". Then, each word is further split into characters, and we attempt to **reassemble those characters** into the largest token we can— often a single token for the whole word. Applying this **merging process** to each word and symbol separated by the regex leaves us with a list of tokens that we can then use to run inference.
+
+## 3.2 Merging Details
+
+Modern LLMs have simplified the merging process significantly— in addition to the vocabulary, the GGUF contains a **list of merges**, and characters are simply combined based on if they appear in the merges. For example, the merges include "o w" and "w ow"— so in the tokenizing process, "wow" will be iteratively merged from individual characters into the whole word: (w,o,w) -> (w,ow) -> (wow). Importantly, this process is **deterministic**— so input text gets tokenized and interpreted identically whether the model is being trained or generating. My package implements merging in the `BPE()` function, which does this with the raw bytes— no need to convert them to characters.
+
+There's one extra bit of nuance. You may have seen in the GGUF metadata that there's a lot of the `Ġ` character floating around— this is from an annoying convention from earlier language processing research that maps **all invisible characters** to visible, less-common latin ones, in order to make debugging easier. This **isn't just visual**— the actual model vocab uses the bytes for `Ġ` instead of space. This is especially relevant since **most words in the vocab start with a space** (e.g. "Ġforgotten")— this helps differentiate between words and suffixes, and if you think about it, almost every word in a piece of writing is preceded by a space.
+
+Anyway, `tokenizer.R` contains `BPE()` and an implementation of this invisible character mapping based on the [original](https://github.com/karpathy/minGPT/blob/37baab71b9abea1b76ab957409a1cc2fbfba8a26/mingpt/bpe.py) by Andrej Karpathy. I recommend reading that instead of the R code, since it's more fully commented.
+
+:::{.callout-note title="tokenizer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+## 3.3 The Chat Template
+GGUFs come with a recommended chat template to turn the LLM into the sort of chatbot we expect. By default, the LLM is **just a word-predictor**— if you feed it part of a phrase, it'll predict what it thinks the next words will be. It turns out that it's quite easy to turn a word predictor into **something more**...
+
+Modern chatbots achieve this by inserting the prompt into a template like this:
+
+```{r eval=F}
+You are a helpful AI assistant.
+User says: [prompt].
+You say: [
+```
+
+Naturally, the next predictions are **predictions of what a helpful AI assistant would say**. This is (surprisingly) tantamount to actually being an AI assistant!
+
+
+![](prediction.png){width=300 fig-align="left"} ![](chatbot.png){width=300 fig-align="left"}
+
+![Left: An example of word prediction: the LLM makes up the details itself, as it's just a word predictor.<br>`infer("Yesterday I went to my friend's barbecue and", model, use_template=FALSE)`<br>Right: The same prompt with the chat template; a reasonable exchange with an assistant.<br>`infer("Yesterday I went to my friend's barbecue and...", model, use_template=TRUE, show_template=TRUE)`](empty.png)
+
+The GGUF chat template uses another weird, esoteric format (jinja2) to actually create this prompt template. In the package I went through SmolLM3's template and manually trimmed it down into a short text template to make it easier to feed into the model; you can see this in the `template()` function at the bottom of `tokenizer.R`. Chat templates use some special tokens— located at the end of the model's vocabulary— to help the LLM know the structure of the template; for example, the string `<|im_start|>` indicates the start of a new message.
+
 
 # 4. Inferencing
+
+now that we have a list of IDs
+
+
+
+
  When I do the math in, I load the `.rds` object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is **the primary bottleneck in running an LLM** in almost every situation, and it's no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.
 
 # 5. Transforming
 
 
 
-# 1. Usage and Such
+# 6. The ggufr Package
+
+## 6.1 Setup
+
+The package has just one dependency and is relatively easy to try out and play around with. Running the model is slow but shouldn't require a particularly powerful computer.
+
+To get started, run this to install the package and download[^down] the **3GB** GGUF[^userdir] to run it with. This will take 5 or 10 minutes depending on your internet speed.
+
+[^down]: From the official [Huggingface](https://huggingface.co/unsloth/SmolLM3-3B-GGUF/blob/main/SmolLM3-3B-Q8_0.gguf) endpoint; the group that both created this model and generally hosts downloads for all local LLMs.
+[^userdir]: Which will be saved in `tools::R_user_dir('ggufr')`. R provides a dedicated folder for each package to store files like this in.
+
+```{r eval=FALSE}
+devtools::install_github("gbkorr/ggufr")
+library(ggufr)
+path = paste0(tools::R_user_dir('ggufr'),"/SmolLM3-3B-Q8_0.gguf")
+download_model(path)
+```
+
+Then to load the model, run this. During this process, the tensors are unpacked and saved in `tempdir()`; the unpacked tensors take up **25GB** of space, so make sure your computer has some free space. The tensors are deleted when you close R/RStudio, so you'll get the space back.
+
+```{r eval=FALSE}
+#this will take around 30 minutes
+model = read_gguf(path)
+```
+
+Once that's finished, the model is ready! You'll be able to run it as much as you like until you close R.
+
+## 6.2 Usage
+
+The main function to run inference is `infer()`. This will automatically insert your prompt into the chat template and run the model on it.
+Token generation speed is mainly tied to how fast R can load the `.rds` tensor layers; I get around a token a minute on my computer.
+
+```{r eval=F}
+#| code-overflow: 'scroll'
+infer(
+  prompt, #the text to feed into the model
+  model, #pass the model object in
+  instructions=NULL, #set this to a string if you want to add a system prompt, e.g. "You are an AI assistant that always rhymes."
+  use_template=TRUE, #set this to FALSE to feed ONLY the prompt into the model; it will behave as a word predictor as discussed in section 3.3
+  show_template=FALSE, #prints the full input and output text, instead of a cleaned "prompt | response" view.
+  temperature=1
+)
+
+```
+
+Here's what I got from this: `"Who is Hadley Wickham?" |> infer(model)`
+
+![Text generation in progress. In another prompt, it told me Hadley was Canadian... factual details are rather hit-or-miss for small LLMs.](hadley.png)
+
+That's about it. Mainly, this package provides a (relatively) simple codebase that should make it easy to tweak and play around with the inferencer.
+
+
+# 7. Learning Process
+
+
 
 # 1.1 Setup
 You can download the package with:
@@ -621,7 +700,7 @@ In the background, this function parses the GGUF (using custom byte-reading code
 
 
 
-# 2. learning process
+#. learning rocess
 
 I took a unique approach to learning for thsi rpoject
 

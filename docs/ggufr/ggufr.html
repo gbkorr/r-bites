@@ -184,25 +184,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#read_gguf" id="toc-read_gguf" class="nav-link" data-scroll-target="#read_gguf">read_gguf</a></li>
   <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">tokenization</a></li>
   <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference">inference</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
-  <li><a href="#big-picture" id="toc-big-picture" class="nav-link" data-scroll-target="#big-picture">Big Picture</a></li>
-  </ul></li>
-  <li><a href="#setup-todo" id="toc-setup-todo" class="nav-link" data-scroll-target="#setup-todo">1. Setup todo</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#big-picture" id="toc-big-picture" class="nav-link" data-scroll-target="#big-picture">1. Big Picture</a></li>
   <li><a href="#gguf-files" id="toc-gguf-files" class="nav-link" data-scroll-target="#gguf-files">2. GGUF Files</a>
   <ul class="collapse">
   <li><a href="#structure" id="toc-structure" class="nav-link" data-scroll-target="#structure">2.1 Structure</a></li>
   <li><a href="#tensors" id="toc-tensors" class="nav-link" data-scroll-target="#tensors">2.2 Tensors</a></li>
-  <li><a href="#read_gguf-1" id="toc-read_gguf-1" class="nav-link" data-scroll-target="#read_gguf-1">2.3 read_gguf</a></li>
+  <li><a href="#read_gguf.r" id="toc-read_gguf.r" class="nav-link" data-scroll-target="#read_gguf.r">2.3 read_gguf.R</a></li>
   </ul></li>
-  <li><a href="#tokenizing" id="toc-tokenizing" class="nav-link" data-scroll-target="#tokenizing">3. Tokenizing</a></li>
+  <li><a href="#tokenizing" id="toc-tokenizing" class="nav-link" data-scroll-target="#tokenizing">3. Tokenizing</a>
+  <ul class="collapse">
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose">3.1 Purpose</a></li>
+  <li><a href="#merging-details" id="toc-merging-details" class="nav-link" data-scroll-target="#merging-details">3.2 Merging Details</a></li>
+  <li><a href="#the-chat-template" id="toc-the-chat-template" class="nav-link" data-scroll-target="#the-chat-template">3.3 The Chat Template</a></li>
+  </ul></li>
   <li><a href="#inferencing" id="toc-inferencing" class="nav-link" data-scroll-target="#inferencing">4. Inferencing</a></li>
   <li><a href="#transforming" id="toc-transforming" class="nav-link" data-scroll-target="#transforming">5. Transforming</a></li>
-  <li><a href="#usage-and-such" id="toc-usage-and-such" class="nav-link" data-scroll-target="#usage-and-such">1. Usage and Such</a></li>
-  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">1.1 Setup</a></li>
+  <li><a href="#the-ggufr-package" id="toc-the-ggufr-package" class="nav-link" data-scroll-target="#the-ggufr-package">6. The ggufr Package</a>
+  <ul class="collapse">
+  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">6.1 Setup</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">6.2 Usage</a></li>
+  </ul></li>
+  <li><a href="#learning-process" id="toc-learning-process" class="nav-link" data-scroll-target="#learning-process">7. Learning Process</a></li>
+  <li><a href="#setup-2" id="toc-setup-2" class="nav-link" data-scroll-target="#setup-2">1.1 Setup</a></li>
   <li><a href="#loading-the-model" id="toc-loading-the-model" class="nav-link" data-scroll-target="#loading-the-model">1.2 Loading the Model</a></li>
   <li><a href="#loading-details" id="toc-loading-details" class="nav-link" data-scroll-target="#loading-details">1.2.1 Loading Details</a></li>
-  <li><a href="#learning-process" id="toc-learning-process" class="nav-link" data-scroll-target="#learning-process">2. learning process</a></li>
   <li><a href="#the-learning-process-give-this-a-good-article-like-section-header" id="toc-the-learning-process-give-this-a-good-article-like-section-header" class="nav-link" data-scroll-target="#the-learning-process-give-this-a-good-article-like-section-header">the learning process (give this a good, article-like section header</a></li>
   </ul>
 </nav>
@@ -235,20 +241,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>I WANT AN ACTUAL OVERVIEW OF GGUF STRUCTURE</p>
-<p>this should go play-by-play integrating structure and how to use— they can read it while it’s loading!</p>
-<p>(this is automatically loaded when you run <code>library(ggufr)</code>; I’m putting it here for ease of reading)</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>I also wanted to get familiar enough to be able to implement an inferencer in stranger contexts— like on an arduino, or perhaps minecraft. after it I’m now confident in being able to make it in a different lanugage, but it ONLY works if vectorized math is available! otherwise the matrix mults are too slow</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+
+</blockquote>
+</blockquote>
+</blockquote>
+<p>RUN usethis::use_package(“re”) IN GGUFR PROJECT</p>
 <section id="setup" class="level1">
 <h1>setup</h1>
-<p>download_model and model = read_ggufr() this requires 30gb of free space GGUF is saved in r directory (delete with delete_model), weights are in tempdir and deleted when r session ends</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gbkorr/ggufr"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggufr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>path <span class="ot">=</span> <span class="fu">paste0</span>(tools<span class="sc">::</span><span class="fu">R_user_dir</span>(<span class="st">'ggufr'</span>),<span class="st">"/SmolLM3-3B-Q8_0.gguf"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download_model</span>(path)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">read_gguf</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>while that’s running, continue reading!</p>
 </section>
 <section id="read_gguf" class="level1">
 <h1>read_gguf</h1>
@@ -268,9 +280,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>This one’s been a long time in the making. It’s a bit of a <strong>personal endeavor</strong>— AI can be scary, but being able to “make one” yourself really demystifies it! I’d say the technical content here is old news, but I haven’t actually seen any inferencer-from-scratch writeups recently.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Anyway, this article is about a little R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all <strong>runs natively in base R</strong>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3</p>
-<p>The package inferences off of <a href="https://huggingface.co/blog/smollm3">SmolLM3</a>— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— <em>the</em> platform for sharing locally-run LLMs— and has a nice writeup about how it was created. Sidenote: if you weren’t aware, local models have improved significantly in the past year (2025-2026). They’re comparable to last year’s online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g.&nbsp;my PC with a GPU from 2016), and some can even run well on your phone!</p>
-<p>This writeup is somewhat casual— there’s plenty of formal resources out there on these topics.</p>
+<p>Anyway, this article is about a little R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all <strong>runs natively in base R</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3</p>
+<p>The package inferences off of <a href="https://huggingface.co/blog/smollm3">SmolLM3</a>— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— <em>the</em> platform for sharing locally-run LLMs— and has a nice <a href="https://huggingface.co/blog/smollm3">writeup</a> about how it was created. Sidenote: if you weren’t aware, local models have improved significantly in the past year (2025-2026). They’re comparable to last year’s online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g.&nbsp;my PC with a GPU from 2016), and some can even run well on a mobile phone. SmolLM3 isn’t great at facts or coding (it’s the second-smallest model I could find!), but it certainly passes the Turing test.</p>
+<p>This writeup is somewhat casual— there’s plenty of formal resources out there on these topics. The first five sections go over how inferencing works (and how I do it in the package), <a href="#the-ggufr-package">section 6</a> explains how to use the package to run inference yourself in R, and the <a href="#learning-process">last section</a> talks about the interesting process of how I learned all this.</p>
+<p>If you want to try the package out for yourself, skip to <a href="#the-ggufr-package">Section 6</a> and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Note [click to expand]">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -287,17 +300,14 @@ Note [click to expand]
 </div>
 </div>
 </div>
-<section id="big-picture" class="level2">
-<h2 class="anchored" data-anchor-id="big-picture">Big Picture</h2>
+</section>
+<section id="big-picture" class="level1">
+<h1>1. Big Picture</h1>
 <p>In order to perform inference with an LLM, you need a <strong>prompt</strong>, the model’s <strong>weights</strong>, and information about the model’s <strong>architecture</strong>— the math you’re supposed to use for that particular model. Locally-run models these days (2026) come in a <strong>single .gguf file</strong> (<a href="#gguf-files">Section 2</a>), which contains the weights and some metadata telling you which architecture to use.</p>
-<p>Generative inference works in <strong>three key steps</strong>. First, a word*<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> is <strong>tokenized</strong> (<a href="#tokenizing">Section 3</a>)— turned into an ID corresponding to a word in the model’s vocabulary, which is stored in the GGUF— and then <strong>embedded</strong>— turned into a large vector corresponding to that word. Each word’s vector is different; and but they all have the same length— 2048, in the case of SmolLM3 and many other models.</p>
+<p>Generative inference works in <strong>three key steps</strong>. First, a word*<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is <strong>tokenized</strong> (<a href="#tokenizing">Section 3</a>)— turned into an ID corresponding to a word in the model’s vocabulary, which is stored in the GGUF— and then <strong>embedded</strong>— turned into a large vector corresponding to that word. Each word’s vector is different; and but they all have the same length— 2048, in the case of SmolLM3 and many other models.</p>
 <p>Then, this vector is passed through a bunch of math— the <strong>transformer</strong> (a specialized neural network; <a href="#transforming">Section 5</a>)— based on the model architecture. This is usually a bunch of simple matrix operations, involving the <strong>model weights</strong> and a set of saved vectors from <strong>all previous words</strong> in the prompt and predictions this session. These operations are applied over and over in series with different weights— SmolLM3 applies them 36 times per prediction.</p>
 <p>Finally, the resulting vector after all this math is compared with the original set of embeddings (the vectors for every word in the vocabulary) to see <strong>which words’ vectors it most closely resembles</strong>. This produces a set of probabilities, which are used to <strong>pick which word to predict</strong> (<a href="#inferencing">Section 4</a>). Then, the picked word gets fed right back into the first step, tokenized and passed through the transformer! This repeats ad nauseum.</p>
 <p>Before text generation starts, the model runs this process with the entire prompt (chat template + user message) as one big matrix instead of a vector— but the math is the same.</p>
-</section>
-</section>
-<section id="setup-todo" class="level1">
-<h1>1. Setup todo</h1>
 </section>
 <section id="gguf-files" class="level1">
 <h1>2. GGUF Files</h1>
@@ -307,7 +317,7 @@ Note [click to expand]
 <p>GGUFs are <strong>stored as raw bytes</strong>, which means you’ll have to manually write a script to interpret them as the numbers and letters they intend to represent. Most coding languages have tools for reading user-defined raw filestructures, but R is unfortunately lacking in this regard; I had to manually write a number of functions to interpret the raw bytes correctly.</p>
 <p>GGUFs follow a <strong>relatively simple structure</strong>: first, a short, fixed-length set of header variables; then, some number of metadata entries; next, information on the size and location of the model weights; and finally, after a small amount of padding to make the index a multiple of 32, all the weights, one after another. The header defines how many metadata and tensor entries there are.</p>
 <p>GGUFs include a few non-standard raw data types in addition to the usual <code>uint32</code> et al.. <code>gguf_string</code> is used for all text, and simply consists of a uint32 (32-bit unsigned integer, a binary number from 0 to 4,294,967,295) indicating the length of the text string, and then that many bytes of raw UTF-8 characters. So “hello” shows up as <code>05 00 00 00</code> <code>68 65 6c 6c 6f</code>; the number 5 (taking up four bytes as a uint32) followed by 5 characters corresponding to each letter in “hello”. GGUFs also use a custom datatype for arrays, and store tensors in a special number format discussed in the next section.</p>
-<p>Here’s a <strong>blueprint</strong> I made<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we’ll be using:</p>
+<p>Here’s a <strong>blueprint</strong> I made<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> to show the exact byte format of a GGUF, with examples from the SmolLM3 GGUF we’ll be using:</p>
 <div class="callout callout-style-default callout-note callout-titled" title="GGUF raw format">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -2998,10 +3008,10 @@ Tensor Info (scroll)
 <p>The blueprint in the previous section outlines the structure of Q8_0 weights. As you may have seen in the Tensor Info block, Q8_0 GGUFs only store their tensors as Q8_0 or 32-bit floats (F32), making them quite convenient to work with. In comparison, something like Q4_K_M often uses 4 or 5 different types of quantization for its weights! (That lets you give impactful tensors a higher precision, while highly compressing tensors that don’t have as signficant an impact on the math.)</p>
 <p>But the bottom line is that we want to unpack these weights into regular numeric data to use in R. But… <strong>it’s a lot of data!</strong> Uncompressed and cast into R’s numeric type, the weights take up a whopping 25 gigabytes of memory. In order to efficiently load this data when we do the math, I opted to save each layer of tensors as its own R object, in an <code>.rds</code> file in <code>tempdir()</code>. These files will be discussed further in section <a href="#inferencing">4. Inferencing</a>, where they get used.</p>
 </section>
-<section id="read_gguf-1" class="level2">
-<h2 class="anchored" data-anchor-id="read_gguf-1">2.3 read_gguf</h2>
-<p>Everything I discussed in this section is performed by one function: <code>read_gguf</code>. Here it is, if you’re curious: (all code is also in the <a href="https://github.com/gbkorr/ggufr/tree/master/R">ggufr repo</a>)</p>
-<div class="callout callout-style-default callout-note callout-titled" title="read_gguf.R" style="max-height: 600px; overflow-y: auto;">
+<section id="read_gguf.r" class="level2">
+<h2 class="anchored" data-anchor-id="read_gguf.r">2.3 read_gguf.R</h2>
+<p>Everything I discussed in this section is performed by one function: <code>read_gguf()</code>. Here it is, if you’re curious: (all code is also in the <a href="https://github.com/gbkorr/ggufr/tree/master/R">ggufr repo</a>)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="read_gguf.R">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -3017,24 +3027,8 @@ read_gguf.R
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="tokenizer.R" style="max-height: 600px; overflow-y: auto;">
+<div class="callout callout-style-default callout-note callout-titled" title="inferencer.R">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-tokenizer.R
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="inferencer.R" style="max-height: 600px; overflow-y: auto;">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3043,14 +3037,14 @@ inferencer.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="transformer.R" style="max-height: 600px; overflow-y: auto;">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="transformer.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3059,7 +3053,7 @@ transformer.R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
 </div>
@@ -3069,20 +3063,108 @@ transformer.R
 </section>
 <section id="tokenizing" class="level1">
 <h1>3. Tokenizing</h1>
-<p>what are tokens regex chunking merge rules— this way, you’ll always end up with tokenss (instead of needing to rely on the old <unk>) deterministic! that’s important, probably actually merging is done with the raw bytes, which is convenient because of how it’s stored</unk></p>
-<p>I actually save the raw bytes separately in the model object to facilitate this, but you could just as easily read from the GGUF</p>
+<section id="purpose" class="level2">
+<h2 class="anchored" data-anchor-id="purpose">3.1 Purpose</h2>
+<p>In order to predict text based on a prompt, we need to <strong>turn the prompt into a set of vectors</strong> that we can perform the math on. The first step in that is to tokenize it— turn it into a bunch of IDs corresponding to the vectors to use.</p>
+<p>Ideally, we’d want every word to be a token, but because we want this model to work for multiple language and not crash when it receives a string like “fovriegfivnvoihuev”, we need another approach— allowing word fragments and letters to be their own token. Modern models have a fixed <strong>vocabulary</strong> of tokens, which includes which includes <strong>every common unicode character</strong> along with a bunch of words. This means that, even if a word isn’t in the vocabulary, it can still be broken up into smaller tokens. SmolLM3 has a vocabulary of 128k tokens— quite a lot!</p>
+<p>So how do we break things up? First, we use a regex pattern to <strong>split the prompt into individual words</strong> and symbols, keeping spaces at the start of each word: “How”, ” are”, ” you”, “?”. Then, each word is further split into characters, and we attempt to <strong>reassemble those characters</strong> into the largest token we can— often a single token for the whole word. Applying this <strong>merging process</strong> to each word and symbol separated by the regex leaves us with a list of tokens that we can then use to run inference.</p>
+</section>
+<section id="merging-details" class="level2">
+<h2 class="anchored" data-anchor-id="merging-details">3.2 Merging Details</h2>
+<p>Modern LLMs have simplified the merging process significantly— in addition to the vocabulary, the GGUF contains a <strong>list of merges</strong>, and characters are simply combined based on if they appear in the merges. For example, the merges include “o w” and “w ow”— so in the tokenizing process, “wow” will be iteratively merged from individual characters into the whole word: (w,o,w) -&gt; (w,ow) -&gt; (wow). Importantly, this process is <strong>deterministic</strong>— so input text gets tokenized and interpreted identically whether the model is being trained or generating. My package implements merging in the <code>BPE()</code> function, which does this with the raw bytes— no need to convert them to characters.</p>
+<p>There’s one extra bit of nuance. You may have seen in the GGUF metadata that there’s a lot of the <code>Ġ</code> character floating around— this is from an annoying convention from earlier language processing research that maps <strong>all invisible characters</strong> to visible, less-common latin ones, in order to make debugging easier. This <strong>isn’t just visual</strong>— the actual model vocab uses the bytes for <code>Ġ</code> instead of space. This is especially relevant since <strong>most words in the vocab start with a space</strong> (e.g.&nbsp;“Ġforgotten”)— this helps differentiate between words and suffixes, and if you think about it, almost every word in a piece of writing is preceded by a space.</p>
+<p>Anyway, <code>tokenizer.R</code> contains <code>BPE()</code> and an implementation of this invisible character mapping based on the <a href="https://github.com/karpathy/minGPT/blob/37baab71b9abea1b76ab957409a1cc2fbfba8a26/mingpt/bpe.py">original</a> by Andrej Karpathy. I recommend reading that instead of the R code, since it’s more fully commented.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="tokenizer.R">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+tokenizer.R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftokenizer.R&amp;style=vs&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFullPath=on"></iframe>
+</div>
+</div>
+</div>
+</section>
+<section id="the-chat-template" class="level2">
+<h2 class="anchored" data-anchor-id="the-chat-template">3.3 The Chat Template</h2>
+<p>GGUFs come with a recommended chat template to turn the LLM into the sort of chatbot we expect. By default, the LLM is <strong>just a word-predictor</strong>— if you feed it part of a phrase, it’ll predict what it thinks the next words will be. It turns out that it’s quite easy to turn a word predictor into <strong>something more</strong>…</p>
+<p>Modern chatbots achieve this by inserting the prompt into a template like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>You are a helpful AI assistant.</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>User says<span class="sc">:</span> [prompt].</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>You say<span class="sc">:</span> [</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Naturally, the next predictions are <strong>predictions of what a helpful AI assistant would say</strong>. This is (surprisingly) tantamount to actually being an AI assistant!</p>
+<p><img src="prediction.png" class="img-fluid quarto-figure quarto-figure-left" width="300"> <img src="chatbot.png" class="img-fluid quarto-figure quarto-figure-left" width="300"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="empty.png" class="img-fluid figure-img"></p>
+<figcaption>Left: An example of word prediction: the LLM makes up the details itself, as it’s just a word predictor.<br><code>infer("Yesterday I went to my friend's barbecue and", model, use_template=FALSE)</code><br>Right: The same prompt with the chat template; a reasonable exchange with an assistant.<br><code>infer("Yesterday I went to my friend's barbecue and...", model, use_template=TRUE, show_template=TRUE)</code></figcaption>
+</figure>
+</div>
+<p>The GGUF chat template uses another weird, esoteric format (jinja2) to actually create this prompt template. In the package I went through SmolLM3’s template and manually trimmed it down into a short text template to make it easier to feed into the model; you can see this in the <code>template()</code> function at the bottom of <code>tokenizer.R</code>. Chat templates use some special tokens— located at the end of the model’s vocabulary— to help the LLM know the structure of the template; for example, the string <code>&lt;|im_start|&gt;</code> indicates the start of a new message.</p>
+</section>
 </section>
 <section id="inferencing" class="level1">
 <h1>4. Inferencing</h1>
+<p>now that we have a list of IDs</p>
 <p>When I do the math in, I load the <code>.rds</code> object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is <strong>the primary bottleneck in running an LLM</strong> in almost every situation, and it’s no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.</p>
 </section>
 <section id="transforming" class="level1">
 <h1>5. Transforming</h1>
 </section>
-<section id="usage-and-such" class="level1">
-<h1>1. Usage and Such</h1>
+<section id="the-ggufr-package" class="level1">
+<h1>6. The ggufr Package</h1>
+<section id="setup-1" class="level2">
+<h2 class="anchored" data-anchor-id="setup-1">6.1 Setup</h2>
+<p>The package has just one dependency and is relatively easy to try out and play around with. Running the model is slow but shouldn’t require a particularly powerful computer.</p>
+<p>To get started, run this to install the package and download<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> the <strong>3GB</strong> GGUF<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> to run it with. This will take 5 or 10 minutes depending on your internet speed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gbkorr/ggufr"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggufr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>path <span class="ot">=</span> <span class="fu">paste0</span>(tools<span class="sc">::</span><span class="fu">R_user_dir</span>(<span class="st">'ggufr'</span>),<span class="st">"/SmolLM3-3B-Q8_0.gguf"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download_model</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then to load the model, run this. During this process, the tensors are unpacked and saved in <code>tempdir()</code>; the unpacked tensors take up <strong>25GB</strong> of space, so make sure your computer has some free space. The tensors are deleted when you close R/RStudio, so you’ll get the space back.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this will take around 30 minutes</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">read_gguf</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once that’s finished, the model is ready! You’ll be able to run it as much as you like until you close R.</p>
 </section>
-<section id="setup-1" class="level1">
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">6.2 Usage</h2>
+<p>The main function to run inference is <code>infer()</code>. This will automatically insert your prompt into the chat template and run the model on it. Token generation speed is mainly tied to how fast R can load the <code>.rds</code> tensor layers; I get around a token a minute on my computer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-overflow-scroll code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">infer</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  prompt, <span class="co">#the text to feed into the model</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  model, <span class="co">#pass the model object in</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">instructions=</span><span class="cn">NULL</span>, <span class="co">#set this to a string if you want to add a system prompt, e.g. "You are an AI assistant that always rhymes."</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_template=</span><span class="cn">TRUE</span>, <span class="co">#set this to FALSE to feed ONLY the prompt into the model; it will behave as a word predictor as discussed in section 3.3</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_template=</span><span class="cn">FALSE</span>, <span class="co">#prints the full input and output text, instead of a cleaned "prompt | response" view.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">temperature=</span><span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s what I got from this: <code>"Who is Hadley Wickham?" |&gt; infer(model)</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hadley.png" class="img-fluid figure-img"></p>
+<figcaption>Text generation in progress. In another prompt, it told me Hadley was Canadian… factual details are rather hit-or-miss for small LLMs.</figcaption>
+</figure>
+</div>
+<p>That’s about it. Mainly, this package provides a (relatively) simple codebase that should make it easy to tweak and play around with the inferencer.</p>
+</section>
+</section>
+<section id="learning-process" class="level1">
+<h1>7. Learning Process</h1>
+</section>
+<section id="setup-2" class="level1">
 <h1>1.1 Setup</h1>
 <p>You can download the package with:</p>
 <pre><code>devtools::install_github("gbkorr/ggufr")
@@ -3114,12 +3196,12 @@ Warning
 <section id="loading-details" class="level1">
 <h1>1.2.1 Loading Details</h1>
 <p>In the background, this function parses the GGUF (using custom byte-reading code— R is quite bad at handling raw binary…) and uses parsed info to extract the model’s tensors. It saves these numbers— 3 billion weights in total!— to <code>tempdir()</code>, with an</p>
-</section>
-<section id="learning-process" class="level1">
-<h1>2. learning process</h1>
+<ol>
+<li>learning rocess</li>
+</ol>
 <p>I took a unique approach to learning for thsi rpoject</p>
-<p>Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
-<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
+<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
 <p>I ended up structuring this project <strong>almost like a class</strong>: I would ask Gemini to describe a part of the LLM implementation, and then implement it entirely on my own, occasionally asking for clarification and advice—but not code!—when needed.</p>
 <p>This lecture -&gt; try it out -&gt; ask clarif was quite similar to tehe structure of classes, and worked tremendously well for me— because I was trying things out, I was building the important experience and understanding myself, and my own testing ironed out any innacuracies in the “teacher’s” teaching.</p>
 <p>focus on: implementing yourself is where ypou actually get a good grasp of the implementation</p>
@@ -3138,10 +3220,13 @@ Warning
 <ol>
 <li id="fn1"><p>I can’t even find many from-scratch projects, let alone writeups! <a href="https://github.com/matrixsmaster/ligguf">This</a> project is perhaps the closest, and worth a look if you’re good with C.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>I’m not sure it really counts as a package— just a set of mostly undocumented functions you can use.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Token, but the nuance isn’t relevant until later.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>By hand; no text or code on this page was AI-generated! That’s what makes it fun, you see.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Except for tokenizing, which needs the <code>re</code> package to perform one extended regex.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Token, but the nuance isn’t relevant until later.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>By hand; no text or code on this page was AI-generated! That’s what makes it fun, you see.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>From the official <a href="https://huggingface.co/unsloth/SmolLM3-3B-GGUF/blob/main/SmolLM3-3B-Q8_0.gguf">Huggingface</a> endpoint; the group that both created this model and generally hosts downloads for all local LLMs.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Which will be saved in <code>tools::R_user_dir('ggufr')</code>. R provides a dedicated folder for each package to store files like this in.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
