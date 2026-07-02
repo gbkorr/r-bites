@@ -128,6 +128,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../ggufr/ggufr.html"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">LLM Prediction in R</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../rollingwater/rollingwater.html"><i class="bi bi-keyboard" role="img">
 </i> 
  <span class="dropdown-text">4-Button Keyboard</span></a>
@@ -242,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>This one’s been a long time in the making. It’s a bit of a <strong>personal endeavor</strong>— AI can be scary, but being able to “make one” yourself really demystifies it! I’d say the technical content here is old news, but I haven’t actually seen any inferencer-from-scratch writeups recently.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Anyway, this article is about a little R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all <strong>runs natively in base R</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3. (As well as the writeup—</p>
+<p>Anyway, this article is about a little R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all <strong>runs natively in base R</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand &lt;3. (As well as the writeup, as always.)</p>
 <p>The package inferences off of <a href="https://huggingface.co/blog/smollm3">SmolLM3</a>— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— <em>the</em> platform for sharing locally-run LLMs— and has a nice <a href="https://huggingface.co/blog/smollm3">writeup</a> about how it was created. Sidenote: if you weren’t aware, local models have improved significantly in the past year (2025-2026). They’re comparable to last year’s online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g.&nbsp;my PC with a GPU from 2016), and some can even run well on a mobile phone. SmolLM3 isn’t great at facts or coding (it’s the second-smallest model I could find!), but it certainly passes the Turing test.</p>
 <p>This writeup is somewhat casual— there’s plenty of formal resources out there on these topics. The first five sections go over how inferencing works (and how I do it in the package), <a href="#the-ggufr-package">Section 7</a> explains how to use the package to run inference yourself in R, and the <a href="#learning-process">last section</a> talks about the interesting process of how I learned all this.</p>
 <p>If you want to try the package out for yourself, skip to <a href="#the-ggufr-package">Section 7</a> and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)</p>
@@ -258,7 +263,7 @@ Note [click to expand]
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>This article contains a bunch of foldable infoboxes like this one!</p>
+<p>This article contains quite a few foldable infoboxes.</p>
 </div>
 </div>
 </div>

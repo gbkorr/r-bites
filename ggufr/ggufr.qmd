@@ -12,7 +12,7 @@ This one's been a long time in the making. It's a bit of a **personal endeavor**
 
 [^more]: I can't even find many from-scratch projects, let alone writeups! And the few I have found have been heavily vibe-coded and vibe-written...
 
-Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**[^re]— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3. (As well as the writeup— 
+Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**[^re]— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3. (As well as the writeup, as always.)
 
 [^re]: Except for tokenizing, which needs the `re` package to perform one extended regex.
 [^isit]: I'm not sure it really counts as a package— just a set of mostly undocumented functions you can use.
@@ -24,7 +24,7 @@ This writeup is somewhat casual— there's plenty of formal resources out there 
 If you want to try the package out for yourself, skip to [Section 7](#the-ggufr-package) and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)
 
 :::{.callout-note title="Note [click to expand]" collapse=true}
-This article contains a bunch of foldable infoboxes like this one!
+This article contains quite a few foldable infoboxes.
 :::
 
 # 1. Big Picture
