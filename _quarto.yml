@@ -13,7 +13,7 @@ website:
     left:
       - text: "Articles"
         menu:
-          - text: "LLM Prediction in R"
+          - text: "LLM Inference in R"
             icon: stars
             href: ggufr/ggufr.qmd
           - text: "4-Button Keyboard"

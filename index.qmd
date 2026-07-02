@@ -18,6 +18,12 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 *June*
 
+<img class='thumbnail' src=images/ggufr.png>
+
+An **LLM chatbot** running locally in pure R. [link](ggufr/ggufr.qmd)
+
+<br clear="left">
+
 <img class='thumbnail' src=images/rollingwater.png>
 
 A full keyboard interface with **just four buttons!** [link](rollingwater/rollingwater.qmd)
