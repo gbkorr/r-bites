@@ -472,7 +472,7 @@ This will set up a debian installation; launch the debian shell with `debian` an
 
 Proot debian can **run anything already installed** on Termux, but you can also use `apt` to install Debian packages that would otherwise be unavailable. I've had [great success](/flipphone-r/flipphone-r.qmd) running the R language this way, for example.
 
-You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, `Create Launcher`, enable `Run in terminal`, and set the command to `proot-distro login debian`[^aww]. You can get an icon for the launcher [here](www.debian.org/logos/) (use the SVG one for background transparency).
+You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, `Create Launcher`, enable `Run in terminal`, and set the command to `proot-distro login debian`[^aww]. You can get an icon for the launcher [here](https://www.debian.org/logos/) (use the SVG one for background transparency).
 
 [^aww]: Apparently launcher commands can't use bash aliases (like the `debian` one we just created), probably because they don't run .bashrc before executing.
 

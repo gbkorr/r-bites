@@ -1,5 +1,5 @@
 ---
-title: "TITLE"
+title: "GGUF Inferencer in R"
 date: June 2026
 date-format: 'MMMM YYYY'
 format: 
@@ -7,64 +7,21 @@ format:
     toc: true
 ---
 
->>>>
-
-I also wanted to get familiar enough to be able to implement an inferencer in stranger contexts— like on an arduino, or perhaps minecraft. after it I'm now confident in being able to make it in a different lanugage, but it ONLY works if vectorized math is available! otherwise the matrix mults are too slow
-
->>>
-
-RUN usethis::use_package("re") IN GGUFR PROJECT
-
-
-# setup
-
-
-# read_gguf
-binary file and raw reading in R
-structure: a bunch of metadata, then the raw tensors
-quantizing and unpacking/caching tensors
-
-# tokenization
-let's make a prompt: who is Hadley Wickham?
-before feeding this into the model, we have to tokenize it (I'm sure you're familiar with this already— if not, plenty of guides online)
-many LLMs in 2026 use BPE based on a merge dictionary, which is very convenient to implement
-[how bpe works w/ the gguf tokens+merges]
-now we take our token ids and use them to look up in the embedding matrix (what do the embeds represent? info at different ~~dims, why?). this is what we feed into transformer to start
-
-# inference
-so what will we do?
-[what's prefilling, then afterwards generation]
-feed embedded state into transformer
-pass that through 36 layers
-this is prefill so slice off the end. now we have an end state matrix, and we use it to get the next token
-"choose" token from logits after multiplying with the original embedding matrix; this makes sense— since we're multiplying element-wise, a vector will be highest value if it matches the embedding matrix
-
-so what's the math on each layer?
-
-#transformation
-for the first piece of math, we do the entire matrix, this is called prefilling
-
-afterwards for prediction we just do this with single vectors, which is much easier. uses the same math too
-
-
-
 # Introduction
-
-
 This one's been a long time in the making. It's a bit of a **personal endeavor**— AI can be scary, but being able to "make one" yourself really demystifies it! I'd say the technical content here is old news, but I haven't actually seen any inferencer-from-scratch writeups recently.[^more]
 
-[^more]: I can't even find many from-scratch projects, let alone writeups! [This](https://github.com/matrixsmaster/ligguf) project is perhaps the closest, and worth a look if you're good with C.
+[^more]: I can't even find many from-scratch projects, let alone writeups! And the few I have found have been heavily vibe-coded and vibe-written...
 
-Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**[^re]— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3
+Anyway, this article is about a little R package[^isit] I wrote to parse GGUF files and run an interactive chat using a specific LLM. It all **runs natively in base R**[^re]— pretty slowly, of course, but this makes it easy to track, visualize, and understand how the math works. All code was made by hand <3. (As well as the writeup— 
 
 [^re]: Except for tokenizing, which needs the `re` package to perform one extended regex.
 [^isit]: I'm not sure it really counts as a package— just a set of mostly undocumented functions you can use.
 
 The package inferences off of [SmolLM3](https://huggingface.co/blog/smollm3)— a tiny, pretty decent LLM from 2025 that uses relatively simple, modern architecture and is small enough to run at a passable speed in R. It was created by the team behind Huggingface— *the* platform for sharing locally-run LLMs— and has a nice [writeup](https://huggingface.co/blog/smollm3) about how it was created. Sidenote: if you weren't aware, local models have improved significantly in the past year (2025-2026). They're comparable to last year's online models in chat quality, and the most powerful can even code effectively! Many will easily run at a decent speed on consumer computers (e.g. my PC with a GPU from 2016), and some can even run well on a mobile phone. SmolLM3 isn't great at facts or coding (it's the second-smallest model I could find!), but it certainly passes the Turing test.
 
-This writeup is somewhat casual— there's plenty of formal resources out there on these topics. The first five sections go over how inferencing works (and how I do it in the package), [section 6](#the-ggufr-package) explains how to use the package to run inference yourself in R, and the [last section](#learning-process) talks about the interesting process of how I learned all this.
+This writeup is somewhat casual— there's plenty of formal resources out there on these topics. The first five sections go over how inferencing works (and how I do it in the package), [Section 7](#the-ggufr-package) explains how to use the package to run inference yourself in R, and the [last section](#learning-process) talks about the interesting process of how I learned all this.
 
-If you want to try the package out for yourself, skip to [Section 6](#the-ggufr-package) and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)
+If you want to try the package out for yourself, skip to [Section 7](#the-ggufr-package) and start the setup; it takes 30 minutes or so for everything to load, which will give you plenty of time to read this article :)
 
 :::{.callout-note title="Note [click to expand]" collapse=true}
 This article contains a bunch of foldable infoboxes like this one!
@@ -539,20 +496,6 @@ Everything I discussed in this section is performed by one function: `read_gguf(
 ```
 :::
 
-
-:::{.callout-note title="inferencer.R" collapse=true}
-```{=html}
-<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
-```
-:::
-
-:::{.callout-note title="transformer.R" collapse=true}
-```{=html}
-<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
-```
-:::
-
-
 # 3. Tokenizing
 
 ## 3.1 Purpose
@@ -589,8 +532,11 @@ You say: [
 
 Naturally, the next predictions are **predictions of what a helpful AI assistant would say**. This is (surprisingly) tantamount to actually being an AI assistant!
 
+::: {layout-ncol=2}
+![](prediction.png){width=400 fig-align="right"}
 
-![](prediction.png){width=300 fig-align="left"} ![](chatbot.png){width=300 fig-align="left"}
+![](chatbot.png){width=400 fig-align="left"}
+:::
 
 ![Left: An example of word prediction: the LLM makes up the details itself, as it's just a word predictor.<br>`infer("Yesterday I went to my friend's barbecue and", model, use_template=FALSE)`<br>Right: The same prompt with the chat template; a reasonable exchange with an assistant.<br>`infer("Yesterday I went to my friend's barbecue and...", model, use_template=TRUE, show_template=TRUE)`](empty.png)
 
@@ -599,20 +545,167 @@ The GGUF chat template uses another weird, esoteric format (jinja2) to actually 
 
 # 4. Inferencing
 
-now that we have a list of IDs
+Now that we have a list of token IDs to feed into the model, it's time to run inference! This involves two steps: first, an initial **prefill**, and then the actual word generation.
 
+The purpose of prefilling is to **process the prompt tokens** and **predict the first new token**. This actually uses the same math and functions as regular generation, but it does it for **the whole prompt at once** with big matrix multiplications. Prefill starts adding to the KV cache— the data the model uses to remember what tokens have come appeared so far, and at the end of prefill we cut off the last row of the matrix to use to predict the first word.
 
+Then, regular text generation: we loop a process of **embedding the previous token ID**, feeding it into the **transformer**, and then using the output of that to **predict the next token**. This process is detailed in the next section. 
 
+The ggufr package does this all in `inferencer.R`. The transformer uses 36 layers applied one-by-one to the input; we saved the GGUF tensors for these layers as `.rds` files back in `read_gguf()`, and during the inference we manually load them, apply the math, and unload them again, one by one. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is **the primary bottleneck in running an LLM** in almost every situation, and it's no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.
 
- When I do the math in, I load the `.rds` object, perform the math for that layer, and then delete the object from memory. This is a funny higher-level approximation of the RAM shuffling that efficient inferencers have to perform— moving the weights in and out of the GPU/CPU is **the primary bottleneck in running an LLM** in almost every situation, and it's no different here. This is why having a lot of RAM is so desirable at the moment— if your RAM is big enough, you never have to move the weights around and can run the LLM as fast as the math allows.
+Here's `inferencer.R`: the function to focus on in `infer()`.
+
+:::{.callout-note title="inferencer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Finferencer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
 
 # 5. Transforming
 
+## 5.1 Big Idea
+
+:::{.callout-warning title="Attention!"}
+This is the **most important** section in this article, in my opinion. It covers how a vector of 2048 numbers can **represent a word**, and how this lets an LLM "guess" the next word.
+:::
+
+So how does the transformer work?
+
+The purpose of the overall transformer is to produce an output— the predicted next token— based on several **inputs**— every word in the conversation so far and their absolute positions (e.g. what was the 5th word?). And with just those inputs, it's very good at predicting the next word!
+
+The way it does this **sorta makes sense** (if you look into the math), though it feels somewhat magical— why does this one work for LLMs when older machine learning techniques don't? There's a good answer to this: to quote Edison[^oops], we've come up with 1,000 similar models that *don't* work, and this one happened to be the one that succeeded. And it took 5 years[^cav] for us to realize it!
+
+[^oops]: Who wasn't the nicest fellow, unfortunately.
+[^cav]: From its publication in 2017 to the rise of LLMs in 2023. Of course, lots of research involving it led up to the events of 2023, but the general idea stands.
+
+We start by getting the **embedding** for the last token by taking a **single row out** of the Embedding Matrix corresponding to the token's ID.
+
+:::{.callout-tip title="Tensor: Embedding Matrix"}
+token_embd.weight<br>
+128256 rows x 2048 columns<br>
+range: (-9.5, 5.4)<br>
+mean: -0.006 ± 0.16
+
+This matrix contains the initial embeddings for each token. Each row corresponds to a token in the model's vocabulary.
+:::
 
 
-# 6. The ggufr Package
+This embedding is a vector that represents a **"fuzzy idea"** of what the token is supposed to be, with 2048 values usually between -1 and 1. The purpose of the transformer is to take the current token and add and subtract from it to get a fuzzy idea of the *next* token, so that we can then decide which token it should be.
 
-## 6.1 Setup
+Here's an example of this "fuzzy idea" representation: below are the embeddings for the tokens "breakfast", "lunch", and "baseball",[^erm] visually represented as colored lines on a graph.
+
+[^erm]: Actually, it's the embeddings for " breakfast", " lunch", and " baseball", since words are usually encountered after a space in natural language. There are a lot more words like this in the model dictionary than without a space.
+
+```{r eval=F}
+#| code-fold: true
+words = c(' breakfast',' lunch',' baseball')
+E = readRDS(paste0(model$dir,'embeddings.rds'))$token_embd.weight
+embeddings = embedding$token_embd.weight[tokenize(' breakfast lunch baseball',model),]
+
+image(t(embeddings))
+axis(side=2, at=c(1,0.5,0), labels = c("breakfast", "lunch", "baseball"),las=2,tick=F)
+```
+
+![](h1.png)
+
+Looks noisy. Let's zoom into the first 100 values of each, and draw positive values in red and negative in blue. Lighter values are closer to zero.
+
+![](h2.png)
+
+In theory, the embeddings for "breakfast" and "lunch" should be more similar than with "baseball", but this isn't apparent from plotting them. But if we take the **dot product** between them, the difference emerges: (values rounded for convenience)
+
+![](table.png){width=400 fig-align='center'}
+
+```{r echo=F, eval=F}
+library(gt)
+mat = tibble::tibble(
+        ' ' = c('breakfast','lunch','baseball'),
+        'breakfast' = c(18,10,4),
+        'lunch' = c('',17,3),
+        'baseball' = c('','',14)
+      )
+gt(mat, rowname_col=' ') |>
+  cols_width(columns = everything() ~ px(80)) |>
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) |>
+  tab_style(
+    style = cell_fill(color = "#ddd"),
+    locations = cells_body(
+      columns = c('breakfast'),
+      rows = c(1)
+  )) |> 
+  tab_style(
+    style = cell_fill(color = "#ddd"),
+    locations = cells_body(
+      columns = c('lunch'),
+      rows = c(2)
+  )) |>
+  tab_style(
+    style = cell_fill(color = "#ddd"),
+    locations = cells_body(
+      columns = c('baseball'),
+      rows = c(3)
+  )) |>
+  tab_style(
+    style = cell_borders(
+      sides = "right",          # Options: "left", "right", or c("left", "right")
+      color = "#ddd",           # Border line color
+      weight = px(1.5),         # Border thickness
+      style = "solid"           # Line style: "solid", "dashed", "dotted"
+    ),
+    locations = cells_body(
+      columns = everything()    # Target specific columns here
+    )
+  )
+  
+```
+
+This is actually how we decide which token to predict after transformation; the transformer spits out an **unknown fuzzy representation vector** for the next token, and we dot it with the embeddings for the entire model vocabulary. The tokens with the highest results from the dot product are the **most closely related** tokens to that fuzzy representation, so we pick one of them[^how], throw out the old vector, and replace it with the actual embedding for that token to feed back into the transformer.
+
+[^how]: By turning the dot product results into probabilities, so more closely related tokens are more likely to be selected.
+
+## 5.2 Layer Components
+Let's look at an embedded token vector as it goes through a **single transformer layer**. I won't get too deep[^upd] into exactly why the transformer is set up the way it is, but I'll give an overview of what each part does.
+
+[^upd]: Though someday I'd like to update this with a fuller explanation of the math.
+
+A transformer layer takes in an embedding vector (1x2048) and **adds**[^sub] two new 1x2048 vectors to it, which it calculates using the input and the tensors for that layer.
+
+[^sub]: Some of the values in the vectors will be negative, so the average value doesn't go up.
+
+The first is the **Attention** component, which factors in information about the previous tokens and their positions (and saves this info for the new token to the KV cache). It uses quite a few cool tricks to accomplish this— I'd recommend looking it up how it works! You can also read the implementation in `transformer.R` at the end of this section, though it's a bit dense. 
+
+Next, the new embedding (input vector + vector from attention) goes through the layer's **FFN** (feed-forward network) component, which is a simple, traditional neural network component: the embedding gets projected up to 11000 values with a matrix multiplication, SwiGLU-gated (negative values get reset to 0[^ish]), and reprojected back to 2048. The FFN helps predict "what's next?" using **only** the current embedding (though, because of previous layers and the previous attention step, this embedding already factors in information about previous tokens).
+
+[^ish]: -ish. Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the official paper introducing SwiGLU: "We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence." -Noam Shazeer
+
+That outputs the second vector to add to the input. Then it's off to the next layer!
+
+## 5.3 transformer.R
+This file contains all the math for an embedding through a transformer layer. (all code is also in the [ggufr repo](https://github.com/gbkorr/ggufr/tree/master/R))
+
+
+:::{.callout-note title="transformer.R" collapse=true}
+```{=html}
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fggufr%2Fblob%2Fmaster%2FR%2Ftransformer.R&style=vs&type=code&showBorder=on&showLineNumbers=on&showFullPath=on"></iframe>
+```
+:::
+
+
+# 6. Unembedding
+
+As discussed in the previous section, we dot-product the **fuzzy output embedding** with the embeddings for the entire model vocabulary to get a list of similarity values. There's a lot of ways to choose a token from this; the typical approach is to turn the values into a list of probabilities for each word (such that the sum of all probabilities is 1), incorporating some parameters like *temperature* (how "stretched" the probabilities area; lower temperature makes the highest-similarity tokens significantly more likely to be chosen), *top-K* (only the top K most similar tokens are considered for choosing), *min-P* (all tokens below a certain likelihood are ignored), and quite a few more to reduce the likelihood of getting a wacky prediction. Once a token is chosen, it's added to the generated text, re-embedded, and fed back into the model for the next prediction.
+
+Interestingly, these parameters are somewhat naive, and I haven't seen any public resources quantifying how to best use them. We're very clearly still **in the early stages** of using LLMs, where there's a million options, everyone is trying to figure out what works, and a lot of the process is unoptimized[^ji] or yet to be practically quantified.
+
+[^ji]: Like the fact that we use jinja and Ġ, yeesh. All the focus at the moment is making things run faster (which is the best thing to focus on, of course).
+
+
+# 7. The ggufr Package
+
+## 7.1 Setup
 
 The package has just one dependency and is relatively easy to try out and play around with. Running the model is slow but shouldn't require a particularly powerful computer.
 
@@ -625,7 +718,7 @@ To get started, run this to install the package and download[^down] the **3GB** 
 devtools::install_github("gbkorr/ggufr")
 library(ggufr)
 path = paste0(tools::R_user_dir('ggufr'),"/SmolLM3-3B-Q8_0.gguf")
-download_model(path)
+download_model(path) #if you want to undo this, run delete_model(path)
 ```
 
 Then to load the model, run this. During this process, the tensors are unpacked and saved in `tempdir()`; the unpacked tensors take up **25GB** of space, so make sure your computer has some free space. The tensors are deleted when you close R/RStudio, so you'll get the space back.
@@ -637,7 +730,7 @@ model = read_gguf(path)
 
 Once that's finished, the model is ready! You'll be able to run it as much as you like until you close R.
 
-## 6.2 Usage
+## 7.2 Usage
 
 The main function to run inference is `infer()`. This will automatically insert your prompt into the chat template and run the model on it.
 Token generation speed is mainly tied to how fast R can load the `.rds` tensor layers; I get around a token a minute on my computer.
@@ -647,10 +740,15 @@ Token generation speed is mainly tied to how fast R can load the `.rds` tensor l
 infer(
   prompt, #the text to feed into the model
   model, #pass the model object in
-  instructions=NULL, #set this to a string if you want to add a system prompt, e.g. "You are an AI assistant that always rhymes."
-  use_template=TRUE, #set this to FALSE to feed ONLY the prompt into the model; it will behave as a word predictor as discussed in section 3.3
-  show_template=FALSE, #prints the full input and output text, instead of a cleaned "prompt | response" view.
-  temperature=1
+  instructions=NULL, 
+    #set this to a string if you want to add a system prompt, 
+    #e.g. "You are an AI assistant that always rhymes."
+  use_template=TRUE, 
+    #set this to FALSE to feed ONLY the prompt into the model; 
+    #it will behave as a word predictor as discussed in section 3.3
+  show_template=FALSE, 
+    #prints the full input and output text, instead of a cleaned "prompt | response" view.
+  temperature=1 #prediction temperature
 )
 
 ```
@@ -662,49 +760,10 @@ Here's what I got from this: `"Who is Hadley Wickham?" |> infer(model)`
 That's about it. Mainly, this package provides a (relatively) simple codebase that should make it easy to tweak and play around with the inferencer.
 
 
-# 7. Learning Process
+# 8. Learning Process
+I took a pretty **new approach** (for me) for learning things for this project.
 
-
-
-# 1.1 Setup
-You can download the package with:
-```
-devtools::install_github("gbkorr/ggufr")
-library(ggufr)
-```
-Then run this function to download the LLM. It's about 3GB, and it'll be saved in your R directory; run `delete_model()` if you want to get rid of it.
-```
-download_model()
-```
-
-# 1.2 Loading the Model
-To run inference, we first have to unpack the GGUF so that R can work with it. The GGUF is a raw binary file with its own special format, so I had to write a big function to read it properly and extract its data.
-
-:::{.callout-warning}
-Warning: fully unpacking the weights (which are required to run inference) will take up around 25GB. Make sure your computer has some free space!
-These files will be deleted when you close R, since they're stored in `tempdir()`.
-:::
-
-Run this, which will take a while (up to 30 minutes):
-```
-model = read_gguf()
-```
-
-This will load the. 
-
-If you have a different GGUF file you'd like to look at, this package can't run it but can 
-
-# 1.2.1 Loading Details
-In the background, this function parses the GGUF (using custom byte-reading code— R is quite bad at handling raw binary...) and uses parsed info to extract the model's tensors. It saves these numbers— 3 billion weights in total!— to `tempdir()`, with an 
-
-
-
-
-#. learning rocess
-
-I took a unique approach to learning for thsi rpoject
-
-Resources for understanding LLM architecture on a [engineering] level are quite [spread out, heterogenous] due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023[^egguide] and 2024, where it's hard to tell what is and isn't outdated.
+Resources for understanding LLM architecture on an implementation level are **quite scattered** due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023[^egguide] and 2024, where it's hard to tell what is and isn't outdated.
 
 [^egguide]: E.g. [https://www.youtube.com/watch?v=kCc8FmEb1nY](https://www.youtube.com/watch?v=kCc8FmEb1nY)
 
@@ -712,25 +771,11 @@ I usually prefer finding articles myself or reading a textbook to learn how to d
 
 [^test]: Including when I ask them a broad question about something I'm quite experienced with.
 
-I ended up structuring this project **almost like a class**: I would ask Gemini to describe a part of the LLM implementation, and then implement it entirely on my own, occasionally asking for clarification and advice—but not code!—when needed.
+I ended up structuring this project **almost like a class**: I would ask Gemini to describe a part of the LLM implementation, and then code it entirely on my own, occasionally asking for clarification and advice— but not code!— when needed.
 
+This structure worked **tremendously well** for me— because I was doing the implementation myself, I was building the important experience and understanding myself, and my own experimentation ironed out any (rare) inaccuracies in the "teacher's" teaching.
 
-
-This lecture -> try it out -> ask clarif was quite similar to tehe structure of classes, and worked tremendously well for me— because I was trying things out, I was building the important experience and understanding myself, and my own testing ironed out any innacuracies in the "teacher's" teaching.
-
-focus on: implementing yourself is where ypou actually get a good grasp of the implementation
-
-
-
-# the learning process (give this a good, article-like section header
-
-learning
-executing
-debugging (gave up, impressed by gemini finding **implementation-level typos**, which requires a pretty deep understanding of how the code works and how that relates to the thing I'm trying to accomplish
-(I've spent a lot of time debugging and know how to do it effectively— but when I know it's , this just seems to be far more effective. I'm not sure if I should adopt it going forward; maybe only when it matters)
-
-
-**never any code written by AI**, but all knowledge was from AI, and it was used to debug
+Now, I'm sure an AI could have written the code for me as well, but that would **miss the point**— the whole goal was to give myself a deeper (and practical) understanding of how LLM inferencing worked, and I certainly got it!
 
 
 
