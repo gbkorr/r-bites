@@ -677,9 +677,11 @@ A transformer layer takes in an embedding vector (1x2048) and **adds**[^sub] two
 
 The first is the **Attention** component, which factors in information about the previous tokens and their positions (and saves this info for the new token to the KV cache). It uses quite a few cool tricks to accomplish this— I'd recommend looking it up how it works! You can also read the implementation in `transformer.R` at the end of this section, though it's a bit dense. 
 
-Next, the new embedding (input vector + vector from attention) goes through the layer's **FFN** (feed-forward network) component, which is a simple, traditional neural network component: the embedding gets projected up to 11000 values with a matrix multiplication, SwiGLU-gated (negative values get reset to 0[^ish]), and reprojected back to 2048. The FFN helps predict "what's next?" using **only** the current embedding (though, because of previous layers and the previous attention step, this embedding already factors in information about previous tokens).
+Next, the new embedding (input vector + vector from attention) goes through the layer's **FFN** (feed-forward network) component, which is a simple, traditional neural network component: the embedding gets projected up to 11000 values with a matrix multiplication, SwiGLU-gated (negative values get reset to 0[^ish]^,^[^ish2]), and reprojected back to 2048. The FFN helps predict "what's next?" using **only** the current embedding (though, because of previous layers and the previous attention step, this embedding already factors in information about previous tokens).
 
-[^ish]: -ish. Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the official paper introducing SwiGLU: "We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence." -Noam Shazeer
+[^ish]: -ish. Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the [official paper](https://arxiv.org/pdf/2002.05202) introducing SwiGLU: "We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence." -Noam Shazeer
+
+[^ish2]: Actually, [here's](https://old.reddit.com/r/LocalLLaMA/comments/1eh6b1h/what_is_swiglu_a_full_bottomup_explanation_of/lfxzmd6/) some good discussion of why SwiGLU might work better. I'm not sure what Noam was on about.
 
 That outputs the second vector to add to the input. Then it's off to the next layer!
 
