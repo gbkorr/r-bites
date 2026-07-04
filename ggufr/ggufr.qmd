@@ -667,27 +667,207 @@ This is actually how we decide which token to predict after transformation; the 
 [^how]: By turning the dot product results into probabilities, so more closely related tokens are more likely to be selected.
 
 ## 5.2 Layer Components
-Let's look at an embedded token vector as it goes through a **single transformer layer**. I won't get too deep[^upd] into exactly why the transformer is set up the way it is, but I'll give an overview of what each part does.
 
-[^upd]: Though someday I'd like to update this with a fuller explanation of the math.
+Let's look at an embedded token vector as it goes through a **single transformer layer**. This section will describe the math we perform; I'm not confident in describing *why* we do each of these steps, but I can certainly say what to do. Code here is paraphrased from `transformer.R` (see section [5.3](#transformer.r)), with some SmolLM3-specific values inserted.
 
-A transformer layer takes in an embedding vector (1x2048) and **adds**[^sub] two new 1x2048 vectors to it, which it calculates using the input and the tensors for that layer.
+```{r eval=F}
+# ---- Input Embedding ----
+input = c(...)
+# input: [1, 2048] <- dimension of vector
+```
+
+A transformer layer (for this model) takes in an embedding vector (1x2048) and **adds**[^sub] two new 1x2048 vectors to it, which it calculates using the input and the tensors for that layer. One vector is for **attention**— which takes into account all the previous tokens— and one is for the **FFN** (feed-forward network), which is a simple, traditional neural network component based on **only** the current state.
 
 [^sub]: Some of the values in the vectors will be negative, so the average value doesn't go up.
 
-The first is the **Attention** component, which factors in information about the previous tokens and their positions (and saves this info for the new token to the KV cache). It uses quite a few cool tricks to accomplish this— I'd recommend looking it up how it works! You can also read the implementation in `transformer.R` at the end of this section, though it's a bit dense. 
+First comes the attention section.
 
-Next, the new embedding (input vector + vector from attention) goes through the layer's **FFN** (feed-forward network) component, which is a simple, traditional neural network component: the embedding gets projected up to 11000 values with a matrix multiplication, SwiGLU-gated (negative values get reset to 0[^ish]^,^[^ish2]), and reprojected back to 2048. The FFN helps predict "what's next?" using **only** the current embedding (though, because of previous layers and the previous attention step, this embedding already factors in information about previous tokens).
+### 5.2.1 GQA (Grouped-Query Attention)
 
-[^ish]: -ish. Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the [official paper](https://arxiv.org/pdf/2002.05202) introducing SwiGLU: "We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence." -Noam Shazeer
+Immediately, we normalize the input and multiply it element-wise with a set of weights for this layer. This normalization includes an epsilon term to avoid dividing by zero, which is interestingly defined in the GGUF.
+```{r eval=F}
+# ---- Normalize Input ----
+RMSN = function(v, norm, epsilon) norm * v / sqrt(mean(v^2) + epsilon)
+NormIn = RMSN(input, layer$attn_norm.weight, metadata$smollm3.attention.layer_norm_rms_epsilon)
+# NormIn: [1, 2048]
+# attn_norm.weight: [1, 2048]
+```
+
+Next, we matrix-multiply this with three sets of weights to create three vectors: **Query, Key, and Value**. I won't go into exactly what these represent[^res], but they're critical for letting the model "understand" the previous words and relationships in the chat.
+
+[^res]: There's plenty of explanations online— though I'm a little suspicious of how accurately the QKV's actual behavior matches how they're intended to work.
+
+```{r eval=F}
+# ---- Get New Query/Key/Value Vectors ----
+Q = NormIn %*% t(layer$attn_q.weight)
+K = NormIn %*% t(layer$attn_k.weight)
+V = NormIn %*% t(layer$attn_v.weight)
+# Q: [1, 2048]
+# K, V: [1, 512]
+# attn_q.weight: [2048, 2048]
+# attn_k.weight, attn_v.weight: [512, 2048]
+```
+
+These vectors are now split up into multiple "**heads**". I believe the primary purpose of this is to make it easier to parallelize the math, since the heads **do not affect each other**[^ie].
+
+[^ie]: i.e. more precisely: the q heads don't interact with each other, the k heads don't interact with each other, but each q head interacts with a k head. This means the math for each q head can all be performed in parallel.
+
+Importantly, in this model, there are **fewer KV heads than Q**, and we'll reuse each K and V head for 4 Q heads. This makes this a **GQA** transformer, and has the advantage of requiring significantly less KV storage than an MHA model (where no heads are reused), at presumably minimal intelligence cost.
+
+```{r eval=F}
+# ---- Break QKV into Heads ----
+q = vector('list',16)
+k = vector('list',4)
+v = vector('list',4)
+for (i in 1:length(q)) {
+  q[[i]] = Q[,128 * (i - 1) + 1:128,drop=FALSE]
+}
+for (i in 1:length(k)) {
+  k[[i]] = K[,128 * (i - 1) + 1:128,drop=FALSE]
+  v[[i]] = V[,128 * (i - 1) + 1:128,drop=FALSE]
+}
+# q: list of 16 heads, 16 x [1, 128]
+# k, v: lists of 4 heads, 4 x [1, 128]
+#note that while there are more Q heads than KV, all heads have the same dimensions.
+```
+
+Next, we'll apply **RoPE** (rotary positional embedding) to the Q and K heads (but NOT V). This is the part that lets the model "understand" the **position** of words relative to each other. It's really neat— in each head, half the values are treated as X coordinates, the other as Y, and the coordinates are **rotated** based on the **absolute position** of the current token; i.e., rotate 4 times if this is the fourth token so far in the chat. Each of the 64 coordinate pairs is rotated at a different speed— and because rotation is cyclic (e.g. a certain amount of rotations will return to the original value), RoPE lets the model recognize pretty much **any spatial relationship** between words[^oo]!
+
+The speed of rotation (as well as a lot of other info, like head size and count) are in the GGUF. SmolLM3 actually uses a system it called NoPE— RopE is not applied on every fourth layer, for reasons discussed in [their writeup](https://huggingface.co/blog/smollm3#architecture-and-training-details).
+
+```{r eval=F}
+# ---- Apply RoPE ----
+RoPE = function(v, pos, base, dims){
+  angles = pos * base ^ -(2*(1:(dims/2) - 1)/dims)
+  odds = seq(1, dims, by = 2) #XY pairs are interleaved
+  evens = seq(2, dims, by = 2)
+  X = v[odds]
+  Y = v[evens]
+
+  v[odds] = X * cos(angles) - Y * sin(angles) #rotate X
+  v[evens] = Y * cos(angles) + X * sin(angles) #rotate Y
+  v
+}
+
+#apply rope to q and k heads
+token_pos = #absolute position of token in chat
+if (layer$id %% 4 != 3) {
+  for (i in 1:16) q[[i]] = RoPE(q[[i]], token_pos, metadata$smollm3.rope.freq_base, 128)
+  for (i in 1:4) k[[i]] = RoPE(k[[i]], token_pos, metadata$smollm3.rope.freq_base, 128)
+}
+```
+
+Now, the K and V heads are **added to the cache** of all previous K and V heads. This is where the model stores info on **all previous tokens**— and because we cache *after* applying RoPE, this already includes info about the tokens' positions. After adding to the cache, we **retrieve the entire KV cache** to use in the next step.
+
+```{r eval=F}
+# ---- Retrieve, Add to, and Cache KV ----
+  kv = retrieve_cache(layer$id)
+  for (i in 1:heads_kv) {
+    k[[i]] = rbind(kv$k[[i]], k[[i]]) #append new values as the bottom (newest) row
+    v[[i]] = rbind(kv$v[[i]], v[[i]])
+    kv$k[[i]] = k[[i]]
+    kv$v[[i]] = v[[i]]
+  }
+  save_cache(kv, layer$id)
+  # k, v: list of 4 heads, 4 x [total tokens so far, 128]
+```
+
+Then it's finally time to **put the QKV together**. For each q head, a new head is created (I call these "ctx" heads). The q head is matrix-multiplied with its corresponding k head, normalized a bit, and then matrix-multiplied again with the corresponding v head. Theoretically, this is the step where the model actually **combines and processes the information about previous tokens** with its current fuzzy guess (embedding) of the next token.
+
+```{r eval=F}
+# ---- Apply Attention ----
+softmax = function(v){x = exp(v - max(v)); x / sum(x)}
+attend = function(q,k,v,head_dim) {#qkv heads, not the full list
+  qk = softmax(q %*% t(k))/sqrt(head_dim)) 
+  # qk: [1, 1] <- just a single value per head during generation!
+  qk %*% v
+}
+#attend() is a bit more complex when prefilling, not shown here
+
+ctx = vector('list',16)
+for (i in 1:heads_q) { #get ctx for each Q head
+  kv_head = ceiling(i/4) #which kv head? (each kv head is used for 4 q heads, hence GQA architecture)
+  ctx[[i]] = attend(q[[i]], k[[kv_head]], v[[kv_head]], 128)
+}
+# ctx: list of 16 heads, 16 x [1, 128]
+```
+
+Finally, all of these new heads are **put back together** to make one 1x2048 vector.
+
+```{r eval=F}
+# ---- Reassemble Full Vector ----
+Context = matrix(0, 1, 2048)
+for (i in 1:16) Context[,128 * (i - 1) + 1:128] = ctx[[i]] #recombine ctx heads, the inverse of how we broke up Q
+# Context: [1, 2048]
+```
+
+Then this vector is matrix-multiplied with a set of weights for the layer, and **added to the original input vector**.
+
+```{r eval=F}
+# ---- Weight Output ----
+Out = Context %*% t(layer$attn_output.weight)
+# Out: [1, 2048]
+# attn_output.weight: [1, 2048]
+
+# ---- Add to Input ----
+Attn_Output = input + Out
+# Attn_Out: [1, 2048]
+```
+
+Then this output is fed into the FFN section.
+
+### 5.2.2 FFN (Feed-Forward Network)
+Just like in the Attention section, we take the previous output and normalize+weight it before anything else.
+
+```{r eval=F}
+# ---- Normalize Input ----
+NormIn = RMSN(Attn_Out, layer$ffn_norm.weight, meteadata$smollm3.attention.layer_norm_rms_epsilon)
+# NormIn: [1, 2048]
+# ffn_norm.weight: [1, 2048]
+```
+
+Then, we matrix-multiply with two tensors to increase our dimension and set up a traditional neural network gate. Gate = G, Values = U.
+
+```{r eval=F}
+# ---- Project Up ----
+G = NormIn %*% t(layer$ffn_gate.weight) #Gate
+U = NormIn %*% t(layer$ffn_up.weight) #Up Weights
+# G, U: [1, 11008]
+# ffn_gate.weight, ffn_up.weight: [11008, 2048]
+```
+
+Apply the gate with element-wise multiplication. Modern LLMs use SwiGLU rather than the traditional ReLU[^ish]^,^[^ish2], but it serves the same purpose: negative values in G are snapped to 0, which also zeroes the corresponding value in U when they're multiplied.
+
+[^ish]: Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the [official paper](https://arxiv.org/pdf/2002.05202) introducing SwiGLU: "We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence." -Noam Shazeer
 
 [^ish2]: Actually, [here's](https://old.reddit.com/r/LocalLLaMA/comments/1eh6b1h/what_is_swiglu_a_full_bottomup_explanation_of/lfxzmd6/) some good discussion of why SwiGLU might work better. I'm not sure what Noam was on about.
 
-That outputs the second vector to add to the input. Then it's off to the next layer!
+```{r eval=F}
+SiLU = function(x) x/(1 + exp(-x))
+# ---- Activate Weights ----
+Activation = SiLU(G) * U
+# Activation: [1, 11008]
+```
+
+Now the activated weights are projected back down to 1x2048, and added again to the input.
+
+```{r eval=F}
+# ---- Project Down ----
+Out = Activation %*% t(layer$ffn_down.weight)
+# Out: [1, 2048]
+# ffn_down.weight: [2048, 11008]
+
+# ---- Add to Input ----
+FFN_Out = Attn_Out + Out
+# FFN_Out: [1, 2048]
+```
+
+Then we send the final result (FFN_Out) off to the next layer!
 
 ## 5.3 transformer.R
 This file contains all the math for an embedding through a transformer layer. (all code is also in the [ggufr repo](https://github.com/gbkorr/ggufr/tree/master/R))
 
+The code is a bit more robust than what was shown in the previous sections; it works for both prefill and single-token generation, and uses slightly different variable names. It's still commented and designed to be highly readable— it was made as a blueprint for myself if I ever want to implement this transformer elsewhere!
 
 :::{.callout-note title="transformer.R" collapse=true}
 ```{=html}

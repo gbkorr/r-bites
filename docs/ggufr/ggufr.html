@@ -203,7 +203,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#transforming" id="toc-transforming" class="nav-link" data-scroll-target="#transforming">5. Transforming</a>
   <ul class="collapse">
   <li><a href="#big-idea" id="toc-big-idea" class="nav-link" data-scroll-target="#big-idea">5.1 Big Idea</a></li>
-  <li><a href="#layer-components" id="toc-layer-components" class="nav-link" data-scroll-target="#layer-components">5.2 Layer Components</a></li>
+  <li><a href="#layer-components" id="toc-layer-components" class="nav-link" data-scroll-target="#layer-components">5.2 Layer Components</a>
+  <ul class="collapse">
+  <li><a href="#gqa-grouped-query-attention" id="toc-gqa-grouped-query-attention" class="nav-link" data-scroll-target="#gqa-grouped-query-attention">5.2.1 GQA (Grouped-Query Attention)</a></li>
+  <li><a href="#ffn-feed-forward-network" id="toc-ffn-feed-forward-network" class="nav-link" data-scroll-target="#ffn-feed-forward-network">5.2.2 FFN (Feed-Forward Network)</a></li>
+  </ul></li>
   <li><a href="#transformer.r" id="toc-transformer.r" class="nav-link" data-scroll-target="#transformer.r">5.3 transformer.R</a></li>
   </ul></li>
   <li><a href="#unembedding" id="toc-unembedding" class="nav-link" data-scroll-target="#unembedding">6. Unembedding</a></li>
@@ -3151,15 +3155,169 @@ Tensor: Embedding Matrix
 </section>
 <section id="layer-components" class="level2">
 <h2 class="anchored" data-anchor-id="layer-components">5.2 Layer Components</h2>
-<p>Let’s look at an embedded token vector as it goes through a <strong>single transformer layer</strong>. I won’t get too deep<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> into exactly why the transformer is set up the way it is, but I’ll give an overview of what each part does.</p>
-<p>A transformer layer takes in an embedding vector (1x2048) and <strong>adds</strong><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> two new 1x2048 vectors to it, which it calculates using the input and the tensors for that layer.</p>
-<p>The first is the <strong>Attention</strong> component, which factors in information about the previous tokens and their positions (and saves this info for the new token to the KV cache). It uses quite a few cool tricks to accomplish this— I’d recommend looking it up how it works! You can also read the implementation in <code>transformer.R</code> at the end of this section, though it’s a bit dense.</p>
-<p>Next, the new embedding (input vector + vector from attention) goes through the layer’s <strong>FFN</strong> (feed-forward network) component, which is a simple, traditional neural network component: the embedding gets projected up to 11000 values with a matrix multiplication, SwiGLU-gated (negative values get reset to 0<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a><sup>,</sup><a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>), and reprojected back to 2048. The FFN helps predict “what’s next?” using <strong>only</strong> the current embedding (though, because of previous layers and the previous attention step, this embedding already factors in information about previous tokens).</p>
-<p>That outputs the second vector to add to the input. Then it’s off to the next layer!</p>
+<p>Let’s look at an embedded token vector as it goes through a <strong>single transformer layer</strong>. This section will describe the math we perform; I’m not confident in describing <em>why</em> we do each of these steps, but I can certainly say what to do. Code here is paraphrased from <code>transformer.R</code> (see section <a href="#transformer.r">5.3</a>), with some SmolLM3-specific values inserted.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Input Embedding ----</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>input <span class="ot">=</span> <span class="fu">c</span>(...)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># input: [1, 2048] &lt;- dimension of vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A transformer layer (for this model) takes in an embedding vector (1x2048) and <strong>adds</strong><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> two new 1x2048 vectors to it, which it calculates using the input and the tensors for that layer. One vector is for <strong>attention</strong>— which takes into account all the previous tokens— and one is for the <strong>FFN</strong> (feed-forward network), which is a simple, traditional neural network component based on <strong>only</strong> the current state.</p>
+<p>First comes the attention section.</p>
+<section id="gqa-grouped-query-attention" class="level3">
+<h3 class="anchored" data-anchor-id="gqa-grouped-query-attention">5.2.1 GQA (Grouped-Query Attention)</h3>
+<p>Immediately, we normalize the input and multiply it element-wise with a set of weights for this layer. This normalization includes an epsilon term to avoid dividing by zero, which is interestingly defined in the GGUF.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Normalize Input ----</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>RMSN <span class="ot">=</span> <span class="cf">function</span>(v, norm, epsilon) norm <span class="sc">*</span> v <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(v<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> epsilon)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>NormIn <span class="ot">=</span> <span class="fu">RMSN</span>(input, layer<span class="sc">$</span>attn_norm.weight, metadata<span class="sc">$</span>smollm3.attention.layer_norm_rms_epsilon)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NormIn: [1, 2048]</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># attn_norm.weight: [1, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we matrix-multiply this with three sets of weights to create three vectors: <strong>Query, Key, and Value</strong>. I won’t go into exactly what these represent<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>, but they’re critical for letting the model “understand” the previous words and relationships in the chat.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Get New Query/Key/Value Vectors ----</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">=</span> NormIn <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>attn_q.weight)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>K <span class="ot">=</span> NormIn <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>attn_k.weight)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>V <span class="ot">=</span> NormIn <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>attn_v.weight)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Q: [1, 2048]</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># K, V: [1, 512]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># attn_q.weight: [2048, 2048]</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># attn_k.weight, attn_v.weight: [512, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These vectors are now split up into multiple “<strong>heads</strong>”. I believe the primary purpose of this is to make it easier to parallelize the math, since the heads <strong>do not affect each other</strong><a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>.</p>
+<p>Importantly, in this model, there are <strong>fewer KV heads than Q</strong>, and we’ll reuse each K and V head for 4 Q heads. This makes this a <strong>GQA</strong> transformer, and has the advantage of requiring significantly less KV storage than an MHA model (where no heads are reused), at presumably minimal intelligence cost.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Break QKV into Heads ----</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>q <span class="ot">=</span> <span class="fu">vector</span>(<span class="st">'list'</span>,<span class="dv">16</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="fu">vector</span>(<span class="st">'list'</span>,<span class="dv">4</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">vector</span>(<span class="st">'list'</span>,<span class="dv">4</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(q)) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  q[[i]] <span class="ot">=</span> Q[,<span class="dv">128</span> <span class="sc">*</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">128</span>,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(k)) {</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  k[[i]] <span class="ot">=</span> K[,<span class="dv">128</span> <span class="sc">*</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">128</span>,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  v[[i]] <span class="ot">=</span> V[,<span class="dv">128</span> <span class="sc">*</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">128</span>,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># q: list of 16 heads, 16 x [1, 128]</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># k, v: lists of 4 heads, 4 x [1, 128]</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#note that while there are more Q heads than KV, all heads have the same dimensions.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we’ll apply <strong>RoPE</strong> (rotary positional embedding) to the Q and K heads (but NOT V). This is the part that lets the model “understand” the <strong>position</strong> of words relative to each other. It’s really neat— in each head, half the values are treated as X coordinates, the other as Y, and the coordinates are <strong>rotated</strong> based on the <strong>absolute position</strong> of the current token; i.e., rotate 4 times if this is the fourth token so far in the chat. Each of the 64 coordinate pairs is rotated at a different speed— and because rotation is cyclic (e.g.&nbsp;a certain amount of rotations will return to the original value), RoPE lets the model recognize pretty much <strong>any spatial relationship</strong> between words[^oo]!</p>
+<p>The speed of rotation (as well as a lot of other info, like head size and count) are in the GGUF. SmolLM3 actually uses a system it called NoPE— RopE is not applied on every fourth layer, for reasons discussed in <a href="https://huggingface.co/blog/smollm3#architecture-and-training-details">their writeup</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Apply RoPE ----</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>RoPE <span class="ot">=</span> <span class="cf">function</span>(v, pos, base, dims){</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  angles <span class="ot">=</span> pos <span class="sc">*</span> base <span class="sc">^</span> <span class="sc">-</span>(<span class="dv">2</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>(dims<span class="sc">/</span><span class="dv">2</span>) <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>dims)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  odds <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">1</span>, dims, <span class="at">by =</span> <span class="dv">2</span>) <span class="co">#XY pairs are interleaved</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  evens <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">2</span>, dims, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">=</span> v[odds]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">=</span> v[evens]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  v[odds] <span class="ot">=</span> X <span class="sc">*</span> <span class="fu">cos</span>(angles) <span class="sc">-</span> Y <span class="sc">*</span> <span class="fu">sin</span>(angles) <span class="co">#rotate X</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  v[evens] <span class="ot">=</span> Y <span class="sc">*</span> <span class="fu">cos</span>(angles) <span class="sc">+</span> X <span class="sc">*</span> <span class="fu">sin</span>(angles) <span class="co">#rotate Y</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  v</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#apply rope to q and k heads</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>token_pos <span class="ot">=</span> <span class="co">#absolute position of token in chat</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (layer<span class="sc">$</span>id <span class="sc">%%</span> <span class="dv">4</span> <span class="sc">!=</span> <span class="dv">3</span>) {</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>) q[[i]] <span class="ot">=</span> <span class="fu">RoPE</span>(q[[i]], token_pos, metadata<span class="sc">$</span>smollm3.rope.freq_base, <span class="dv">128</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) k[[i]] <span class="ot">=</span> <span class="fu">RoPE</span>(k[[i]], token_pos, metadata<span class="sc">$</span>smollm3.rope.freq_base, <span class="dv">128</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, the K and V heads are <strong>added to the cache</strong> of all previous K and V heads. This is where the model stores info on <strong>all previous tokens</strong>— and because we cache <em>after</em> applying RoPE, this already includes info about the tokens’ positions. After adding to the cache, we <strong>retrieve the entire KV cache</strong> to use in the next step.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Retrieve, Add to, and Cache KV ----</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  kv <span class="ot">=</span> <span class="fu">retrieve_cache</span>(layer<span class="sc">$</span>id)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>heads_kv) {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    k[[i]] <span class="ot">=</span> <span class="fu">rbind</span>(kv<span class="sc">$</span>k[[i]], k[[i]]) <span class="co">#append new values as the bottom (newest) row</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    v[[i]] <span class="ot">=</span> <span class="fu">rbind</span>(kv<span class="sc">$</span>v[[i]], v[[i]])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    kv<span class="sc">$</span>k[[i]] <span class="ot">=</span> k[[i]]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    kv<span class="sc">$</span>v[[i]] <span class="ot">=</span> v[[i]]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">save_cache</span>(kv, layer<span class="sc">$</span>id)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># k, v: list of 4 heads, 4 x [total tokens so far, 128]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then it’s finally time to <strong>put the QKV together</strong>. For each q head, a new head is created (I call these “ctx” heads). The q head is matrix-multiplied with its corresponding k head, normalized a bit, and then matrix-multiplied again with the corresponding v head. Theoretically, this is the step where the model actually <strong>combines and processes the information about previous tokens</strong> with its current fuzzy guess (embedding) of the next token.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Apply Attention ----</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>softmax <span class="ot">=</span> <span class="cf">function</span>(v){x <span class="ot">=</span> <span class="fu">exp</span>(v <span class="sc">-</span> <span class="fu">max</span>(v)); x <span class="sc">/</span> <span class="fu">sum</span>(x)}</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>attend <span class="ot">=</span> <span class="cf">function</span>(q,k,v,head_dim) {<span class="co">#qkv heads, not the full list</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  qk <span class="ot">=</span> <span class="fu">softmax</span>(q <span class="sc">%*%</span> <span class="fu">t</span>(k))<span class="sc">/</span><span class="fu">sqrt</span>(head_dim)<span class="er">)</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># qk: [1, 1] &lt;- just a single value per head during generation!</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  qk <span class="sc">%*%</span> v</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#attend() is a bit more complex when prefilling, not shown here</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>ctx <span class="ot">=</span> <span class="fu">vector</span>(<span class="st">'list'</span>,<span class="dv">16</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>heads_q) { <span class="co">#get ctx for each Q head</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  kv_head <span class="ot">=</span> <span class="fu">ceiling</span>(i<span class="sc">/</span><span class="dv">4</span>) <span class="co">#which kv head? (each kv head is used for 4 q heads, hence GQA architecture)</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  ctx[[i]] <span class="ot">=</span> <span class="fu">attend</span>(q[[i]], k[[kv_head]], v[[kv_head]], <span class="dv">128</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ctx: list of 16 heads, 16 x [1, 128]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, all of these new heads are <strong>put back together</strong> to make one 1x2048 vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Reassemble Full Vector ----</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Context <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2048</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>) Context[,<span class="dv">128</span> <span class="sc">*</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">128</span>] <span class="ot">=</span> ctx[[i]] <span class="co">#recombine ctx heads, the inverse of how we broke up Q</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Context: [1, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then this vector is matrix-multiplied with a set of weights for the layer, and <strong>added to the original input vector</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Weight Output ----</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Out <span class="ot">=</span> Context <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>attn_output.weight)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Out: [1, 2048]</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># attn_output.weight: [1, 2048]</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Add to Input ----</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>Attn_Output <span class="ot">=</span> input <span class="sc">+</span> Out</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Attn_Out: [1, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then this output is fed into the FFN section.</p>
+</section>
+<section id="ffn-feed-forward-network" class="level3">
+<h3 class="anchored" data-anchor-id="ffn-feed-forward-network">5.2.2 FFN (Feed-Forward Network)</h3>
+<p>Just like in the Attention section, we take the previous output and normalize+weight it before anything else.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Normalize Input ----</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>NormIn <span class="ot">=</span> <span class="fu">RMSN</span>(Attn_Out, layer<span class="sc">$</span>ffn_norm.weight, meteadata<span class="sc">$</span>smollm3.attention.layer_norm_rms_epsilon)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># NormIn: [1, 2048]</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ffn_norm.weight: [1, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we matrix-multiply with two tensors to increase our dimension and set up a traditional neural network gate. Gate = G, Values = U.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Project Up ----</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">=</span> NormIn <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>ffn_gate.weight) <span class="co">#Gate</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>U <span class="ot">=</span> NormIn <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>ffn_up.weight) <span class="co">#Up Weights</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># G, U: [1, 11008]</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ffn_gate.weight, ffn_up.weight: [11008, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Apply the gate with element-wise multiplication. Modern LLMs use SwiGLU rather than the traditional ReLU<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a><sup>,</sup><a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a>, but it serves the same purpose: negative values in G are snapped to 0, which also zeroes the corresponding value in U when they’re multiplied.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>SiLU <span class="ot">=</span> <span class="cf">function</span>(x) x<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Activate Weights ----</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Activation <span class="ot">=</span> <span class="fu">SiLU</span>(G) <span class="sc">*</span> U</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Activation: [1, 11008]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now the activated weights are projected back down to 1x2048, and added again to the input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Project Down ----</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Out <span class="ot">=</span> Activation <span class="sc">%*%</span> <span class="fu">t</span>(layer<span class="sc">$</span>ffn_down.weight)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Out: [1, 2048]</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ffn_down.weight: [2048, 11008]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Add to Input ----</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>FFN_Out <span class="ot">=</span> Attn_Out <span class="sc">+</span> Out</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># FFN_Out: [1, 2048]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we send the final result (FFN_Out) off to the next layer!</p>
+</section>
 </section>
 <section id="transformer.r" class="level2">
 <h2 class="anchored" data-anchor-id="transformer.r">5.3 transformer.R</h2>
 <p>This file contains all the math for an embedding through a transformer layer. (all code is also in the <a href="https://github.com/gbkorr/ggufr/tree/master/R">ggufr repo</a>)</p>
+<p>The code is a bit more robust than what was shown in the previous sections; it works for both prefill and single-token generation, and uses slightly different variable names. It’s still commented and designed to be highly readable— it was made as a blueprint for myself if I ever want to implement this transformer elsewhere!</p>
 <div class="callout callout-style-default callout-note callout-titled" title="transformer.R">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -3181,24 +3339,24 @@ transformer.R
 <section id="unembedding" class="level1">
 <h1>6. Unembedding</h1>
 <p>As discussed in the previous section, we dot-product the <strong>fuzzy output embedding</strong> with the embeddings for the entire model vocabulary to get a list of similarity values. There’s a lot of ways to choose a token from this; the typical approach is to turn the values into a list of probabilities for each word (such that the sum of all probabilities is 1), incorporating some parameters like <em>temperature</em> (how “stretched” the probabilities area; lower temperature makes the highest-similarity tokens significantly more likely to be chosen), <em>top-K</em> (only the top K most similar tokens are considered for choosing), <em>min-P</em> (all tokens below a certain likelihood are ignored), and quite a few more to reduce the likelihood of getting a wacky prediction. Once a token is chosen, it’s added to the generated text, re-embedded, and fed back into the model for the next prediction.</p>
-<p>Interestingly, these parameters are somewhat naive, and I haven’t seen any public resources quantifying how to best use them. We’re very clearly still <strong>in the early stages</strong> of using LLMs, where there’s a million options, everyone is trying to figure out what works, and a lot of the process is unoptimized<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> or yet to be practically quantified.</p>
+<p>Interestingly, these parameters are somewhat naive, and I haven’t seen any public resources quantifying how to best use them. We’re very clearly still <strong>in the early stages</strong> of using LLMs, where there’s a million options, everyone is trying to figure out what works, and a lot of the process is unoptimized<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> or yet to be practically quantified.</p>
 </section>
 <section id="the-ggufr-package" class="level1">
 <h1>7. The ggufr Package</h1>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">7.1 Setup</h2>
 <p>The package has just one dependency and is relatively easy to try out and play around with. Running the model is slow but shouldn’t require a particularly powerful computer.</p>
-<p>To get started, run this to install the package and download<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> the <strong>3GB</strong> GGUF<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> to run it with. This will take 5 or 10 minutes depending on your internet speed.</p>
+<p>To get started, run this to install the package and download<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> the <strong>3GB</strong> GGUF<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> to run it with. This will take 5 or 10 minutes depending on your internet speed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gbkorr/ggufr"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggufr)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>path <span class="ot">=</span> <span class="fu">paste0</span>(tools<span class="sc">::</span><span class="fu">R_user_dir</span>(<span class="st">'ggufr'</span>),<span class="st">"/SmolLM3-3B-Q8_0.gguf"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download_model</span>(path) <span class="co">#if you want to undo this, run delete_model(path)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gbkorr/ggufr"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggufr)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>path <span class="ot">=</span> <span class="fu">paste0</span>(tools<span class="sc">::</span><span class="fu">R_user_dir</span>(<span class="st">'ggufr'</span>),<span class="st">"/SmolLM3-3B-Q8_0.gguf"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download_model</span>(path) <span class="co">#if you want to undo this, run delete_model(path)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then to load the model, run this. During this process, the tensors are unpacked and saved in <code>tempdir()</code>; the unpacked tensors take up <strong>25GB</strong> of space, so make sure your computer has some free space. The tensors are deleted when you close R/RStudio, so you’ll get the space back.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this will take around 30 minutes</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">read_gguf</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this will take around 30 minutes</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">read_gguf</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once that’s finished, the model is ready! You’ll be able to run it as much as you like until you close R.</p>
 </section>
@@ -3206,19 +3364,19 @@ transformer.R
 <h2 class="anchored" data-anchor-id="usage">7.2 Usage</h2>
 <p>The main function to run inference is <code>infer()</code>. This will automatically insert your prompt into the chat template and run the model on it. Token generation speed is mainly tied to how fast R can load the <code>.rds</code> tensor layers; I get around a token a minute on my computer.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-overflow-scroll code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">infer</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  prompt, <span class="co">#the text to feed into the model</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  model, <span class="co">#pass the model object in</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">instructions=</span><span class="cn">NULL</span>, </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#set this to a string if you want to add a system prompt, </span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#e.g. "You are an AI assistant that always rhymes."</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_template=</span><span class="cn">TRUE</span>, </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#set this to FALSE to feed ONLY the prompt into the model; </span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#it will behave as a word predictor as discussed in section 3.3</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_template=</span><span class="cn">FALSE</span>, </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#prints the full input and output text, instead of a cleaned "prompt | response" view.</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">temperature=</span><span class="dv">1</span> <span class="co">#prediction temperature</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-overflow-scroll code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">infer</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  prompt, <span class="co">#the text to feed into the model</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  model, <span class="co">#pass the model object in</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">instructions=</span><span class="cn">NULL</span>, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#set this to a string if you want to add a system prompt, </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#e.g. "You are an AI assistant that always rhymes."</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_template=</span><span class="cn">TRUE</span>, </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#set this to FALSE to feed ONLY the prompt into the model; </span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#it will behave as a word predictor as discussed in section 3.3</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_template=</span><span class="cn">FALSE</span>, </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#prints the full input and output text, instead of a cleaned "prompt | response" view.</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">temperature=</span><span class="dv">1</span> <span class="co">#prediction temperature</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here’s what I got from this: <code>"Who is Hadley Wickham?" |&gt; infer(model)</code></p>
 <div class="quarto-figure quarto-figure-center">
@@ -3233,8 +3391,8 @@ transformer.R
 <section id="learning-process" class="level1">
 <h1>8. Learning Process</h1>
 <p>I took a pretty <strong>new approach</strong> (for me) for learning things for this project.</p>
-<p>Resources for understanding LLM architecture on an implementation level are <strong>quite scattered</strong> due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
-<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a></p>
+<p>Resources for understanding LLM architecture on an implementation level are <strong>quite scattered</strong> due to the fast-paced nature of AI development in the past few years. Many of the best guides are from 2023<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> and 2024, where it’s hard to tell what is and isn’t outdated.</p>
+<p>I usually prefer finding articles myself or reading a textbook to learn how to do something, but because of these reasons, I decided this would be a good situation to <strong>learn from an LLM</strong>. For such a frequently-discussed, cutting-edge topic, I figured one of the big models could do a good job finding and synthesizing <strong>recent, relevant sources</strong> on the topic of LLM implementation. I started by asking for an overview of the modern GGUF and transformer structure, and how this differs from early models, and received a detailed and accurate response— for <strong>broad, bigger-picture questions</strong> like these, I’ve found LLMs to answer quite well.<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a></p>
 <p>I ended up structuring this project <strong>almost like a class</strong>: I would ask Gemini to describe a part of the LLM implementation, and then code it entirely on my own, occasionally asking for clarification and advice— but not code!— when needed.</p>
 <p>This structure worked <strong>tremendously well</strong> for me— because I was doing the implementation myself, I was building the important experience and understanding myself, and my own experimentation ironed out any (rare) inaccuracies in the “teacher’s” teaching.</p>
 <p>Now, I’m sure an AI could have written the code for me as well, but that would <strong>miss the point</strong>— the whole goal was to give myself a deeper (and practical) understanding of how LLM inferencing worked, and I certainly got it!</p>
@@ -3255,15 +3413,16 @@ transformer.R
 <li id="fn7"><p>From its publication in 2017 to the rise of LLMs in 2023. Of course, lots of research involving it led up to the events of 2023, but the general idea stands.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>Actually, it’s the embeddings for ” breakfast”, ” lunch”, and ” baseball”, since words are usually encountered after a space in natural language. There are a lot more words like this in the model dictionary than without a space.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>By turning the dot product results into probabilities, so more closely related tokens are more likely to be selected.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><p>Though someday I’d like to update this with a fuller explanation of the math.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn11"><p>Some of the values in the vectors will be negative, so the average value doesn’t go up.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p>-ish. Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the <a href="https://arxiv.org/pdf/2002.05202">official paper</a> introducing SwiGLU: “We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence.” -Noam Shazeer<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn13"><p>Actually, <a href="https://old.reddit.com/r/LocalLLaMA/comments/1eh6b1h/what_is_swiglu_a_full_bottomup_explanation_of/lfxzmd6/">here’s</a> some good discussion of why SwiGLU might work better. I’m not sure what Noam was on about.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn14"><p>Like the fact that we use jinja and Ġ, yeesh. All the focus at the moment is making things run faster (which is the best thing to focus on, of course).<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn15"><p>From the official <a href="https://huggingface.co/unsloth/SmolLM3-3B-GGUF/blob/main/SmolLM3-3B-Q8_0.gguf">Huggingface</a> endpoint; the group that both created this model and generally hosts downloads for all local LLMs.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn16"><p>Which will be saved in <code>tools::R_user_dir('ggufr')</code>. R provides a dedicated folder for each package to store files like this in.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn17"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn18"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Some of the values in the vectors will be negative, so the average value doesn’t go up.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>There’s plenty of explanations online— though I’m a little suspicious of how accurately the QKV’s actual behavior matches how they’re intended to work.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>i.e.&nbsp;more precisely: the q heads don’t interact with each other, the k heads don’t interact with each other, but each q head interacts with a k head. This means the math for each q head can all be performed in parallel.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Unlike the traditional ReLU gates, SwiGLU preserves small negative values, which makes the deep learning work better. Why? From the <a href="https://arxiv.org/pdf/2002.05202">official paper</a> introducing SwiGLU: “We offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence.” -Noam Shazeer<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Actually, <a href="https://old.reddit.com/r/LocalLLaMA/comments/1eh6b1h/what_is_swiglu_a_full_bottomup_explanation_of/lfxzmd6/">here’s</a> some good discussion of why SwiGLU might work better. I’m not sure what Noam was on about.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Like the fact that we use jinja and Ġ, yeesh. All the focus at the moment is making things run faster (which is the best thing to focus on, of course).<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>From the official <a href="https://huggingface.co/unsloth/SmolLM3-3B-GGUF/blob/main/SmolLM3-3B-Q8_0.gguf">Huggingface</a> endpoint; the group that both created this model and generally hosts downloads for all local LLMs.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>Which will be saved in <code>tools::R_user_dir('ggufr')</code>. R provides a dedicated folder for each package to store files like this in.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>E.g. <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a><a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>Including when I ask them a broad question about something I’m quite experienced with.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
