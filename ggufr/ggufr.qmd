@@ -27,6 +27,10 @@ If you want to try the package out for yourself, skip to [Section 7](#the-ggufr-
 This article contains quite a few foldable infoboxes.
 :::
 
+> July Edit: I've discovered a blog with very good info on the inner workings of LLMs, with many articles going into much more detail than this page. Would highly recommend! [https://magazine.sebastianraschka.com/](https://magazine.sebastianraschka.com/)
+
+> And [this](https://magazine.sebastianraschka.com/i/168650848/7-smollm3) section has an excellent visual of the transformer structure of SmolLM3.
+
 # 1. Big Picture
 In order to perform inference with an LLM, you need a **prompt**, the model's **weights**, and information about the model's **architecture**— the math you're supposed to use for that particular model. Locally-run models these days (2026) come in a **single .gguf file** ([Section 2](#gguf-files)), which contains the weights and some metadata telling you which architecture to use.
 

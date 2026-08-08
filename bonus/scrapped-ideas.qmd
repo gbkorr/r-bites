@@ -6,6 +6,8 @@ I do a lot of projects for fun, but not all of them succeed enough to put on the
 
 ---
 
+**stego** (Jul '26): There's a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.
+
 **awkme** (May '26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn't feasible with a small awk script.
 
 **tunnelvision** (Mar '26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn't end up working. One of this big villains of this project was moustache distortion, funnily enough...
