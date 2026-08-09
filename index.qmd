@@ -12,9 +12,15 @@ This is where I upload articles on small projects I've done. At first it was jus
 
 See my [Github](https://github.com/gbkorr) for more projects.
 
-> Note: All my writing is my own! AI is useful, but I always write without it.
+> Note: All my writing is my own! AI is useful, but I always write without it. I also code everything myself, unless otherwise stated— this blog is for fun, after all!
 
 #### *Recent Articles*:
+
+*August*
+
+*July*
+
+> Gaps? No, [*projects that didn't work out*](bonus/scrapped-ideas.qmd)— science is all about trying and failing! 
 
 *June*
 

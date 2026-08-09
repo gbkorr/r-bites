@@ -296,9 +296,9 @@
   {
     "objectID": "bonus/scrapped-ideas.html",
     "href": "bonus/scrapped-ideas.html",
-    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "title": "Slipped Through the Cracks",
     "section": "",
-    "text": "I do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of some recent ones that didn’t pan out, despite several weeks of effort for each one.\n\nawkme (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.\ntunnelvision (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was moustache distortion, funnily enough…"
+    "text": "Slipped Through the Cracks\nI do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort.\n\ntugra (Jul ’26): todo\nstego (Jul ’26): There’s a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.\nawkme (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.\ntunnelvision (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was the “moustache distortion”, funnily enough…"
   },
   {
     "objectID": "ggufr/ggufr.html",
@@ -431,7 +431,7 @@
     "href": "index.html",
     "title": "R Bites",
     "section": "",
-    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects.\n\nNote: All my writing is my own! AI is useful, but I always write without it.\n\n\nRecent Articles:\nJune\n\nAn LLM chatbot running locally in pure R. link\n\n\nA full keyboard interface with just four buttons! link\n\nMay\n\nA morse code interface for headless linux, and the world’s smallest chatbot. link\n\nApril\n\nA full guide on using a phone as a Linux laptop. link\n\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the RStudio console at native framerate. link\n\n\nWhy doesn’t this page use the regular RSS listing format? Hindsight is 20/20…"
+    "text": "This is where I upload articles on small projects I’ve done. At first it was just for R, but I started branching out!\nSee my Github for more projects.\n\nNote: All my writing is my own! AI is useful, but I always write without it. I also code everything myself, unless otherwise stated— this blog is for fun, after all!\n\n\nRecent Articles:\nAugust\nJuly\n\nGaps? No, projects that didn’t work out— science is all about trying and failing!\n\nJune\n\nAn LLM chatbot running locally in pure R. link\n\n\nA full keyboard interface with just four buttons! link\n\nMay\n\nA morse code interface for headless linux, and the world’s smallest chatbot. link\n\nApril\n\nA full guide on using a phone as a Linux laptop. link\n\n\nA tiny full-stack Python pipeline that retrieves satellite data to estimate your local temperature. link\n\nMarch\n\nA video conference client running in R, streaming webcam video to the console. link\n\n\nRunning R on a flip phone, and pushing to github from it. link\n\nFebruary\n\nA lightweight set of functions to render video in the RStudio console at native framerate. link\n\n\nWhy doesn’t this page use the regular RSS listing format? Hindsight is 20/20…"
   },
   {
     "objectID": "rollingwater/rollingwater.html",
@@ -523,5 +523,47 @@
     "title": "“Live” Temperature Data from Geostationary Satellites",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nAll personal location info is handled client-side, so your location never leaves your computer. Fear not!↩︎\nLearning about AWS for this project, it’s quite interesting that this company provides such services. I wonder if the goal is to use Amazon’s wealth to improve global efficiency, or to achieve technological dominance wherein great amounts of organizations rely completely on it.↩︎\nAnd used the settings to change the project name and URL, though that’s technically not necessary.↩︎\nIncreasing the resolution from 5km to 3!↩︎\nSuch as Yan Holtz, a great figure in that space.↩︎"
+  },
+  {
+    "objectID": "tugra/tugra.html",
+    "href": "tugra/tugra.html",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "",
+    "text": "groups (fragments) of symbols (beads) on a line (thread) constitute a letter\nThe idea is to split each letter into two patterns that represent the letter, and then separate those two patterns such that only a human can track the connection. This results in randomly-arranged fragments that are (hopefully) too\nDetecting these fragments with OCR is already somewhat challenging, and I doubt a high recognition rate is achievable without significant training.\nhttps://www.mixfont.com/experiments/decoy-font\nways to make it harder - using nonstandardized patterns, or splitting patterns into more than two, makes it WAY harder, but it’s somewhat inconvenient and may not be necessary"
+  },
+  {
+    "objectID": "tugra/tugra.html#the-goal",
+    "href": "tugra/tugra.html#the-goal",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "The Goal",
+    "text": "The Goal\nUltimately, we want a system of communication that can, without decryption, be understood by a human, but not an AI. That is to say, we’d like it to be impossible to automatically— algorithmically— parse, while remaining reasonably clear to a human.\nI’m not sure there’s all that many ways of accomplishing this. It’s been tried before, but I’ve yet to see an attempt I’m satisfied with; hence, this post."
+  },
+  {
+    "objectID": "tugra/tugra.html#obvious-solutions",
+    "href": "tugra/tugra.html#obvious-solutions",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "Obvious Solutions",
+    "text": "Obvious Solutions\n\nWhy not just use made-up symbols for each letter?\n\nThat’s a substitution cipher, and can be pretty trivially cracked as long as letters can be identified as distinct. If we want to encode English (and we do; see the next question), we need to obfuscate the letters somehow, either in number (“how many letters?”), content (“what letter does this represent?”), order (“what’s the order of these letters?”). The three are strongest in combination.\n\nWhy not just use a different language that the AI can’t speak? E.g. make up your own dialect of Heiroglyphics\n\nThis is anti-user; it’s too hard for people to adopt because of the steep learning curve of a new language and grammar. However, it’s probably the most robust solution, and can only be cracked by training on a sufficiently large corpus of text."
+  },
+  {
+    "objectID": "tugra/tugra.html#my-approach",
+    "href": "tugra/tugra.html#my-approach",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "My Approach",
+    "text": "My Approach\nAs a , I introduce Tugra1, a script inspired by Arabic calligraphy taking advantage of our ability to follow lines. Tugra breaks up each letter into smaller fragments, and then spaces these fragments out, with the only [ORDER… FOLLOW THREAD…]\n[images]"
+  },
+  {
+    "objectID": "tugra/tugra.html#can-it-be-cracked",
+    "href": "tugra/tugra.html#can-it-be-cracked",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "Can it be Cracked?",
+    "text": "Can it be Cracked?\nThe procedure for algorithmically parsing Tugra is very simple. First a brute-force method: * Detect every fragment and brute-force their pairings to find every valid word. Or, a manual implementation of the human algorithm: * Detect every fragment, detect every thread, and use the threads to connect the fragments. * Then, brute-force the resulting letters or order them correctly based on thread position.\nHowever, these are hard problems! 1. Detecting fragments with OCR is already quite challenging, and would require some machine training. That means getting a big enough corpus of translated Tugra, which would require significant human effort. 2. Detecting fragments requires a procedural algorithm, since the threads have to be fully traced spatially. This is feasible, though. 3. Threads intentionally cross and terminate unpredictably in order\nSo the long-term security of the system depends on how hard it actually is to reliably detect fragments. Increased security can be achieved by breaking up letters further— i.e. into fragments of 1+3 or 1+2+1 beads— which would make training require even more data. However, if technology advances such that detecting fragments becomes feasible, a program could feasible be created to automatically parse Tugra.\nIn my next blog post I’ll be attempting to create such a program, as well as creating a tool to automatically generate tugra for text.\njunk letters— use some easy rule to “invalidate” certain letters, like shape of thread or put an X on the thread lol adds an annoying check for parsing"
+  },
+  {
+    "objectID": "tugra/tugra.html#footnotes",
+    "href": "tugra/tugra.html#footnotes",
+    "title": "<i class='bi bi-hexagon'></i>&nbsp;&nbsp;R Bites",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nNamed after the real tughras, but spelled differently for convenience. Nothing’s worse than a project with an ungoogleable name…↩︎"
   }
 ]
