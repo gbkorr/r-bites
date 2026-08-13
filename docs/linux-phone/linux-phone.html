@@ -523,7 +523,7 @@ App Sleuthing
 <li>Download the required packages:</li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> update <span class="kw">&amp;&amp;</span> <span class="ex">pkg</span> upgrade</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install termux-api x11-repo termux-x11-nightly pulseaudio xfce4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install termux-api x11-repo termux-x11-nightly pulseaudio xfce4 virglrenderer-android</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="2" type="1">
 <li>Create a new file:</li>
 </ol>
@@ -546,27 +546,32 @@ App Sleuthing
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kill open X11 processes</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-9</span> <span class="va">$(</span><span class="ex">pgrep</span> <span class="at">-f</span> <span class="st">"termux.x11"</span><span class="va">)</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable PulseAudio over Network</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pulseaudio</span> <span class="at">--start</span> <span class="at">--load</span><span class="op">=</span><span class="st">"module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"</span> <span class="at">--exit-idle-time</span><span class="op">=</span>-1</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare termux-x11 session</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">XDG_RUNTIME_DIR</span><span class="op">=</span><span class="va">${TMPDIR}</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-x11</span> :0 <span class="op">&gt;</span>/dev/null <span class="kw">&amp;</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Wait a bit until termux-x11 gets started.</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch Termux X11 main activity</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ex">am</span> start <span class="at">--user</span> 0 <span class="at">-n</span> com.termux.x11/com.termux.x11.MainActivity <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Set audio server</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PULSE_SERVER</span><span class="op">=</span>127.0.0.1</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Run XFCE4 Desktop</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span> DISPLAY=:0 dbus-launch <span class="at">--exit-with-session</span> xfce4-session <span class="kw">&amp;</span> <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Start GPU backend (remove this if you don't want hardware acceleration)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pkill</span> <span class="at">-f</span> virgl</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">GALLIUM_DRIVER</span><span class="op">=</span>virpipe</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">virgl_test_server_android</span> <span class="kw">&amp;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable PulseAudio over Network</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">pulseaudio</span> <span class="at">--start</span> <span class="at">--load</span><span class="op">=</span><span class="st">"module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"</span> <span class="at">--exit-idle-time</span><span class="op">=</span>-1</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare termux-x11 session</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">XDG_RUNTIME_DIR</span><span class="op">=</span><span class="va">${TMPDIR}</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-x11</span> :0 <span class="op">&gt;</span>/dev/null <span class="kw">&amp;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Wait a bit until termux-x11 gets started.</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Launch Termux X11 main activity</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="ex">am</span> start <span class="at">--user</span> 0 <span class="at">-n</span> com.termux.x11/com.termux.x11.MainActivity <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Set audio server</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PULSE_SERVER</span><span class="op">=</span>127.0.0.1</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Run XFCE4 Desktop</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span> DISPLAY=:0 dbus-launch <span class="at">--exit-with-session</span> xfce4-session <span class="kw">&amp;</span> <span class="op">&gt;</span> /dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <ol start="4" type="1">
@@ -608,6 +613,7 @@ Preferences
 </ul>
 <p><code>Pointer</code>:</p>
 <ul>
+<li><code>Touchscreen input mode</code> -&gt; Direct touch</li>
 <li><code>Capture external pointer devices when possible</code></li>
 </ul>
 <p>You can changes mouse speed here, and mouse acceleration from <code>Applications</code> -&gt; <code>Settings</code> -&gt; <code>Mouse and Touchpad</code> on the Xfce desktop. Note: this is quite sensitive to DPI, and low-DPI mice will feel sluggish. Modern mice typically have good enough DPI, though.</p>
@@ -751,21 +757,29 @@ Recommended Packages
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install proot-distro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Use <code>proot-distro list</code> to see available distributions. I recommend Debian:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">proot-distro</span> install debian</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"alias debian='proot-distro login debian'"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">exec</span> bash</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"alias debian='proot-distro login debian --shared-tmp'"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">exec</span> bash</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">debian</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /data/data/com.termux/files/home termux</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"export DISPLAY=:0"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">exec</span> bash</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will set up a debian installation; launch the debian shell with <code>debian</code> and quit with <code>exit</code>. This also includes a folder (<code>termux</code>) to access files from the Termux filesystem while in Debian (but not the other way around; like with the phone files, that’s more complicated).</p>
 <p>Proot debian can <strong>run anything already installed</strong> on Termux, but you can also use <code>apt</code> to install Debian packages that would otherwise be unavailable. I’ve had <a href="../flipphone-r/flipphone-r.html">great success</a> running the R language this way, for example.</p>
 <p>You can make a launcher on the Xfce desktop that opens a terminal window running proot debian: right-click on the desktop, <code>Create Launcher</code>, enable <code>Run in terminal</code>, and set the command to <code>proot-distro login debian</code><a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a>. You can get an icon for the launcher <a href="https://www.debian.org/logos/">here</a> (use the SVG one for background transparency).</p>
+<hr>
+<p>It’s unwise, but you can also use this to easily emulate <strong>x86 architecture</strong>, EXTREMELY SLOWLY.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install qemu-user-x86-64</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">proot-distro</span> install ubuntu <span class="at">--architecture</span> x86_64</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">proot-distro</span> login ubuntu <span class="at">--shared-tmp</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"export DISPLAY=:0"</span> <span class="op">&gt;&gt;</span> ~/.bashrc <span class="kw">&amp;&amp;</span> <span class="bu">exec</span> bash</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I was able to get a full graphical x86 librewriter (open-source microsoft word) instance running with this (<code>apt install libreoffice &amp;&amp; lowriter</code>). But of course— x86 emulation is extremely slow, and it wasn’t very practical. Would not recommend; stick to native proot arches.</p>
 </section>
 <section id="termux-api" class="level2">
 <h2 class="anchored" data-anchor-id="termux-api">5.4 Termux-API</h2>
 <p>Termux-API offers a bunch of fun ways to interact with the phone (via Termux, not proot).</p>
 <p><strong>Take a selfie</strong>: (without saving it)</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-camera-photo</span> <span class="at">-c</span> 1 tmp <span class="kw">&amp;&amp;</span> <span class="ex">timg</span> tmp <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> tmp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">termux-camera-photo</span> <span class="at">-c</span> 1 tmp <span class="kw">&amp;&amp;</span> <span class="ex">timg</span> tmp <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> tmp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Read out the date</strong>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +<span class="st">"%A; %B %dth %Y"</span> <span class="kw">|</span> <span class="ex">termux-tts-speak</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +<span class="st">"%A; %B %dth %Y"</span> <span class="kw">|</span> <span class="ex">termux-tts-speak</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It also offers some pretty powerful tools for using your phone as a sensor, with commands like <code>termux-location</code> (GPS), <code>termux-torch</code> (flashlight), and <code>termux-sensor</code> (gyroscope et al.).</p>
 </section>
 </section>
@@ -796,7 +810,7 @@ Warning: this section is <strong>highly experimental</strong>.
 <h2 class="anchored" data-anchor-id="setup">6.1 Setup</h2>
 <p>First, install the <a href="https://github.com/Ruddle/RemoteCam">RemoteCam</a> apk. This will stream the camera to a local IP address (I can’t figure out how to point it to localhost ☹), which we can pick up from the desktop.</p>
 <p>Now install the dependencies in termux:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mpv gstreamer xdotool wmctrl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mpv gstreamer xdotool wmctrl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And make a new .sh file with this script:</p>
 <div class="callout callout-style-default callout-note callout-titled" title="~/cameramirror.sh">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
@@ -810,32 +824,32 @@ Warning: this section is <strong>highly experimental</strong>.
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="va">width</span><span class="op">=</span>2400</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="va">height</span><span class="op">=</span>1080</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">mpv</span> <span class="at">--title</span><span class="op">=</span><span class="st">"vstream"</span> <span class="at">--demuxer-lavf-format</span><span class="op">=</span>mjpeg <span class="at">--profile</span><span class="op">=</span>low-latency <span class="at">--untimed</span> <span class="st">"http://</span><span class="va">$1</span><span class="st">"</span> <span class="kw">&amp;</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="va">mxid</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--name</span> <span class="st">"vstream"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ex">gst-launch-1.0</span> ximagesrc xid=<span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> show-pointer=false ! <span class="dt">\</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    videoconvert ! <span class="dt">\</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    videoscale method=0 ! <span class="dt">\</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"video/x-raw,width=</span><span class="va">$width</span><span class="st">,height=</span><span class="va">$height</span><span class="st">"</span> ! <span class="dt">\</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    ximagesink <span class="kw">&amp;</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="va">pid</span><span class="op">=</span><span class="va">$(</span><span class="ex">pgrep</span> gst-launch-1.0<span class="va">)</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="va">xid</span><span class="op">=</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--pid</span> <span class="st">"</span><span class="va">$pid</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,maximized_vert,maximized_horz</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">closeup()</span> <span class="kw">{</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">killall</span> gst-launch-1.0 mpv</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="bu">trap</span> closeup SIGINT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="va">width</span><span class="op">=</span>2400</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="va">height</span><span class="op">=</span>1080</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">mpv</span> <span class="at">--title</span><span class="op">=</span><span class="st">"vstream"</span> <span class="at">--demuxer-lavf-format</span><span class="op">=</span>mjpeg <span class="at">--profile</span><span class="op">=</span>low-latency <span class="at">--untimed</span> <span class="st">"http://</span><span class="va">$1</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 3</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="va">mxid</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--name</span> <span class="st">"vstream"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="ex">gst-launch-1.0</span> ximagesrc xid=<span class="st">"</span><span class="va">$mxid</span><span class="st">"</span> show-pointer=false ! <span class="dt">\</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    videoconvert ! <span class="dt">\</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    videoscale method=0 ! <span class="dt">\</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"video/x-raw,width=</span><span class="va">$width</span><span class="st">,height=</span><span class="va">$height</span><span class="st">"</span> ! <span class="dt">\</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    ximagesink <span class="kw">&amp;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 1</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="va">pid</span><span class="op">=</span><span class="va">$(</span><span class="ex">pgrep</span> gst-launch-1.0<span class="va">)</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="va">xid</span><span class="op">=</span><span class="va">$(</span><span class="ex">xdotool</span> search <span class="at">--pid</span> <span class="st">"</span><span class="va">$pid</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,below,skip_taskbar,skip_pager</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="ex">wmctrl</span> <span class="at">-i</span> <span class="at">-r</span> <span class="st">"</span><span class="va">$xid</span><span class="st">"</span> <span class="at">-b</span> add,maximized_vert,maximized_horz</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">closeup()</span> <span class="kw">{</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">killall</span> gst-launch-1.0 mpv</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="bu">trap</span> closeup SIGINT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -850,7 +864,7 @@ Warning: this section is <strong>highly experimental</strong>.
 <li><p>Turn off preview and turn on the stream. Copy the stream’s IP/URL (something like <code>192.1.../cam.mjpeg</code>).</p></li>
 <li><p>Open up a terminal window in Xfce, and run the script with that IP in an Xfce terminal:</p></li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> ~/cameramirror.sh <span class="op">&lt;</span>COPIED_URL<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> ~/cameramirror.sh <span class="op">&lt;</span>COPIED_URL<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="5" type="1">
 <li><p>If all goes well, the script should open the stream and project it onto a background window. Now you can continue using the desktop as normal, and you’ll be able to see the phone camera output behind everything.</p></li>
 <li><p>To close the stream, enter ^C into the original terminal window, and then close the window.</p></li>
@@ -1319,7 +1333,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-      &nbsp;
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gbkorr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gbkorr/">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;

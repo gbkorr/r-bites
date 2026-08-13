@@ -211,7 +211,7 @@ Once those are installed, it's time to set up the desktop.[^source] This will mo
 1. Download the required packages:
 ```bash
 pkg update && pkg upgrade
-pkg install termux-api x11-repo termux-x11-nightly pulseaudio xfce4
+pkg install termux-api x11-repo termux-x11-nightly pulseaudio xfce4 virglrenderer-android
 ```
 
 2. Create a new file:
@@ -229,6 +229,11 @@ nano ~/startxfce4_termux.sh
 
 # Kill open X11 processes
 kill -9 $(pgrep -f "termux.x11") 2>/dev/null
+
+# Start GPU backend (remove this if you don't want hardware acceleration)
+pkill -f virgl
+export GALLIUM_DRIVER=virpipe
+virgl_test_server_android &
 
 # Enable PulseAudio over Network
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
@@ -287,6 +292,7 @@ Before (or after) starting the desktop, let's change some settings. Click and ho
 
 `Pointer`:
 
+- `Touchscreen input mode` -> Direct touch
 - `Capture external pointer devices when possible`
 
 You can changes mouse speed here, and mouse acceleration from `Applications` -> `Settings` -> `Mouse and Touchpad` on the Xfce desktop. Note: this is quite sensitive to DPI, and low-DPI mice will feel sluggish. Modern mice typically have good enough DPI, though.
@@ -462,9 +468,10 @@ Use `proot-distro list` to see available distributions. I recommend Debian:
 
 ```bash
 proot-distro install debian
-echo "alias debian='proot-distro login debian'" >> ~/.bashrc && exec bash
+echo "alias debian='proot-distro login debian --shared-tmp'" >> ~/.bashrc && exec bash
 debian
 ln -s /data/data/com.termux/files/home termux
+echo "export DISPLAY=:0" >> ~/.bashrc && exec bash
 apt update
 ```
 
@@ -476,6 +483,18 @@ You can make a launcher on the Xfce desktop that opens a terminal window running
 
 [^aww]: Apparently launcher commands can't use bash aliases (like the `debian` one we just created), probably because they don't run .bashrc before executing.
 
+---
+
+It's unwise, but you can also use this to easily emulate **x86 architecture**, EXTREMELY SLOWLY.
+
+```bash
+pkg install qemu-user-x86-64
+proot-distro install ubuntu --architecture x86_64
+proot-distro login ubuntu --shared-tmp
+echo "export DISPLAY=:0" >> ~/.bashrc && exec bash
+```
+
+I was able to get a full graphical x86 librewriter (open-source microsoft word) instance running with this (`apt install libreoffice && lowriter`). But of course— x86 emulation is extremely slow, and it wasn't very practical. Would not recommend; stick to native proot arches.
 
 
 ## 5.4 Termux-API

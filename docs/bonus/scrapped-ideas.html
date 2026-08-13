@@ -136,18 +136,6 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
 </ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/in/gbkorr/"> <i class="bi bi-linkedin" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/gbkorr/"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-</ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
 </div>
@@ -175,9 +163,9 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="slipped-through-the-cracks" class="level1">
 <h1>Slipped Through the Cracks</h1>
-<p>I do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort.</p>
+<p>I do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort. Many of these were going to be articles and/or already had some writing done.</p>
 <hr>
-<p><strong>tugra</strong> (Jul ’26): todo</p>
+<p><strong>tugra</strong> (Jul ’26): I’m interested in the concept of communication that’s impossible to parse algorithmically; i.e., a way for humans to communicate that can’t be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn’t succeed long-term.</p>
 <p><strong>stego</strong> (Jul ’26): There’s a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.</p>
 <p><strong>awkme</strong> (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.</p>
 <p><strong>tunnelvision</strong> (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was the “moustache distortion”, funnily enough…</p>
@@ -599,7 +587,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-      &nbsp;
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gbkorr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gbkorr/">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
