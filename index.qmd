@@ -18,6 +18,12 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 *August*
 
+<img class='thumbnail' src=images/grr-claude.png>
+
+A simple **Claude skill** for learning from agentic tooling as it happens. [link](grr-claude/grr-claude.qmd)
+
+<br clear="left">
+
 *July*
 
 > Gaps? No, [*projects that didn't work out*](bonus/scrapped-ideas.qmd)— science is all about trying and failing! 
@@ -81,5 +87,7 @@ A lightweight set of functions to **render video in the RStudio console** at nat
 <br clear="left"/>
 
 ---
+
+Website built by hand with [Quarto](https://quarto.org/) in RStudio.
 
 Why doesn't this page use the regular RSS listing format? Hindsight is 20/20...

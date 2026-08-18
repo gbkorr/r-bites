@@ -430,7 +430,7 @@ pkg install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch
 
 **mandoc** lets you run `man` to view the documentation (manual) for any function. Surprised this isn't installed by default.
 
-**micro** is a *modern* lightweight text editor— it serves the same role as `nano`, but uses intuitive keybindings like `ctrl+s` to save and `ctrl+q` to quit. Much more convenient, imo.
+**micro** is a *modern* lightweight text editor— it serves the same role as `nano`, but has nicer features like pretty code highlighting. Alternatively you can use `nano -/ <file>` to get the same modern keybinds in nano.
 
 **tmux**[^name] is a "terminal multiplexer", which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run `tmux` to start; once you're in, all hotkeys will start with `ctrl+b`. Press `ctrl+b ?` (i.e. `ctrl+b shift+/`) to see a list of commands. The most important are `ctrl+b % or "` to split a pane horizontally/vertically, `ctrl+b <arrow keys>` to move around panes, and `ctrl+b x` or `exit` to close a pane.
 

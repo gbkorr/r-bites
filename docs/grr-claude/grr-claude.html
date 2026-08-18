@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>&nbsp;&nbsp;R Bites - Rollingwater: a Full Keyboard in 4 Keys</title>
+<title>&nbsp;&nbsp;R Bites - .claude/skills/apprentice:Learning through Agentic Tooling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -39,6 +39,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -156,10 +159,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#basic-idea" id="toc-basic-idea" class="nav-link active" data-scroll-target="#basic-idea">Basic Idea</a></li>
-  <li><a href="#ergonomics" id="toc-ergonomics" class="nav-link" data-scroll-target="#ergonomics">Ergonomics</a></li>
-  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
-  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
+  <li><a href="#manifest" id="toc-manifest" class="nav-link active" data-scroll-target="#manifest">Manifest</a></li>
+  <li><a href="#skill" id="toc-skill" class="nav-link" data-scroll-target="#skill">Skill</a></li>
+  <li><a href="#active-learning" id="toc-active-learning" class="nav-link" data-scroll-target="#active-learning">Active Learning</a></li>
+  <li><a href="#customization" id="toc-customization" class="nav-link" data-scroll-target="#customization">Customization</a></li>
+  <li><a href="#personal-thoughts" id="toc-personal-thoughts" class="nav-link" data-scroll-target="#personal-thoughts">Personal Thoughts</a></li>
   </ul>
 </nav>
     </div>
@@ -168,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Rollingwater: a Full Keyboard in 4 Keys</h1>
+<h1 class="title">.claude/skills/apprentice:<br>Learning through Agentic Tooling</h1>
 </div>
 
 
@@ -179,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 2026</p>
+      <p class="date">August 2026</p>
     </div>
   </div>
   
@@ -191,46 +195,112 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Last summer, I got quite interested in <a href="https://docs.google.com/document/d/1W0jhfqJI2ueJ2FNseR4YAFpNfsUM-_FlREHbpNGmC2o">alternative keyboard layouts</a>, as well as alternative input methods in general. During that time, I came up with my own to fill an open niche: how do you bridge the gap between morse code (1 or 2-button input), and a <a href="https://en.wikipedia.org/wiki/Chorded_keyboard">chording keyboard</a> (6+ keys)?</p>
-<p>My answer was to come up with an input device with just four keys, using the <strong>order they’re pressed</strong> to get around the otherwise-too-few chording combinations. You can try it out at the bottom of this page!</p>
-<section id="basic-idea" class="level2">
-<h2 class="anchored" data-anchor-id="basic-idea">Basic Idea</h2>
-<p>In a chording keyboard, like those used by stenographers, the user presses a <strong>specific combination of keys</strong>, and upon release, a letter or string of letters is entered based on the combination and some internal logic (the chording <em>dictionary</em> for that particular device). Usually, the point of such devices is to enable <strong>significantly faster typing</strong> than a regular keyboard, as is the case for stenography. In other cases, including here, the purpose is to allow a device to be used as a full keyboard despite having fewer than 26 keys.</p>
-<p>Because chording uses key <strong>combinations</strong>, a chording keyboard with <em>n</em> keys has 2<sup><em>n</em></sup> key combinations. You can also double or triple the number of combos by using <em>layers</em>— like the shift key on a normal keyboard— which change the set of symbols the combos produce (but this adds an effort overhead every time you have to switch layers).</p>
-<p>Anyway, you’ll notice that 2<sup>4</sup> = 16 isn’t anywhere near enough combinations for a full set of letters, capitals, and symbols, even with several layers. So instead of just using combinations, Rollingwater uses the <strong>first key of each combo</strong> to break ties, so <strong>A</strong>BCD ≠ <strong>B</strong>ACD ≠ <strong>C</strong>ABD (but <strong>A</strong>BCD = <strong>A</strong>CDB = <strong>A</strong>DBC). This bumps the total combo count up to 4x2<sup>3</sup> = 32, which is enough to fit the alphabet onto one layer— perfect!</p>
-<p>I initially wanted to include every permutation of buttons (i.e., ordered combo), but realized this was both uncomfortable and unnecessary; tracking only the first was much easier to perform and was already enough for the full keyboard I wanted.</p>
+<p>The time finally came for me to properly learn how to use agentic AI. I’d been following local AI excitedly all summer, but it became clear that experience using frontier models would be extremely important for my career.</p>
+<p>So I bought a month of Claude<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it rewrote my project in 15 minutes, booted linux on a device I’d failed thrice at, yada yada. You’ve heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> to do it, and found it so effective that I though it’d be worth sharing.</p>
+<p>I’d like to reiterate that every article<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> on my blog is written without any AI assistance or editing. Unfortunately, common elements of good prose— like conceptual triplets<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, m-dashes<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and general eloquence— are also utilized by AI<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> and have become associated with them due to the rarity of good writers these days.</p>
+<p>You can get the plugin for yourself at <a href="https://github.com/gbkorr/apprentice">https://github.com/gbkorr/apprentice</a></p>
+<section id="manifest" class="level2">
+<h2 class="anchored" data-anchor-id="manifest">Manifest</h2>
+<p>A frontier model like Fable is more than capable of doing nearly all the heavy lifting on a project itself, but this robs users (me) of perhaps the most important reasons to do a project: sure, you end up with something cool, but the real value is in what you learn along the way. Luckily, AI is also more than capable of narrating its decisions and teaching the user what it’s doing. Several techniques already exist for facilitating this; this skill adds another that I think fills a useful niche.</p>
+<p>I have enough OS experience to roughly follow along with what the agent is doing, but bash calls tend to be hard to parse, and I don’t know <em>everything</em> about how Linux works. I figured asking for frequent tidbits about the things it’s interacting with would give me some useful knowledge and exposure.</p>
 </section>
-<section id="ergonomics" class="level2">
-<h2 class="anchored" data-anchor-id="ergonomics">Ergonomics</h2>
-<p>Keyboards with around one key per finger have a particular advantage that makes them easier to use than keyboards with slightly more keys; because you <strong>never have to move your fingers</strong> to a different key, the entire task of finger positioning— responsible for most of the kinesthetic effort in typing— is removed. This gives it and morse code a surprise speed boost that helps recoup some of the disadvantages and complexity demanded by fewer keys.</p>
-<p>Naturally, I made the simplest and most comfortable combos map to the most frequently used letters and symbols, like any good interface would. I like following the interface design principle of <strong>intuition</strong>— wherin a more <em>intuitive</em> keyboard layout, like one where all the vowels are grouped together, is superior to one where the vowels are randomly distributed to be slightly more ergonomically optimal. Intuitive layouts make onboarding <em>feel</em> much more comfortable (and fun!), and are satisfying from a design point of view. This principle manifests in two ways in Rollingwater: all vowels start with the index-finger key, and the non-symbol combos— space, backspace, and the layer keys— use all or almost all the keys, while letters almost always use three or less keys. This gives the vowels and utility combos distinct <strong>muscle memory footprints</strong>, and makes the system much easier to learn.</p>
-<p>I’ve found it to be quite comfortable to learn and type with. For speed, about 2 characters (combos) per second (<strong>24 words per minute</strong>) is reasonable as soon as you learn all the keys. With lots of practice and a set of buttons optimized for the job (regular keyboard keys are too slow for 5+ presses per second), you could get <strong>upwards of 6 cps</strong> or 72 wpm. This is a little faster than Morse (20 wpm for a novice, upwards of 60 for experts), but with three times the amount of symbols— morse has no capitals! Unlike morse, this can function as a <strong>full keyboard interface</strong>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>(For reference, the average typing speed on a regular keyboard is 40 wpm, with around 100 being achievable with some practice. But the world record is <a href="https://www.youtube.com/watch?v=zb_npyHwfNg">300</a>!)</p>
-</section>
-<section id="usage" class="level2">
-<h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<p>Using rollingwater is quite straightforward. To use a certain combo, press its primary key (blue) followed by its secondary keys (green). A combo is executed once all keys are released.</p>
-<p>There are four layers: <strong>lowercase</strong> (white), <strong>uppercase</strong> (yellow), <strong>symbols1</strong> (blue), and <strong>symbols2</strong> (magenta). Each layer has its characters, the SPACE and BACKSPACE combos, and combos for changing layers. Layers are “sticky”; if you press, for example, CAPS, the next character will use the caps layer, after which it will go back to the regular lowercase characters. This behavior is inverted if you instead lock caps by pressing CAPS twice in a row. Symbols follow this same behavior, and having both CAPS and SYMBOLS active lets you access symbols2.</p>
-<p>There’s also a few <strong>macros</strong>, like STOP (period + space + caps, for starting a new sentence) and DELETEWORD (deletes the last word). The symbols layer has some commands like cut/copy/paste/undo/arrow keys (and plenty of room for more), but they aren’t implemented in the demo. In real hardware, it would be quite easy to map these to the equivalent keyboard input.</p>
-</section>
-<section id="demo" class="level2">
-<h2 class="anchored" data-anchor-id="demo">Demo</h2>
-<p>I made<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> this tool a year ago in p5.js, since it was the most convenient way to implement it quickly for a demonstration. It provides <strong>two sets of keys</strong>— one for each hand, which can also be used in tandem<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. The dictionary on the right is for the right hand; the left hand is <strong>mirrored</strong>. The tool also shows some indicators for currently pressed keys, the last combo, and the currently active or locked layers (arrows + colored circle next to the input display).</p>
-<p>Just click on the window and start “typing”!</p>
-<div style="overflow-x: hidden">
-<iframe src="https://openprocessing.org/sketch/2706541/embed/" style="width: 1600px; height: 800px; transform: scale(0.5); transform-origin: top left;"></iframe>
+<section id="skill" class="level2">
+<h2 class="anchored" data-anchor-id="skill">Skill</h2>
+<p>The concept behind this skill is to de-obfuscate Claude’s agentic decisions so that the user can “learn by watching”— if I’m an apprentice apothecary, part of my job is to watch my master as they work to get exposure to the skills I need, and part of their role is to provide tips and info on what and why they’re doing. This skill provides that— a subagent listens to the conversation and frequently chimes in with short blurbs about relevant concepts Claude’s using, like the purpose of a niche CLI tool it used or the goal of the repo structure it just created.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="qemu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Image from an early version, but demonstrative of the sort of comments it gives."><img src="qemu.png" class="img-fluid figure-img" width="400" alt="Image from an early version, but demonstrative of the sort of comments it gives."></a></p>
+<figcaption>Image from an early version, but demonstrative of the sort of comments it gives.</figcaption>
+</figure>
 </div>
+<p>I was careful with how I did the implementation and prompting (plugin and prompts drafted by Claude, but with significant higher-level guidance, tweaking, and testing— Claude is good at soloing a first draft of things like this, but making a good skill takes hands-on polish). The plugin runs a second agent for the entirety of the conversation (Sonnet, which barely adds additional usage to a Fable session), and it injects info blurbs using the <code>MessageDisplay</code> hook visible only to the user. This ensures that it never touches<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> the main agent, which is important— the skill <strong>can’t influence Claude’s actual work</strong>, and <strong>only</strong> exists to give additional context and info to the user. There’s a couple reasons for this— mainly, the main agent would forget to write blurbs, but I think maintaining its purity of output is important here too. The skill is designed to be as lightweight as possible; see the <a href="#customization">customization</a> section later on this page.</p>
+<p>Here’s another demo with the current UI: the narrator gives good insight into the agentic work Claude is doing. The left was during a one-shot of the demo prompt <code>/apprentice Please create a webpage that shows an infographic of the most visited wikipedia articles over the past week.</code>, and the right from when I asked it to benchmark my computer specs. Again, this skill <em>doesn’t affect the main process</em>— Claude had no idea these comments were being generated as it worked, which prevents the skill from deteriorating the model’s abilities.</p>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><a href="debugging.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="debugging.png" class="img-fluid quarto-figure quarto-figure-right figure-img" width="400"></a></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><a href="moredemo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="moredemo.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="400"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="active-learning" class="level2">
+<h2 class="anchored" data-anchor-id="active-learning">Active Learning</h2>
+<pre><code> ▐▛███▜▌
+▝▜█████▛▘
+  ▘▘ ▝▝</code></pre>
+<p>So here’s how I use the tool to learn as I watch Claude work instead of sitting back and letting it do my dishes for me. Let me be clear— Claude is still doing my dishes for me, but now it’s telling me how it’s doing them and I’m asking additional questions so that I’ll have enough experience to do the dishes on my own if I have to.</p>
+<p>I already use <strong>/btw</strong> frequently to learn about keywords and concepts I’m unfamiliar with— it’s incredibly useful— but this skill sort of adds a new dimension to what I can learn from a session. Getting to read a narration of the actual agentic workflow gives a TON of additional information that I wouldn’t have gotten otherwise, unless I did the work myself.</p>
+<p>Sometimes it can be a bit hectic to parse through, but I can always… ignore blurbs that don’t look interesting. I’ve decided that the volume of commentary is more benefit than downside, but it’s very easy to tweak— just add a line to the narrator prompt (see next section) specifying more or less frequent narration. You can also add topics the blacklist if you’re very familiar with them already; I put git/Github integration in my blacklist, for example.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="screen.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" data-glightbox="description: .lightbox-desc-4" title="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."><img src="screen.png" class="img-fluid figure-img" alt="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."></a></p>
+<figcaption>Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions.</figcaption>
+</figure>
+</div>
+</section>
+<section id="customization" class="level2">
+<h2 class="anchored" data-anchor-id="customization">Customization</h2>
+<p>As always, my commitment to elegant and minimal solutions and approaches has been a boon when working with AI. This skill is intentionally extremely light, and it’s very easy to customize; most notably, you can just edit <code>skills/apprentice/scripts/narrator-prompt.md</code> to ask the narrator to say… literally anything based on the conversation, since it has full context.</p>
+<p>The goal for this skill was specifically to give me learning and exposure, but I think it could be quite useful if converted into <strong>a full “wtf is claude doing” tool</strong>— based on my experience with the default version, the blurbs will be quite accurate to what and why Claude is running or choosing to do at any given moment, and it would cover a huge gap between obfuscated tool calls and user understanding. You’d just have to tweak narrator-prompt.md for that purpose.</p>
+<p>Here’s the default <code>narrator-prompt.md</code> for reference:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="narrator-prompt.md">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+narrator-prompt.md
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2000px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fapprentice%2Fblob%2Fmain%2Fskills%2Fapprentice%2Fscripts%2Fnarrator-prompt.md&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
+</div>
+</div>
+</div>
+</section>
+<section id="personal-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="personal-thoughts">Personal Thoughts</h2>
+<p>The loss of small-scale coding as a career-defining skill hurts a lot (it’s my #1 favorite thing to do, after all), but progress is progress. Having a good understanding of how coding works and how to organize and manage a project, which are the other skills you develop while coding. I just worry it’ll be hard to come up with projects if it’s always more effective to vibecode them :/</p>
+<p>Here’s a finishing quote from a goofy daily stoic quotes applet I have on my linux desktop:</p>
+<blockquote class="blockquote">
+<p>The man who is truly good and wise neither struggles with adversity nor complains of his lot; rather, he takes heart from even the harshest of conditions. -Musonius Rufus, Lecture X</p>
+</blockquote>
+<p>Who knows where AI will take us— but the sun will keep rising. Carpe diem.</p>
 
 
+<div class="hidden" aria-hidden="true">
+<span class="glightbox-desc lightbox-desc-1">Image from an early version, but demonstrative of the sort of comments it gives.</span>
+<span class="glightbox-desc lightbox-desc-4">Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions.</span>
+</div>
 </section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>If all the necessary layers are added. I haven’t designed a layer with keys like <code>pageup</code> yet, since I don’t really need them…<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>By hand, thank you very much. But seriously— for something like this, it would take more work just to confirm that an LLM has interpreted your wishes correctly, even if it were a perfect coder!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Although layers are specific to each hand, which I think was a poor choice in retrospect.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I figured that if I really want good practice, I should use the best model possible (especially since weaker models will likely be just as good within in a year). What I wasn’t expecting is for the usage limits to be <strong>incredibly</strong> generous— I think it’s something about how I use Claude, but I’ve never even come close to running out of Fable on the max plan. With that said, give your money to open weights instead :)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>technically a plugin<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>As well as the website itself, and almost all code featured. The scripts for this plugin are Claude-authored, though.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Present in this very sentence! Although there’s an argument to be made that triplets actually aren’t great for prose. My opinion is mixed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Why the heck is the correct term an “em dash”?? I don’t call the letter B “bee”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I’ve recently abandoned my beloved overuse of <strong>bold text</strong> because it just looks like Claude prose to me now.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Oh god, I’ve been reading too many claude logs. I can feel the subtle shifts in my prose that mimic it.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -670,6 +740,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 

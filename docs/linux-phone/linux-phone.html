@@ -128,6 +128,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
+</i> 
+ <span class="dropdown-text">Claude Apprentice</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../ggufr/ggufr.html"><i class="bi bi-stars" role="img">
 </i> 
  <span class="dropdown-text">LLM Inference in R</span></a>
@@ -738,7 +743,7 @@ Recommended Packages
 <p>Install with:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg</span> install mandoc micro tmux timg cmus cmatrix fastfetch cpufetch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>mandoc</strong> lets you run <code>man</code> to view the documentation (manual) for any function. Surprised this isn’t installed by default.</p>
-<p><strong>micro</strong> is a <em>modern</em> lightweight text editor— it serves the same role as <code>nano</code>, but uses intuitive keybindings like <code>ctrl+s</code> to save and <code>ctrl+q</code> to quit. Much more convenient, imo.</p>
+<p><strong>micro</strong> is a <em>modern</em> lightweight text editor— it serves the same role as <code>nano</code>, but has nicer features like pretty code highlighting. Alternatively you can use <code>nano -/ &lt;file&gt;</code> to get the same modern keybinds in nano.</p>
 <p><strong>tmux</strong><a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> is a “terminal multiplexer”, which is just a fancy term for software that lets you have multiple terminal windows open side-by-side in the terminal. Run <code>tmux</code> to start; once you’re in, all hotkeys will start with <code>ctrl+b</code>. Press <code>ctrl+b ?</code> (i.e.&nbsp;<code>ctrl+b shift+/</code>) to see a list of commands. The most important are <code>ctrl+b % or "</code> to split a pane horizontally/vertically, <code>ctrl+b &lt;arrow keys&gt;</code> to move around panes, and <code>ctrl+b x</code> or <code>exit</code> to close a pane.</p>
 <p><strong>timg</strong> lets you view images and video within the terminal by running <code>timg &lt;file&gt;</code>. Pretty useful if you encounter images while using the terminal.</p>
 <p><strong>cmus</strong> makes it easy to listen to music while using the terminal. Run it with <code>cmus</code>, add a playlist with <code>:add &lt;folder&gt;</code>, and navigate the songlist by pressing <code>2</code> and moving up and down with the arrow keys. <code>Enter</code> to play the song, <code>c</code> to pause/unpause, and <code>q</code> to quit.</p>

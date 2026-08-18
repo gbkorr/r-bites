@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Claude Apprentice"
+            icon: asterisk
+            href: grr-claude/grr-claude.qmd
           - text: "LLM Inference in R"
             icon: stars
             href: ggufr/ggufr.qmd
