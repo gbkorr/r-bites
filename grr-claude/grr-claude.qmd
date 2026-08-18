@@ -10,10 +10,9 @@ lightbox: true
 
 The time finally came for me to properly learn how to use agentic AI. I'd been following local AI excitedly all summer, but it became clear that experience using frontier models would be extremely important for my career.
 
-So I bought a month of Claude[^usage], it rewrote my project in 15 minutes, booted linux on a device I'd failed thrice at, yada yada. You've heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill[^plug] to do it, and found it so effective that I though it'd be worth sharing.
+So I bought a month of Claude, it rewrote my project in 15 minutes, booted linux on a device I'd failed thrice at, yada yada. You've heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill[^plug] to do it, and found it so effective that I though it'd be worth sharing.
 
 [^plug]: technically a plugin
-[^usage]: I figured that if I really want good practice, I should use the best model possible (especially since weaker models will likely be just as good within in a year). What I wasn't expecting is for the usage limits to be **incredibly** generous— I think it's something about how I use Claude, but I've never even come close to running out of Fable on the max plan. With that said, give your money to open weights instead :)
 
 I'd like to reiterate that every article[^design] on my blog is written without any AI assistance or editing. Unfortunately, common elements of good prose— like conceptual triplets[^sent], m-dashes[^em], and general eloquence— are also utilized by AI[^ab] and have become associated with them due to the rarity of good writers these days.
 

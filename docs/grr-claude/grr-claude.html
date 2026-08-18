@@ -196,8 +196,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>The time finally came for me to properly learn how to use agentic AI. I’d been following local AI excitedly all summer, but it became clear that experience using frontier models would be extremely important for my career.</p>
-<p>So I bought a month of Claude<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it rewrote my project in 15 minutes, booted linux on a device I’d failed thrice at, yada yada. You’ve heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> to do it, and found it so effective that I though it’d be worth sharing.</p>
-<p>I’d like to reiterate that every article<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> on my blog is written without any AI assistance or editing. Unfortunately, common elements of good prose— like conceptual triplets<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, m-dashes<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and general eloquence— are also utilized by AI<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> and have become associated with them due to the rarity of good writers these days.</p>
+<p>So I bought a month of Claude, it rewrote my project in 15 minutes, booted linux on a device I’d failed thrice at, yada yada. You’ve heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to do it, and found it so effective that I though it’d be worth sharing.</p>
+<p>I’d like to reiterate that every article<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> on my blog is written without any AI assistance or editing. Unfortunately, common elements of good prose— like conceptual triplets<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, m-dashes<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, and general eloquence— are also utilized by AI<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and have become associated with them due to the rarity of good writers these days.</p>
 <p>You can get the plugin for yourself at <a href="https://github.com/gbkorr/apprentice">https://github.com/gbkorr/apprentice</a></p>
 <section id="manifest" class="level2">
 <h2 class="anchored" data-anchor-id="manifest">Manifest</h2>
@@ -213,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
 <figcaption>Image from an early version, but demonstrative of the sort of comments it gives.</figcaption>
 </figure>
 </div>
-<p>I was careful with how I did the implementation and prompting (plugin and prompts drafted by Claude, but with significant higher-level guidance, tweaking, and testing— Claude is good at soloing a first draft of things like this, but making a good skill takes hands-on polish). The plugin runs a second agent for the entirety of the conversation (Sonnet, which barely adds additional usage to a Fable session), and it injects info blurbs using the <code>MessageDisplay</code> hook visible only to the user. This ensures that it never touches<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> the main agent, which is important— the skill <strong>can’t influence Claude’s actual work</strong>, and <strong>only</strong> exists to give additional context and info to the user. There’s a couple reasons for this— mainly, the main agent would forget to write blurbs, but I think maintaining its purity of output is important here too. The skill is designed to be as lightweight as possible; see the <a href="#customization">customization</a> section later on this page.</p>
+<p>I was careful with how I did the implementation and prompting (plugin and prompts drafted by Claude, but with significant higher-level guidance, tweaking, and testing— Claude is good at soloing a first draft of things like this, but making a good skill takes hands-on polish). The plugin runs a second agent for the entirety of the conversation (Sonnet, which barely adds additional usage to a Fable session), and it injects info blurbs using the <code>MessageDisplay</code> hook visible only to the user. This ensures that it never touches<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> the main agent, which is important— the skill <strong>can’t influence Claude’s actual work</strong>, and <strong>only</strong> exists to give additional context and info to the user. There’s a couple reasons for this— mainly, the main agent would forget to write blurbs, but I think maintaining its purity of output is important here too. The skill is designed to be as lightweight as possible; see the <a href="#customization">customization</a> section later on this page.</p>
 <p>Here’s another demo with the current UI: the narrator gives good insight into the agentic work Claude is doing. The left was during a one-shot of the demo prompt <code>/apprentice Please create a webpage that shows an infographic of the most visited wikipedia articles over the past week.</code>, and the right from when I asked it to benchmark my computer specs. Again, this skill <em>doesn’t affect the main process</em>— Claude had no idea these comments were being generated as it worked, which prevents the skill from deteriorating the model’s abilities.</p>
 <div>
 
@@ -294,13 +294,12 @@ narrator-prompt.md
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>I figured that if I really want good practice, I should use the best model possible (especially since weaker models will likely be just as good within in a year). What I wasn’t expecting is for the usage limits to be <strong>incredibly</strong> generous— I think it’s something about how I use Claude, but I’ve never even come close to running out of Fable on the max plan. With that said, give your money to open weights instead :)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>technically a plugin<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>As well as the website itself, and almost all code featured. The scripts for this plugin are Claude-authored, though.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Present in this very sentence! Although there’s an argument to be made that triplets actually aren’t great for prose. My opinion is mixed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Why the heck is the correct term an “em dash”?? I don’t call the letter B “bee”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>I’ve recently abandoned my beloved overuse of <strong>bold text</strong> because it just looks like Claude prose to me now.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Oh god, I’ve been reading too many claude logs. I can feel the subtle shifts in my prose that mimic it.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>technically a plugin<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>As well as the website itself, and almost all code featured. The scripts for this plugin are Claude-authored, though.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Present in this very sentence! Although there’s an argument to be made that triplets actually aren’t great for prose. My opinion is mixed.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Why the heck is the correct term an “em dash”?? I don’t call the letter B “bee”.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>I’ve recently abandoned my beloved overuse of <strong>bold text</strong> because it just looks like Claude prose to me now.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Oh god, I’ve been reading too many claude logs. I can feel the subtle shifts in my prose that mimic it.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -740,7 +739,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom","selector":".lightbox"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
