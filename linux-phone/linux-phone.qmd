@@ -513,7 +513,20 @@ termux-camera-photo -c 1 tmp && timg tmp && rm tmp
 date +"%A; %B %dth %Y" | termux-tts-speak
 ```
 
-It also offers some pretty powerful tools for using your phone as a sensor, with commands like `termux-location` (GPS), `termux-torch` (flashlight), and `termux-sensor` (gyroscope et al.).
+**Type with voice**:  
+Usage: say "say <text> over"; it will inject <text> as keyboard text into whatever window you're focused on. `termux-speech-to-text` likes to cut off the final word so you have to end with a dummy phrase like "over".
+
+```bash
+while true; do
+txt="$(termux-speech-to-text)"
+txt="${txt,,}" #lowercase
+cmd="${txt%% *}" #get first word
+txt="${txt#* }" #remove first word
+test "$cmd" = "say" && xdotool type "$txt"
+done
+```
+
+Termux-API also offers some pretty powerful tools for using your phone as a sensor, with commands like `termux-location` (GPS), `termux-torch` (flashlight), and `termux-sensor` (gyroscope et al.).
 
 
 # **6. Augmented Reality**
