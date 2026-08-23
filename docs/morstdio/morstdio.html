@@ -130,6 +130,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../clouds/clouds.html"><i class="bi bi-clouds-fill" role="img">
+</i> 
+ <span class="dropdown-text">Terminal Cloud Renderer</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
 </i> 
  <span class="dropdown-text">Claude Apprentice</span></a>
@@ -357,7 +362,7 @@ Basic Usage
 </section>
 <section id="commands" class="level3">
 <h3 class="anchored" data-anchor-id="commands">4.3 Commands</h3>
-<p>Morsdtio has a <strong>modular command system</strong>. If you type <code>":s "</code> (delete word), for example, it will remove the characters <code>":s "</code> and execute the “delete word” command. If you type something that isn’t a command, like <code>":y "</code>, it will remain as plaintext.</p>
+<p>Morstdio has a <strong>modular command system</strong>. If you type <code>":s "</code> (delete word), for example, it will remove the characters <code>":s "</code> and execute the “delete word” command. If you type something that isn’t a command, like <code>":y "</code>, it will remain as plaintext.</p>
 <p>Commands are used for everything, including sending messages (<code>:w</code>) and repeating recent output (<code>:r</code>). When you successfully execute a command, it will flash a distinct pattern corresponding to the command— if you don’t get the flash feedback you were expecting, you mistyped! (And should run <code>:+</code> to clear up your mistake)</p>
 <p>Note that all commands <strong>start with a colon</strong> and end in a space, to minimize the likelihood of accidentally typing one. I like calling these “vim-like”, though the comparison is a bit silly in morse…</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Commands">

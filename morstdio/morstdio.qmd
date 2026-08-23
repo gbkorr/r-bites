@@ -112,7 +112,7 @@ Morstdio opens a bash shell that you can type characters into via morse code.
 
 ### 4.3 Commands
 
-Morsdtio has a **modular command system**. If you type `":s "` (delete word), for example, it will remove the characters `":s "` and execute the "delete word" command. If you type something that isn't a command, like `":y "`, it will remain as plaintext.
+Morstdio has a **modular command system**. If you type `":s "` (delete word), for example, it will remove the characters `":s "` and execute the "delete word" command. If you type something that isn't a command, like `":y "`, it will remain as plaintext.
 
 Commands are used for everything, including sending messages (`:w`) and repeating recent output (`:r`). When you successfully execute a command, it will flash a distinct pattern corresponding to the command— if you don't get the flash feedback you were expecting, you mistyped! (And should run `:+` to clear up your mistake)
 

@@ -298,6 +298,8 @@ Before (or after) starting the desktop, let's change some settings. Click and ho
 You can changes mouse speed here, and mouse acceleration from `Applications` -> `Settings` -> `Mouse and Touchpad` on the Xfce desktop. Note: this is quite sensitive to DPI, and low-DPI mice will feel sluggish. Modern mice typically have good enough DPI, though.
 :::
 
+You'll notice that the Android keyboard hotkeys (like cmd+tab) still apply; I just got used to avoiding them, but it's also possible to disable them via adb.
+
 ## 4.2 Start Xfce
 Now you can go back to Termux and run `xfce` to open the desktop. Your mouse (heh) and keyboard work normally, and it feels just as responsive as a normal computer.
 
