@@ -1,3 +1,4 @@
+r-bites.Rproj
 .Rproj.user
 .Rhistory
 .RData
@@ -9,3 +10,5 @@ tugra
 
 /.quarto/
 clouds/raw/
+
+**/*.quarto_ipynb
