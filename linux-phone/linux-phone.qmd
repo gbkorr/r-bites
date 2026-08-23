@@ -529,6 +529,7 @@ done
 Termux-API also offers some pretty powerful tools for using your phone as a sensor, with commands like `termux-location` (GPS), `termux-torch` (flashlight), and `termux-sensor` (gyroscope et al.).
 
 
+
 # **6. Augmented Reality**
 
 :::{.callout-warning}
