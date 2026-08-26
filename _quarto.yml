@@ -13,6 +13,12 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Tiny Wikipedia RAG"
+            icon: book
+            href: ratsearch/ratsearch.qmd
+          - text: "Terminal Cloud Renderer"
+            icon: clouds-fill
+            href: clouds/clouds.qmd
           - text: "Claude Apprentice"
             icon: asterisk
             href: grr-claude/grr-claude.qmd

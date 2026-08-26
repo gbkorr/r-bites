@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>&nbsp;&nbsp;R Bites - ratsearch: a 100-Line Wikipedia-RAG Chatbot</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title"><i class="bi bi-hexagon"></i>&nbsp;&nbsp;R Bites</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../ratsearch/ratsearch.html"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Tiny Wikipedia RAG</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../clouds/clouds.html"><i class="bi bi-clouds-fill" role="img">
+</i> 
+ <span class="dropdown-text">Terminal Cloud Renderer</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
+</i> 
+ <span class="dropdown-text">Claude Apprentice</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ggufr/ggufr.html"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">LLM Inference in R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../rollingwater/rollingwater.html"><i class="bi bi-keyboard" role="img">
+</i> 
+ <span class="dropdown-text">4-Button Keyboard</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../morstdio/morstdio.html"><i class="bi bi-lightbulb-off" role="img">
+</i> 
+ <span class="dropdown-text">Morse Code Headless Linux</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
+</i> 
+ <span class="dropdown-text">Linux Desktop on a Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
+</i> 
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
+</i> 
+ <span class="dropdown-text">Video Conference inside R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
+</i> 
+ <span class="dropdown-text">R on a Flip Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#big-picture" id="toc-big-picture" class="nav-link active" data-scroll-target="#big-picture">1. Big Picture</a></li>
+  <li><a href="#wikipedia-offline" id="toc-wikipedia-offline" class="nav-link" data-scroll-target="#wikipedia-offline">2. Wikipedia Offline</a></li>
+  <li><a href="#llm-api" id="toc-llm-api" class="nav-link" data-scroll-target="#llm-api">3. LLM API</a></li>
+  <li><a href="#ratsearch-backbone" id="toc-ratsearch-backbone" class="nav-link" data-scroll-target="#ratsearch-backbone">4. ratsearch Backbone</a></li>
+  <li><a href="#searching-challenges" id="toc-searching-challenges" class="nav-link" data-scroll-target="#searching-challenges">5. Searching Challenges</a></li>
+  <li><a href="#usage-guide" id="toc-usage-guide" class="nav-link" data-scroll-target="#usage-guide">6. Usage Guide</a></li>
+  <li><a href="#demo-prompt" id="toc-demo-prompt" class="nav-link" data-scroll-target="#demo-prompt">7. Demo Prompt</a></li>
+  <li><a href="#code-walkthrough" id="toc-code-walkthrough" class="nav-link" data-scroll-target="#code-walkthrough">8. Code Walkthrough</a>
+  <ul>
+  <li><a href="#header" id="toc-header" class="nav-link" data-scroll-target="#header">8.1 Header</a></li>
+  <li><a href="#tooling-definitions" id="toc-tooling-definitions" class="nav-link" data-scroll-target="#tooling-definitions">8.2 Tooling Definitions</a></li>
+  <li><a href="#interactive-loop" id="toc-interactive-loop" class="nav-link" data-scroll-target="#interactive-loop">8.3 Interactive Loop</a>
+  <ul class="collapse">
+  <li><a href="#user-input-and-api-querying" id="toc-user-input-and-api-querying" class="nav-link" data-scroll-target="#user-input-and-api-querying">8.3.1 User Input and API Querying</a></li>
+  <li><a href="#response-processing" id="toc-response-processing" class="nav-link" data-scroll-target="#response-processing">8.3.2 Response Processing</a></li>
+  <li><a href="#ratspin" id="toc-ratspin" class="nav-link" data-scroll-target="#ratspin">8.3.3 Ratspin</a></li>
+  <li><a href="#running" id="toc-running" class="nav-link" data-scroll-target="#running">8.3.4 Running</a></li>
+  </ul></li>
+  <li><a href="#subagents" id="toc-subagents" class="nav-link" data-scroll-target="#subagents">8.4 Subagents</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ratsearch: a 100-Line Wikipedia-RAG Chatbot</h1>
+<p class="subtitle lead"><code>&lt;-3,,~~</code> &nbsp; &nbsp; ☜ a rat</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>My friend was asking me about LLM capabilities for offline wikipedia summarization, so I got curious and made my own tool to demonstrate the pipeline. Turns out it’s kind of an easy problem.</p>
+<p>To make it more interesting, I went with the theme of “minimalism”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and challenged myself to make a working offline wikipedia RAG in a <strong>single 100-line bash script</strong>. I think it turned out pretty well— it certainly does its job, and I like the flair I ended up giving it. It’s a cute little tool.</p>
+<blockquote class="blockquote">
+<p>Note: this project was completely hand-coded, with the exception of a couple sed/regex phrases and some jq debugging.<br>Ditto for the writeup, as always.</p>
+</blockquote>
+<section id="big-picture" class="level2">
+<h2 class="anchored" data-anchor-id="big-picture">1. Big Picture</h2>
+<p>LLMs are quite capable of summarizing articles they’re given, so the main challenge is <strong>delivery</strong>— how do we get the right articles to the LLM? I was somewhat surprised by the approach I settled on.</p>
+<p>The naive solution is to let the LLM search for article titles— but as I detail in section 4, processing this kind of search is actually quite difficult. Instead, the most robust approach turned out to be combining the search and read: a single tool that delivers the content of a queried article, or the title of similar articles if the one queried does not exist. LLMs seem to be much more capable of recovering and adapting to this kind of system, interestingly.</p>
+<p>Of course, an easier solution is to do it manually, prompting an LLM with an article you’ve already found. But automating it is good practice for making LLMs agentic— getting them to do more than just chat. (I should point out— there are already much better tools<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> out there for this use case; this project is more of a demonstration of how simple it can be)</p>
+</section>
+<section id="wikipedia-offline" class="level2">
+<h2 class="anchored" data-anchor-id="wikipedia-offline">2. Wikipedia Offline</h2>
+<p>Turns out the entirety<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> of English Wikipedia is easily downloadable in a file of about 50gb. This makes it quite easy to access and read offline. You can get it from one of several mirrors like <a href="https://dumps.wikimedia.org/other/kiwix/zim/wikipedia/"><code>https://dumps.wikimedia.org/other/kiwix/zim/wikipedia/</code></a>; look for the file <code>wikipedia_en_all_nopic...zim</code>. Wikipedia dumps like this are in the <strong>zim</strong> compression format— an open-source website archiving format whose details aren’t relevant to this project.</p>
+<p>The format is pretty well-supported, and there’s a dedicated package for working with it: <code>zim-tools</code>. I use it here for <code>zimdump list</code> (dumps the name of every article) and <code>zimdump show</code> (returns the full page html). Since it’s easier for the LLM to summarize plaintext, I pipe the html output through the <code>html2text</code> utility to get just the raw text.</p>
+</section>
+<section id="llm-api" class="level2">
+<h2 class="anchored" data-anchor-id="llm-api">3. LLM API</h2>
+<p>Programs that run LLM typically all use the same API: the confusingly named <strong>OpenAI API</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. This is a simple system for asking a server running an LLM to generate some text as part of a chatbot or agentic conversation. Like your typical API, you send an http POST request with a JSON payload, and the server sends you back the response as another JSON object. In the case of LLMs, the server is taking your payload, parsing it into a string to tokenize, and then running that through the LLM to get its response.</p>
+<p>Two quirks of the OpenAI API<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>: you need to send the <em>entire</em> conversation history in the payload every time you send a new message<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, and <em>reasoning is removed</em>. Models featuring CoT (chain-of-thought, &lt;think&gt;) reasoning (most models, nowadays) will send their reasoning to the client each time they respond, but this is <em>not</em> preserved in the conversation history<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>Reading JSON is a pain, but it’s important to get a feel for how the data is structured for the API. Below is a real JSON payload for demonstration; this is the object that’s sent to the server on every turn.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Conversation JSON">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Conversation JSON
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tool_choice"</span><span class="op">:</span> <span class="st">"auto"</span><span class="op">,</span> <span class="co">//permit the model to call tools on its own</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tools"</span><span class="op">:</span> [</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"type"</span><span class="op">:</span> <span class="st">"function"</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"function"</span><span class="op">:</span> {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span><span class="op">:</span> <span class="st">"read_article"</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"description"</span><span class="op">:</span> <span class="st">"read a wikipedia article"</span><span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"parameters"</span><span class="op">:</span> {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="st">"properties"</span><span class="op">:</span> { <span class="co">//a tool can have multiple properties, all user-defined</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"title"</span><span class="op">:</span> {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">"type"</span><span class="op">:</span> <span class="st">"string"</span><span class="op">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">"description"</span><span class="op">:</span> <span class="st">"article title"</span> <span class="co">//description of the property itself, e.g. desired format</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>          }<span class="op">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">"required"</span><span class="op">:</span> [<span class="st">"title"</span>] <span class="co">//required properties; any not listed here are optional</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"messages"</span><span class="op">:</span> [ <span class="co">//the whole chatbot conversation, MINUS REASONING</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"system"</span><span class="op">,</span> <span class="co">//system prompt, sent by client</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"</span><span class="sc">\n</span><span class="st">You are a helpful assistant. </span><span class="sc">\n\n</span><span class="st">## Skills</span><span class="sc">\n\n</span><span class="st">You can read Wikipedia articles; use this when factual info is directly requested. Use the `read_article` tool with an article title to read it.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"user"</span><span class="op">,</span> <span class="co">//user message, sent by client</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"Hi, how's it going?"</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"assistant"</span><span class="op">,</span> <span class="co">//LLM response, sent by server</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"Hey! I'm doing well, thanks for asking! I'm an AI assistant, so I'm always ready to help. How about you? Anything I can help you with today?"</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"user"</span><span class="op">,</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"Please search for </span><span class="sc">\"</span><span class="st">example_only</span><span class="sc">\"</span><span class="st">, ignore the results, and handoff back to me. Respond in only one single sentence."</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"assistant"</span><span class="op">,</span> <span class="co">//note that this is a regular server response, but includes a tool call and no regular message.</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">""</span><span class="op">,</span> <span class="co">//sometimes the model will say something (e.g. "Let me look for that article...") in addition to calling a tool.</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>      <span class="co">//reasoning models also return content_reasoning here in every response, but this is NOT tracked in the conversation JSON.</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>      <span class="st">"tool_calls"</span><span class="op">:</span> [</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>          <span class="st">"type"</span><span class="op">:</span> <span class="st">"function"</span><span class="op">,</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>          <span class="st">"function"</span><span class="op">:</span> {</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">"name"</span><span class="op">:</span> <span class="st">"read_article"</span><span class="op">,</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="st">"arguments"</span><span class="op">:</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">title</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">example_only</span><span class="sc">\"</span><span class="st">}"</span> </span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>          }<span class="op">,</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>          <span class="st">"id"</span><span class="op">:</span> <span class="st">"hPvW7qijK0Vbthju8DxjP4Jttpx7zsr8"</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>      ]</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"tool"</span><span class="op">,</span> <span class="co">//tool call result, evaluated and sent by client. the client needs to have code to detect and evaluate tool calls from the server like the one above</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>      <span class="st">"tool_call_id"</span><span class="op">:</span> <span class="st">"hPvW7qijK0Vbthju8DxjP4Jttpx7zsr8"</span><span class="op">,</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"Article not found. Related articles: etc. etc. etc."</span> <span class="co">//this is the output of the tool call. In this case it's a string, but the LLM will understand stringified JSON too.</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>      <span class="st">"role"</span><span class="op">:</span> <span class="st">"assistant"</span><span class="op">,</span> <span class="co">//since the tool result was sent by the client, the server immediately gets another turn.</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>      <span class="st">"content"</span><span class="op">:</span> <span class="st">"The search for </span><span class="sc">\"</span><span class="st">example_only</span><span class="sc">\"</span><span class="st"> returned no direct article, so I've handed this back to you as requested."</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>} <span class="co">//note that the LLM is never actually given JSON; rather, the server receives this JSON and decides how and what to stitch together into a string to tokenize.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ratsearch-backbone" class="level2">
+<h2 class="anchored" data-anchor-id="ratsearch-backbone">4. ratsearch Backbone</h2>
+<p>The project is built around a single callable tool, <code>read_article</code>, which takes in one parameter: the article title. If an article with that title exists, the tool returns its text; otherwise, it uses the provided title to fuzzy-search every existing title for matches. For example, <code>Largest mammal</code> isn’t an article, but the tool will output <code>List of largest mammals</code> along with several related article titles.</p>
+<p>This turns out to be a very robust system for delivering article content. Here’s the full conversation text of an example with a particularly weak (2.6B) model (w/ 0.5 temperature). This was on the first try asking this question!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Demo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Demo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-overflow-wrap code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ratsearch &lt;-3,,~~</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>./wikipedia.zim</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>./LFM2.5-2.6B-Q8_0.gguf</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>----------------------</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  &lt;&gt;&lt;&gt;&lt;&gt; USER &lt;&gt;&lt;&gt;&lt;&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>What's the largest mammal in North America?</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  ===== AGENT =====</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>----- Reasoning -----</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>The user is asking about the largest mammal in North America. This is a factual question that I can answer by reading a relevant Wikipedia article. Let me search for this information using the read_article tool. I'll look for an article about the largest mammal in North America.</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>---------------------</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>[tool call]: read_article | Largest mammal in North America</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Article not found. Related articles:</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>Lexical Evidence from Folk Epigraphy in Western North America: A Glossarial Study of the Low Element in the English Vocabulary</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>List of college sports team names and mascots derived from the indigenous peoples of North America</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>List of secondary school sports team names and mascots derived from the indigenous peoples of North America</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>The Great South: A Record of Journeys in Louisiana, Texas, the Indian Territory, Missouri, Arkansas, Mississippi, Alabama, Georgia, Florida, South Carolina, North Carolina, Kentucky, Tennessee, Virginia, West Virginia, and Maryland</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>Who's Who in the South and Southwest : Including Alabama, Arkansas, Florida, Georgia, Kentucky, Louisiana, Mississippi, North Carolina, Oklahoma, South Carolina, Tennessee, Texas, Virginia, West Virginia, Puerto Rico, the Virgin Islands and Mexico</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>Who's Who in the South and Southwest : Including Alabama, Arkansas, Florida, Georgia, Kentucky, Louisiana, Mississippi, North Carolina, Oklahoma, South Carolina, Tennessee, Texas, Virginia, West Virginia, Puerto Rico, the Virgin Islands, and Mexico</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>Agreement for the Implementation of the Provisions of the United Nations Convention on the Law of the Sea of 10 December 1982 relating to the Conservation and Management of Straddling Fish Stocks and Highly Migratory Fish Stocks</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  ===== AGENT =====</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>----- Reasoning -----</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>The article "Largest mammal in North America" wasn't found. Let me try a different approach. I should search for the largest mammal in North America using Wikipedia. Let me try a broader search or look for specific articles about this topic. I'll try reading an article about the largest mammal in North America or search for relevant information.</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>---------------------</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>[tool call]: read_article | Largest mammal</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>Article not found. Related articles:</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>Largest mammals</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>Largest land mammal</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>List of largest mammals</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>Mohammad Naeem (Lahore Eagles cricketer)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>Atacama Large Millimeter/submillimeter Array (ALMA)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>The Atacama Large Millimeter/submillimeter Array (ALMA)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>Sturmgeschütz neuer Art mit 7.5cm PAK L/48 auf Fahrgestell Panzerkampfwagen IV</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>List of largest biomedical companies by market capitalization</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>Grammy Award for Best Instrumental Jazz Performance, Large Group or Soloist With Large Group</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  ===== AGENT =====</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>----- Reasoning -----</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>The search for "Largest mammal in North America" didn't return a direct article. Let me try reading the "Largest mammals" article which was listed as a related article. This might contain information about the largest mammal in North America.</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>---------------------</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>[tool call]: read_article | Largest mammals</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>Article:</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>****** List of largest mammals ******</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>See also: Largest and heaviest animals</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>The following is a list of largest mammals by family.</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>***** Tenrecs and allies (Afrosoricida) *****</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    * The largest of these insectivorous mammals is the giant otter shrew</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>      (Potamogale velox), native to Central Africa. This species can weigh up</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>      to 1 kilogram (2.2&nbsp;lb) and measure 0.64 metres (2.1&nbsp;ft) in total length.</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>      [1][2]</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    * The larger of the two species of bibymalagasy (Plesiorycteropus</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  ===== AGENT =====</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>----- Reasoning -----</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>The user is asking about the largest mammal in North America. I searched for this information using Wikipedia articles, but the direct article "Largest mammal in North America" wasn't found. However, from the extensive Wikipedia article on "Largest mammals" that was read earlier, I can find the answer.</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>From the Wikipedia article on "Largest mammals", I can see that the largest land mammal in North America is the American bison (Bison bison). The article mentions:</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>"The largest living land mammal in North America is the American bison (Bison bison)."</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>The article also mentions that the largest land mammal overall (globally) is the blue whale, but that's not in North America.</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>Let me also check the specific information about North American mammals. From the article:</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>- The American bison (Bison bison) is the largest living land mammal in North America</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>- It can weigh up to 1,270 kg (2,800 lb) and be 2 to 3.5 m (6.6 to 11.5 ft) in length</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>- The largest species of the family Felidae (cats) in North America is the cougar (Puma concolor), which can weigh up to 207 kg (456 lb)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>However, the question asks for the largest mammal in North America. The American bison is clearly the largest land mammal. But I should also consider if there are any marine mammals that might be larger. The blue whale is the largest mammal overall, but it's not native to North America - it's found in all oceans.</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>For North America specifically, the American bison is the largest land mammal. The question doesn't specify land or marine, so I should provide the most accurate answer based on the information available.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>From the Wikipedia article, the largest living land mammal in North America is the American bison (Bison bison). It can weigh up to 1,270 kg (2,800 lb) and be 2 to 3.5 m (6.6 to 11.5 ft) in length.</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>Let me provide a clear and accurate answer based on the Wikipedia information I've read.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>---------------------</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>Based on the Wikipedia article on "Largest mammals," the largest living land mammal in North America is the American bison (*Bison bison*).</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>Key details from the article:</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>- Species: American bison (*Bison bison*)</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>- Weight: Up to 1,270 kg (2,800 lb)</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>- Length: 2 to 3.5 m (6.6 to 11.5 ft)</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>- Status: The largest living land mammal in North America</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>The article also notes that the largest living land mammal globally is the blue whale, but it is not native to North America and lives in the oceans. Among North American carnivores, the cougar (*Puma concolor*) is the largest, reaching up to 207 kg (456 lb), but it is significantly smaller than the bison.</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>So the answer is: The American bison (*Bison bison*) is the largest mammal in North America.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>You may also notice a lot of garbage in the “similar articles” results; that leads us into the next section…</p>
+</section>
+<section id="searching-challenges" class="level2">
+<h2 class="anchored" data-anchor-id="searching-challenges">5. Searching Challenges</h2>
+<p>This section is a leftover from an earlier iteration of the writup, and it details the challenges of having the LLM search for article titles to input into <code>read_article</code>. I think the insights here about LLM searching capabilities (and search engine non-triviality) are important.</p>
+<p>It turns out that weak LLMs are very good at generating <strong>search queries</strong> for something they want to look up, with queries like <code>"United States mammals number"</code> when I asked how many species of mammal live in the US. However, it’s actually <em>pretty difficult</em> to find article titles based on a search phrase like this! Google will immediately give you a link for “List of Mammals in the United States”, but finding that article title without an advanced search algorithm is nearly infeasible.</p>
+<p>For example, we can:</p>
+<ol type="1">
+<li>grep the list of titles with the whole phrase<br>
+</li>
+<li>grep the list of titles with each keyword individually<br>
+</li>
+<li>fuzzy-find (fzf) the list of titles with the search phrase<br>
+</li>
+<li>use zim-tools’ <code>zimsearch</code> function directly on the .zim</li>
+</ol>
+<p>All of these have severe issues:</p>
+<ol type="1">
+<li>returns nothing, because none of the titles fully include the search query.<br>
+</li>
+<li>gives us a million irrelevant articles, since grep returns things like every single title with the word “United” (United Airlines, UK, etc.).<br>
+</li>
+<li>fzf is <em>strictly</em> ordered, so “mammal United States” will succeed but “United States mammal” will fail; this makes fzf results very inconsistent.</li>
+<li>seems to be specifically designed for matching longer phrases, and is terrible when the keywords are few. Its highest match for the search “United States tree” was an article about Christmas Trees in the US… because that’s the article with the most occurrences of the word “tree” along with the US.</li>
+</ol>
+<p>To make matters worse, the LLMs are strongly trained to search with <em>more</em> keywords if the first results were unhelpful— and this is so ingrained that they’ll completely ignore instructions<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> demanding the opposite. This highlights an important rule of thumb in LLM tooling: <strong>prompting shouldn’t be relied upon</strong>, and LLM tools should always focus on minimizing the load on the LLM.</p>
+<p>So what was the solution? <strong>Recontextualize</strong> the situation for the LLM. By switching to a single “read_article” tool, the LLM knew it should be providing a title-like query— which happens to be exactly what works well with fzf. It’s a bit like tricking the LLM— I make it provide a title-like phrase, and then use that as the search. Fzf searching still has its issues, but this approach <em>completely</em> avoids the search-query instruction-following troubles above— suddenly the models went from looping</p>
+<blockquote class="blockquote">
+<p>The search results weren’t relevant, so I should be more specific. I’ll <strong>search</strong> for “Albert Einstein parents”.</p>
+</blockquote>
+<p>to</p>
+<blockquote class="blockquote">
+<p>I should <strong>read</strong> the article on Albert Einstein, which could mention the info I’m looking for.</p>
+</blockquote>
+<p>Reframing the tooling let me get significantly better results from what’s essentially the same agentic workflow.</p>
+</section>
+<section id="usage-guide" class="level2">
+<h2 class="anchored" data-anchor-id="usage-guide">6. Usage Guide</h2>
+<p>Download a .zim wikipedia archive (section 2), and copy <code>ratsearch.sh</code> from below into a file (or download it from the <a href="https://github.com/gbkorr/ratsearch">github</a>). Then:</p>
+<ul>
+<li>put <code>ratsearch.sh</code> and your wikipedia zim in a folder</li>
+<li>rename your wikipedia zim to <code>wikipedia.zim</code> or change <code>DATABASE=</code> to its name in ratsearch.sh</li>
+<li>run <code>zimdump list wikipedia.zim &gt; index</code> to generate the list of titles</li>
+<li>run <code>sh ratsearch.sh</code> to use ratsearch</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="ratsearch.sh">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+ratsearch.sh
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>See section 8 for a commented walkthrough of the code.</p>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2200px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fratsearch.sh&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
+</div>
+</div>
+</div>
+</section>
+<section id="demo-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="demo-prompt">7. Demo Prompt</h2>
+<p>To close, here’s a demo of the UI with a stronger model<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> and a quick prompt that doesn’t require any searching. Models with good reasoning like this can do a lot with the tool, but suffer from slow prefill; I think the tool is much more suited to small models.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="superbowl.png" class="img-fluid figure-img"></p>
+<figcaption>This article title was likely already in the training data, but “1992 Super Bowl” and “Super Bowl 1992” redirect to it anyway— Wikipedia is surprisingly generous with its redirects a lot of the time.</figcaption>
+</figure>
+</div>
+</section>
+<section id="code-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="code-walkthrough">8. Code Walkthrough</h2>
+<p>Because there’s so little code, I can actually step through it for a fun little section. The full file is back in section 6; the code here has been unfolded and given extra #comments.</p>
+<p>Funnily enough, despite its small size, it’s still <strong>mostly jq bloat</strong> (jq is the command-line tool for working with JSON)— JSON is kind of a pain to handle in bash. Speaking of which— it’s actually POSIX-compliant sh<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>, my preferred bash “flavor”. So, uh, run this on Alpine Linux or something. But don’t forget the 50-gig wikipedia file.</p>
+<section id="header" class="level3">
+<h3 class="anchored" data-anchor-id="header">8.1 Header</h3>
+<p>Most of this section should be self-explanatory. DATABASE points to your .zim file, and INDEX to the raw list of titles from <code>zimdump list $DATABASE &gt; index</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#requires: jq fzf html2text zim-tools</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#zimdump list wikipedia.zim &gt; index</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">DATABASE</span><span class="op">=</span><span class="st">"./wikipedia.zim"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">INDEX</span><span class="op">=</span><span class="st">"./index"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">ENDPOINT</span><span class="op">=</span><span class="st">"localhost:8080"</span> <span class="co">#LLM API endpoint, e.g. "api.openai.com" or the host:port </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">SYSTEM</span><span class="op">=</span><span class="st">'</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">You are a helpful assistant. </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">## Skills</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">You can read Wikipedia articles; use this when factual info is directly requested. </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">Use the `read_article` tool with an article title to read it.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The system prompt is always weird to write, since it feels like it’s simultaneously very and not very important. It needs to alert the agent of its capabilities and tell it what to do, but how it does that doesn’t seem to matter <em>too</em> much… But at the same time, you have things like “omitting ‘You are a helpful assistant’ degrades model performance.”<sup>[citation needed]</sup><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+</section>
+<section id="tooling-definitions" class="level3">
+<h3 class="anchored" data-anchor-id="tooling-definitions">8.2 Tooling Definitions</h3>
+<p>This has two sections: defining the tools <strong>to the LLM</strong>, and actually defining what they run. The former is done in the “tools” section of the conversation JSON, while the latter is just a function we’ll call later. I intentionally kept the tool definitions (“read a wikipedia article”) light, since giving more detail never seemed to help the models I was working with.</p>
+<p>And the function just does what I described in section 4: return the article if it exists and fuzzy-search related titles if not. Interestingly, you’ll notice that the model never gets told ahead of time what the tool does; I make it <strong>rely on the tool output for context</strong>, and this has proven to work <em>much better</em> than giving it the context beforehand (in the tool definition) and leaving the output unannotated. Specifically, the function prints a header for its output: either “Article:” or “Article not found. Related articles:”, which is just enough to give the LLM the necessary context for what the tool output is.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Tools ----</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">conversation</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span> <span class="co">#initialize conversation + tool definition; see section 3</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">jq</span> <span class="at">-n</span> <span class="at">--arg</span> system <span class="st">"</span><span class="va">$SYSTEM</span><span class="st">"</span> <span class="st">'{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">        "messages":[{"role": "system", "content": $system}], </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">        "tools": [</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">          { </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">            "type": "function",</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">            "function": {</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">              "name": "read_article",</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">              "description": "read a wikipedia article",</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">              "parameters": {</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">                "properties": {</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">                  "title": {</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">                    "type": "string",</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">                    "description": "article title"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">                  }</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">                },</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">                "required": ["title"]</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">              }</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="st">            }</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="st">          }</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="st">        ],</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="st">        "tool_choice": "auto"}'</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="va">)</span><span class="st">"</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">read_article()</span> <span class="kw">{</span> <span class="co">#$1 = title query; this is what the LLM will provide in the tool call</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="va">title</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'_'</span><span class="va">)</span><span class="st">"</span> <span class="co">#convert to snake case</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="va">details</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">zimdump</span> list <span class="at">--details</span> <span class="at">--url</span> <span class="st">"</span><span class="va">$title</span><span class="st">"</span> <span class="st">"</span><span class="va">$DATABASE</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span><span class="va">)</span><span class="st">"</span> </span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$details</span><span class="st">"</span> <span class="ot">!=</span> <span class="st">"Entry not found"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="bu">echo</span> <span class="st">"Article:"</span> <span class="co">#test if the article exists</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>          <span class="co">#irrelevant redirect logic; zimdump show doesn't process title redirects automatically</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>          <span class="va">index</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$details</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"redirect index"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-oE</span> <span class="st">'[0-9]+$'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>          <span class="bu">test</span> <span class="at">-z</span> <span class="st">"</span><span class="va">$index</span><span class="st">"</span> <span class="kw">&amp;&amp;</span> <span class="va">index</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$details</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"idx"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-oE</span> <span class="st">'[0-9]+$'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="co">#the actual tool result: converting the article to plaintext and truncating the output</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">#the truncation is important to avoid large articles crashing the server or client</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="ex">zimdump</span> show <span class="at">--idx</span> <span class="st">"</span><span class="va">$index</span><span class="st">"</span> <span class="st">"</span><span class="va">$DATABASE</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="ex">html2text</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-c</span> 65535 <span class="co">#trim at 65k characters</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="bu">echo</span> <span class="st">"Article not found. Related articles:"</span> <span class="co">#if article doesn't exist, search for related</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">#use the query to fzf the list of all article titles</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span> <span class="st">"</span><span class="va">$INDEX</span><span class="st">"</span> <span class="kw">|</span> <span class="ex">fzf</span> <span class="at">-f</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'_'</span> <span class="st">' '</span> <span class="co">#desnake for ease of model understanding </span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="co">#remember, if your tool outputs a well-made error the model can adapt and correct itself</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A note on snake case: LLMs have a slightly easier time understanding regular title (“John Lennon”) compared to snake_case titles (“John_Lennon”), and asking them to only submit snake case to read_article adds unnecessary prompt load. Luckily, it’s easy to get around this by just converting to and from snake case internally, so the model only ever gives and receives the regular whitespaced format.</p>
+<p>I have a note in the code that doesn’t come into play here, but it’s still important: tools should <strong>output nice errors</strong>. This has the same goal that I mentioned above— relying on the tool output for context— and it <em>signnificantly</em> improves the model’s ability to try again and push through roadblocks.</p>
+</section>
+<section id="interactive-loop" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-loop">8.3 Interactive Loop</h3>
+<p>This is the part that runs the conversation with the LLM. It records the user’s input and adds it to the conversation, sends the conversation to the API to get a response from the LLM, and then evaluates that response.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Conversation ----</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">die()</span> <span class="kw">{</span> <span class="bu">kill</span> <span class="st">"</span><span class="va">$$</span><span class="st">"</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span> <span class="co">#stop the script</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">loop()</span> <span class="kw">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">turn</span><span class="op">=</span><span class="st">"user"</span><span class="kw">;</span> <span class="cf">while</span> <span class="bu">:</span><span class="kw">;</span> <span class="cf">do</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">#skip user turn unless $turn == "user"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">#call listen() to record user message</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">test</span> <span class="st">"</span><span class="va">$turn</span><span class="st">"</span> = <span class="st">"user"</span> <span class="kw">&amp;&amp;</span> <span class="ex">listen</span> <span class="kw">&amp;&amp;</span> <span class="va">turn</span><span class="op">=</span><span class="st">"assistant"</span> </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>          <span class="bu">printf</span> <span class="st">"\n%s\n"</span> <span class="st">"  ===== AGENT ====="</span> <span class="co">#agent banner</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>          <span class="ex">ratspin</span> <span class="kw">&amp;</span> <span class="va">spinner</span><span class="op">=</span><span class="va">$!</span> <span class="co">#call ratspin() for an ascii animation while waiting</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>          <span class="bu">trap</span> <span class="st">'kill "$spinner" 2&gt;/dev/null; printf "\n"'</span> EXIT<span class="kw">;</span> <span class="bu">trap</span> <span class="st">'exit 130'</span> INT TERM </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>          <span class="co">#kill spinner if program is exited during animation</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>          <span class="co">#(I used AI to debug that line, but it doesn't come up much)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">#send conversation with query() and process response with parse()</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">parse</span> <span class="st">"</span><span class="va">$(</span><span class="ex">query</span><span class="va">)</span><span class="st">"</span> </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sleep</span> 1 <span class="co">#safety pause so while :; doesn't loop at mach speed if something breaks</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="user-input-and-api-querying" class="level4">
+<h4 class="anchored" data-anchor-id="user-input-and-api-querying">8.3.1 User Input and API Querying</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">listen()</span> <span class="kw">{</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>      <span class="bu">printf</span> <span class="st">"\n%s\n"</span> <span class="st">"  &lt;&gt;&lt;&gt;&lt;&gt; USER &lt;&gt;&lt;&gt;&lt;&gt;"</span> <span class="co">#user banner</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get user input from terminal</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">read</span> <span class="at">-r</span> <span class="va">input</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#push user input to conversation as message object</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">conversation</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">printf</span> <span class="st">"%s"</span> <span class="st">"</span><span class="va">$conversation</span><span class="st">"</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">--arg</span> content <span class="st">"</span><span class="va">$input</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">'.messages += [{"role": "user", "content": $content}]'</span><span class="va">)</span><span class="st">"</span><span class="kw">;</span> <span class="co">#push user message into conversation</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">query()</span> <span class="kw">{</span> </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#pipe $conversation into curl API request. @- reads from stdin because... sure...</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">printf</span> <span class="st">"%s"</span> <span class="st">"</span><span class="va">$conversation</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">curl</span> <span class="at">-s</span> <span class="at">--request</span> POST <span class="at">--url</span> http://<span class="st">"</span><span class="va">$ENDPOINT</span><span class="st">"</span>/v1/chat/completions <span class="dt">\</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">--header</span> <span class="st">"Content-Type: application/json"</span> <span class="at">--data</span> @- <span class="dt">\</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">jq</span> <span class="st">'.choices[0].message'</span> <span class="co">#get just the agent's response</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Because the whole conversation is sent in every query, I have to pipe it into curl to avoid the maximum bash variable size limit. And echo can silently break with jq (due to adding newlines), so I have to use printf in a lot of places… which is good practice anyway<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>.</p>
+</section>
+<section id="response-processing" class="level4">
+<h4 class="anchored" data-anchor-id="response-processing">8.3.2 Response Processing</h4>
+<p>parse() handles most of the script’s logic, and determines what to do with responses from the server.</p>
+<p>If the LLM responds with just a tool call (no regular message), the user’s next turn is skipped and the client instead evaluates and sends the tool result as part of the conversation; see section 3. If the response is a regular message, it’s printed and control is returned to the user.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse()</span> <span class="kw">{</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">kill</span> <span class="st">"</span><span class="va">$spinner</span><span class="st">"</span><span class="kw">;</span> <span class="bu">wait</span> <span class="va">$!</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="kw">;</span> <span class="bu">printf</span> <span class="st">"\033[2K\r"</span> <span class="co">#stop and clear the ratspin() ascii animation</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>      <span class="co">#check if the response was empty; this is usually due to the LLM's KV cache filling up</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>      <span class="co">#(this tool doesn't need super fancy error handling, since it's more of a PoC)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="bu">test</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> = <span class="st">"null"</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"Context size exceeded :("</span> <span class="kw">&amp;&amp;</span> <span class="ex">die</span> <span class="co">#stop the program if response is empty</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#push response to conversation</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">conversation</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">printf</span> <span class="st">"%s"</span> <span class="st">"</span><span class="va">$conversation</span><span class="st">"</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'.messages += [$message | del(.reasoning_content?)]'</span><span class="va">)</span><span class="st">"</span> <span class="co">#strip thinking</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#show reasoning and response</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="va">reasoning</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="st">'$message.reasoning_content // ""'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">response</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="st">'$message.content // ""'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">test</span> <span class="at">-n</span> <span class="st">"</span><span class="va">$reasoning</span><span class="st">"</span> <span class="kw">&amp;&amp;</span> <span class="bu">printf</span> <span class="st">"\033[3m\033[90m%s\n%s\n%s\n\033[0m"</span> <span class="st">"----- Reasoning -----"</span> <span class="st">"</span><span class="va">$reasoning</span><span class="st">"</span> <span class="st">"---------------------"</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">test</span> <span class="at">-n</span> <span class="st">"</span><span class="va">$response</span><span class="st">"</span> <span class="kw">&amp;&amp;</span> <span class="bu">printf</span> <span class="st">"%s\n"</span> <span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$response</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">':a;$!N;$!ba;:b;s/\*\*/\x1b[1m/;s/\*\*/\x1b[22m/;tb'</span><span class="va">)</span><span class="st">"</span> <span class="co">#apply bold</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#check if the response contains a tool call </span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-n</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="st">'$message | has("tool_calls")'</span><span class="va">)</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"false"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      <span class="va">turn</span><span class="op">=</span><span class="st">"user"</span> <span class="co">#no tool calls, just return to user</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">#count the number of tool calls; there can be multiple!</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">calls</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-n</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">-r</span> <span class="st">'$message.tool_calls | length'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">#evaluate each call in series</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">i</span><span class="op">=</span>0<span class="kw">;</span> <span class="cf">while</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="ot">-le</span> <span class="va">$((calls</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>            <span class="co">#annoying jq to pull variables out of the toolcall JSON; see section 3 for reference</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>            <span class="va">id</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">--argjson</span> i <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">'$message.tool_calls[$i].id'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>            <span class="va">name</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">--argjson</span> i <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">'$message.tool_calls[$i].function.name'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">arguments</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> message <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">--argjson</span> i <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">'$message.tool_calls[$i].function.arguments | fromjson | .[]'</span><span class="va">)</span><span class="st">"</span>   </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>            <span class="co">#evaluate tool call with read_article()</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>            <span class="va">result</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">read_article</span> <span class="st">"</span><span class="va">$arguments</span><span class="st">"</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>              <span class="co">#print call and response</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>              <span class="bu">printf</span> <span class="st">"%s\n\033[3m\033[90m%s\n\033[0m"</span> <span class="st">"[tool call]: </span><span class="va">$name</span><span class="st"> | </span><span class="va">$arguments</span><span class="st">"</span> <span class="st">"</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$result</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 10<span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>            <span class="co">#push tool result to conversation</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>            <span class="va">conversation</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="bu">printf</span> <span class="st">"%s"</span> <span class="st">"</span><span class="va">$conversation</span><span class="st">"</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">--arg</span> id <span class="st">"</span><span class="va">$id</span><span class="st">"</span> <span class="at">--arg</span> result <span class="st">"</span><span class="va">$result</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>                <span class="st">'.messages += [{"role": "tool", "tool_call_id": $id, "content": $result}]'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        <span class="va">i</span><span class="op">=</span><span class="va">$((i</span> <span class="op">+</span> <span class="dv">1</span><span class="va">))</span><span class="kw">;</span> <span class="cf">done</span> </span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ratspin" class="level4">
+<h4 class="anchored" data-anchor-id="ratspin">8.3.3 Ratspin</h4>
+<p>I had the pleasure of cooking up a custom spinner to show while the LLM run, based on a small rat <code>&lt;8=~~</code> (the logo of the project is a larger ASCII rat, <code>&lt;-3,,~~</code>). It also polls the API frequently to see how many tokens of prefill (“Reading”) or generation (“Thinking”) it’s processed so far.</p>
+<p>It uses some clever ansi coding to fit the entire animation into two lines— the rest is just the API polling.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ratspin()</span> <span class="kw">{</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="bu">:</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">#get generation status from API</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">status</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-sS</span> http://<span class="st">"</span><span class="va">$ENDPOINT</span><span class="st">"</span>/slots<span class="va">)</span><span class="st">"</span> <span class="kw">||</span> <span class="ex">die</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">prefill</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-n</span> <span class="at">--argjson</span> status <span class="st">"</span><span class="va">$status</span><span class="st">"</span> <span class="st">'($status[] | select(.is_processing) | .n_prompt_tokens_processed) // 0'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">generated</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-n</span> <span class="at">--argjson</span> status <span class="st">"</span><span class="va">$status</span><span class="st">"</span> <span class="st">'($status[] | select(.is_processing) | .next_token[0].n_decoded) // 0'</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$generated</span><span class="st">"</span> <span class="ot">!=</span> <span class="st">"0"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="bu">printf</span> <span class="st">"\r%s"</span> <span class="st">"</span><span class="va">$generated</span><span class="st"> Thinking..."</span> <span class="co">#generating response</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$prefill</span><span class="st">"</span> <span class="ot">!=</span> <span class="st">"0"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="bu">printf</span> <span class="st">"\r%s"</span> <span class="st">"</span><span class="va">$prefill</span><span class="st"> Reading..."</span> <span class="co">#prefilling</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="bu">printf</span> <span class="st">"\r%s"</span> <span class="st">"Processing..."</span><span class="kw">;</span> <span class="cf">fi</span> <span class="co">#tokenizing (?)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#twoliner</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$rat</span><span class="st">"</span> <span class="ot">!=</span> <span class="st">"  ~~=8&gt;"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="va">rat</span><span class="op">=</span><span class="st">"  ~~=8&gt;"</span><span class="kw">;</span> <span class="cf">else</span> <span class="bu">printf</span> <span class="st">"      "</span><span class="kw">;</span> <span class="va">rat</span><span class="op">=</span><span class="st">"&lt;8=~~"</span><span class="kw">;</span> <span class="cf">fi</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="bu">echo</span> <span class="st">"1 2 3 4 5 6"</span><span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="bu">printf</span> <span class="st">"%s\b\b\b\b\b\b\033[P"</span> <span class="st">"</span><span class="va">$rat</span><span class="st">"</span><span class="kw">;</span> <span class="fu">sleep</span> 0.1<span class="kw">;</span> <span class="cf">done</span><span class="kw">;</span> <span class="co">#printf "\r" # &lt;- if you want just the twoliner</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="ratspin.gif" class="img-fluid"></p>
+</section>
+<section id="running" class="level4">
+<h4 class="anchored" data-anchor-id="running">8.3.4 Running</h4>
+<p>The end of the script pings the server once to make sure it’s ready, and then starts the main conversation loop.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">PING</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-sS</span> http://<span class="st">"</span><span class="va">$ENDPOINT</span><span class="st">"</span>/v1/models<span class="va">)</span><span class="st">"</span> <span class="kw">||</span> <span class="ex">die</span> <span class="co">#exit program on curl error</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#print http errors if there are any</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$PING</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"error"</span> <span class="op">&gt;</span>/dev/null <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Endpoint error:"</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> <span class="at">-n</span> <span class="at">--argjson</span> error <span class="st">"</span><span class="va">$PING</span><span class="st">"</span> <span class="st">'$error'</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">die</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#print a header: "ratsearch", the .zim you're using, and the loaded LLM.</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">"%s\n%s\n%s\n%s\r"</span> <span class="dt">\</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ratsearch &lt;-3,,~~"</span> <span class="dt">\</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"</span><span class="va">$DATABASE</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$(</span><span class="ex">jq</span> <span class="at">-nr</span> <span class="at">--argjson</span> ping <span class="st">"</span><span class="va">$PING</span><span class="st">"</span> <span class="st">'$ping.models[0].name'</span><span class="va">)</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">"----------------------"</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="ex">loop</span> <span class="co">#go!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="subagents" class="level3">
+<h3 class="anchored" data-anchor-id="subagents">8.4 Subagents</h3>
+<p>Subagents are actually also trivially easy to add— I was able to implement them with a single-line function (see below)— but it turned out not to be useful in the scope of this project. Weak subagents aren’t great at filtering relevant articles out of 1000 grep results, and that’s about the only place they’d matter here. But they’re very useful in other contexts, and it’s good to know they’re this easy to get working!</p>
+<p>The oneliner (expanded for ease of reading):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subagent()</span> <span class="kw">{</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">query</span> <span class="st">"</span><span class="va">$(</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>      <span class="ex">jq</span> <span class="at">-n</span> <span class="at">--arg</span> system <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="at">--arg</span> prompt <span class="st">"</span><span class="va">$2</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">'{</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">          "messages":[</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">            {"role": "system", "content": $system},</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">            {"role": "user", "content": $prompt}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st">          ]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">        }'</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">)</span><span class="st">"</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="st">'.content'</span><span class="kw">;</span> </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This requests a new LLM conversation and outputs whatever its response text is. Example usage:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">response</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">subagent</span> <span class="st">"You are a helpful assistant..."</span> <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Summarize this document: </span><span class="va">$DOCUMENT</span><span class="st">"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>My favorite, of course.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Look up RAG MCP or something; I haven’t looked too deeply since there isn’t a well-established “you should use this one” option (though I’m sure we’ll settle on one soon). And it’s not a particularly relevant circumstance to me in the first place— offline searching really only matters for things like internal company tooling.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>You can even include every image for about 2x the filesize, but that’s not relevant here.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Since <em>OpenAI</em> (of ChatGPT fame) created it, and presumably by the time competitors came around everything was already design for this specific API format.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>$%#@&amp; claudisms are leaking into my prose again, I’ve been doing too much agentic work<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Which feels very wasteful, and probably is— but it makes regenerating from a given point (or editing your last message to get a new response) trivial to implement.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Since reasoning often contains more text than the actual response, and it would clog up the conversation. This comes with some downsides, so some inferencers provide an option like <code>--preserve-reasoning</code> that disable its removal.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Trust me, I tried a lot of engineering… they even ignored basic formatting requests in the tool metadata, which isn’t something you see in other scenarios with the same models.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>A distill of Qwen3.6 35B-A3B I had lying around.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Even though it’s a bad habit… bash is more capable and readible, and in this day and age it’s trivial to get it translated to dash by an LLM if needed.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>I’ve seen this in a couple places, but can’t remember where. It was circumstances where people were testing a lot of different system prompts… definitely worth looking into more at some point.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Echo is irritatingly not POSIX-standardized for how useful and ubiquitous it is :/<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gbkorr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gbkorr/">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<hr>
+<p>© Gabriel Broussard Korr — 2026<br><a href="mailto:mantis9877@gmail.com">mantis9877@gmail.com</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

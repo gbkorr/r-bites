@@ -97,6 +97,16 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../ratsearch/ratsearch.html"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Tiny Wikipedia RAG</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../clouds/clouds.html"><i class="bi bi-clouds-fill" role="img">
+</i> 
+ <span class="dropdown-text">Terminal Cloud Renderer</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
 </i> 
  <span class="dropdown-text">Claude Apprentice</span></a>
@@ -209,7 +219,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The concept behind this skill is to de-obfuscate Claude’s agentic decisions so that the user can “learn by watching”— if I’m an apprentice apothecary, part of my job is to watch my master as they work to get exposure to the skills I need, and part of their role is to provide tips and info on what and why they’re doing. This skill provides that— a subagent listens to the conversation and frequently chimes in with short blurbs about relevant concepts Claude’s using, like the purpose of a niche CLI tool it used or the goal of the repo structure it just created.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="qemu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Image from an early version, but demonstrative of the sort of comments it gives."><img src="qemu.png" class="img-fluid figure-img" width="400" alt="Image from an early version, but demonstrative of the sort of comments it gives."></a></p>
+<p><a href="qemu.png" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1" title="Image from an early version, but demonstrative of the sort of comments it gives."><img src="qemu.png" class="img-fluid figure-img" width="400" alt="Image from an early version, but demonstrative of the sort of comments it gives."></a></p>
 <figcaption>Image from an early version, but demonstrative of the sort of comments it gives.</figcaption>
 </figure>
 </div>
@@ -247,7 +257,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Sometimes it can be a bit hectic to parse through, but I can always… ignore blurbs that don’t look interesting. I’ve decided that the volume of commentary is more benefit than downside, but it’s very easy to tweak— just add a line to the narrator prompt (see next section) specifying more or less frequent narration. You can also add topics the blacklist if you’re very familiar with them already; I put git/Github integration in my blacklist, for example.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="screen.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" data-glightbox="description: .lightbox-desc-4" title="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."><img src="screen.png" class="img-fluid figure-img" alt="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."></a></p>
+<p><a href="screen.png" class="lightbox" data-glightbox="description: .lightbox-desc-4" data-gallery="quarto-lightbox-gallery-4" title="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."><img src="screen.png" class="img-fluid figure-img" alt="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."></a></p>
 <figcaption>Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions.</figcaption>
 </figure>
 </div>
@@ -739,7 +749,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
