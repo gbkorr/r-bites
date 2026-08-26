@@ -50,7 +50,7 @@ Reading JSON is a pain, but it's important to get a feel for how the data is str
 
 [^why]: Which feels very wasteful, and probably is— but it makes regenerating from a given point (or editing your last message to get a new response) trivial to implement.
 
-:::{.callout-tip title="Conversation JSON" collapse=true}
+:::{.callout-tip title="Conversation JSON" collapse=true .default}
 ```js
 {
   "tool_choice": "auto", //permit the model to call tools on its own
