@@ -438,6 +438,7 @@ parse() {
     response="$(jq -nr --argjson message "$1" '$message.content // ""')"
     test -n "$reasoning" && printf "\033[3m\033[90m%s\n%s\n%s\n\033[0m" "----- Reasoning -----" "$reasoning" "---------------------"
     test -n "$response" && printf "%s\n" "$(echo "$response" | sed ':a;$!N;$!ba;:b;s/\*\*/\x1b[1m/;s/\*\*/\x1b[22m/;tb')" #apply bold
+    #I got that sed string from AI, also non-critical
     
     #check if the response contains a tool call 
     if [ "$(jq -n --argjson message "$1" '$message | has("tool_calls")')" = "false" ]; then 
