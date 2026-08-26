@@ -17,6 +17,8 @@ To make it more interesting, I went with the theme of "minimalism"[^always] and 
 
 [^always]: My favorite, of course.
 
+You can read the code yourself in section 6 or on [github](https://github.com/gbkorr/ratsearch).
+
 > Note: this project was completely hand-coded, with the exception of a couple sed/regex phrases and some jq debugging.<br>Ditto for the writeup, as always.
 
 ## 1. Big Picture
