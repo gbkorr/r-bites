@@ -20,11 +20,15 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 <img class='thumbnail' src=images/ratsearch2.png>
 
-A tiny bash script that lets local AI find and **read wikipedia articles** offline. [link](ratsearch/ratsearch.qmd)
+A tiny bash script that lets local AI find and **read wikipedia articles** offline, or perform websearches. [link](ratsearch/ratsearch.qmd)
 
 <br clear="left">
 
-COMING SOON: A **volumetric cloud CLI screensaver** in pure C, built with Claude Fable. [link](clouds/clouds.qmd)
+<img class='thumbnail' src=images/clouds.png>
+
+A **volumetric cloud CLI screensaver** in pure C, built with Claude Fable. [link](clouds/clouds.qmd)
+
+<br clear="left">
 
 <img class='thumbnail' src=images/grr-claude.png>
 
@@ -34,7 +38,9 @@ A simple **Claude skill** for learning from agentic tooling as it happens. [link
 
 *July*
 
-> Gaps? No, [*projects that didn't work out*](bonus/scrapped-ideas.qmd)— science is all about trying and failing! 
+> Gaps? No, [*projects that didn't work out*](bonus/scrapped-ideas.qmd)— science is all about trying and failing![^and]
+
+[^and]: Also, I was in Alaska.
 
 *June*
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>&nbsp;&nbsp;R Bites - .claude/skills/apprentice:Learning through Agentic Tooling</title>
+<title>&nbsp;&nbsp;R Bites - clouds.c: A Small, Feature-Rich Terminal Screensaver</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -39,9 +73,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -169,11 +200,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#manifest" id="toc-manifest" class="nav-link active" data-scroll-target="#manifest">Manifest</a></li>
-  <li><a href="#skill" id="toc-skill" class="nav-link" data-scroll-target="#skill">Skill</a></li>
-  <li><a href="#active-learning" id="toc-active-learning" class="nav-link" data-scroll-target="#active-learning">Active Learning</a></li>
-  <li><a href="#customization" id="toc-customization" class="nav-link" data-scroll-target="#customization">Customization</a></li>
-  <li><a href="#personal-thoughts" id="toc-personal-thoughts" class="nav-link" data-scroll-target="#personal-thoughts">Personal Thoughts</a></li>
+  <li><a href="#basic-usage" id="toc-basic-usage" class="nav-link active" data-scroll-target="#basic-usage">Basic Usage</a></li>
+  <li><a href="#flight" id="toc-flight" class="nav-link" data-scroll-target="#flight">Flight!</a></li>
+  <li><a href="#prerendering" id="toc-prerendering" class="nav-link" data-scroll-target="#prerendering">Prerendering</a></li>
+  <li><a href="#colors" id="toc-colors" class="nav-link" data-scroll-target="#colors">Colors</a></li>
+  <li><a href="#web-demo" id="toc-web-demo" class="nav-link" data-scroll-target="#web-demo">Web Demo</a></li>
   </ul>
 </nav>
     </div>
@@ -182,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">.claude/skills/apprentice:<br>Learning through Agentic Tooling</h1>
+<h1 class="title">clouds.c: A Small, Feature-Rich Terminal Screensaver</h1>
 </div>
 
 
@@ -205,111 +236,91 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The time finally came for me to properly learn how to use agentic AI. I’d been following local AI excitedly all summer, but it became clear that experience using frontier models would be extremely important for my career.</p>
-<p>So I bought a month of Claude, it rewrote my project in 15 minutes, booted linux on a device I’d failed thrice at, yada yada. You’ve heard all this before. Anyway, I saw a clear opportunity to improve my experience as a user, made a skill<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to do it, and found it so effective that I though it’d be worth sharing.</p>
-<p>I’d like to reiterate that every article<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> on my blog is written without any AI assistance or editing. Unfortunately, common elements of good prose— like conceptual triplets<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, m-dashes<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, and general eloquence— are also utilized by AI<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and have become associated with them due to the rarity of good writers these days.</p>
-<p>You can get the plugin for yourself at <a href="https://github.com/gbkorr/apprentice">https://github.com/gbkorr/apprentice</a></p>
-<section id="manifest" class="level2">
-<h2 class="anchored" data-anchor-id="manifest">Manifest</h2>
-<p>A frontier model like Fable is more than capable of doing nearly all the heavy lifting on a project itself, but this robs users (me) of perhaps the most important reasons to do a project: sure, you end up with something cool, but the real value is in what you learn along the way. Luckily, AI is also more than capable of narrating its decisions and teaching the user what it’s doing. Several techniques already exist for facilitating this; this skill adds another that I think fills a useful niche.</p>
-<p>I have enough OS experience to roughly follow along with what the agent is doing, but bash calls tend to be hard to parse, and I don’t know <em>everything</em> about how Linux works. I figured asking for frequent tidbits about the things it’s interacting with would give me some useful knowledge and exposure.</p>
-</section>
-<section id="skill" class="level2">
-<h2 class="anchored" data-anchor-id="skill">Skill</h2>
-<p>The concept behind this skill is to de-obfuscate Claude’s agentic decisions so that the user can “learn by watching”— if I’m an apprentice apothecary, part of my job is to watch my master as they work to get exposure to the skills I need, and part of their role is to provide tips and info on what and why they’re doing. This skill provides that— a subagent listens to the conversation and frequently chimes in with short blurbs about relevant concepts Claude’s using, like the purpose of a niche CLI tool it used or the goal of the repo structure it just created.</p>
+<p>Here’s a little project I cooked up with Claude Fable over the course of about two weeks. Like my other projects with Claude, I led the design and iteration and had Claude do the technical implementation.</p>
+<p>I’ve always enjoyed terminal screensavers like cbonsai and pipes.sh, but my background in R never gave me an opportunity to make my own— I’m just not great at writing in C. That made this a particularly good project to vibecode— I know how the renderer works, but wouldn’t have been able to get the volumetric logic running in C on my own (in a reasonable amount of time to make it worth doing as a project).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="qemu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Image from an early version, but demonstrative of the sort of comments it gives."><img src="qemu.png" class="img-fluid figure-img" width="400" alt="Image from an early version, but demonstrative of the sort of comments it gives."></a></p>
-<figcaption>Image from an early version, but demonstrative of the sort of comments it gives.</figcaption>
+<p><img src="images/presets.png" class="img-fluid figure-img"></p>
+<figcaption>The presets <code>nimbus</code>, <code>below</code>, <code>sol</code>, and <code>thunder</code>.</figcaption>
 </figure>
 </div>
-<p>I was careful with how I did the implementation and prompting (plugin and prompts drafted by Claude, but with significant higher-level guidance, tweaking, and testing— Claude is good at soloing a first draft of things like this, but making a good skill takes hands-on polish). The plugin runs a second agent for the entirety of the conversation (Sonnet, which barely adds additional usage to a Fable session), and it injects info blurbs using the <code>MessageDisplay</code> hook visible only to the user. This ensures that it never touches<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> the main agent, which is important— the skill <strong>can’t influence Claude’s actual work</strong>, and <strong>only</strong> exists to give additional context and info to the user. There’s a couple reasons for this— mainly, the main agent would forget to write blurbs, but I think maintaining its purity of output is important here too. The skill is designed to be as lightweight as possible; see the <a href="#customization">customization</a> section later on this page.</p>
-<p>Here’s another demo with the current UI: the narrator gives good insight into the agentic work Claude is doing. The left was during a one-shot of the demo prompt <code>/apprentice Please create a webpage that shows an infographic of the most visited wikipedia articles over the past week.</code>, and the right from when I asked it to benchmark my computer specs. Again, this skill <em>doesn’t affect the main process</em>— Claude had no idea these comments were being generated as it worked, which prevents the skill from deteriorating the model’s abilities.</p>
-<div>
-
-</div>
-<div class="quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-right">
-<figure class="figure">
-<p><a href="debugging.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="debugging.png" class="img-fluid quarto-figure quarto-figure-right figure-img" width="400"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><a href="moredemo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="moredemo.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="400"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="active-learning" class="level2">
-<h2 class="anchored" data-anchor-id="active-learning">Active Learning</h2>
-<pre><code> ▐▛███▜▌
-▝▜█████▛▘
-  ▘▘ ▝▝</code></pre>
-<p>So here’s how I use the tool to learn as I watch Claude work instead of sitting back and letting it do my dishes for me. Let me be clear— Claude is still doing my dishes for me, but now it’s telling me how it’s doing them and I’m asking additional questions so that I’ll have enough experience to do the dishes on my own if I have to.</p>
-<p>I already use <strong>/btw</strong> frequently to learn about keywords and concepts I’m unfamiliar with— it’s incredibly useful— but this skill sort of adds a new dimension to what I can learn from a session. Getting to read a narration of the actual agentic workflow gives a TON of additional information that I wouldn’t have gotten otherwise, unless I did the work myself.</p>
-<p>Sometimes it can be a bit hectic to parse through, but I can always… ignore blurbs that don’t look interesting. I’ve decided that the volume of commentary is more benefit than downside, but it’s very easy to tweak— just add a line to the narrator prompt (see next section) specifying more or less frequent narration. You can also add topics the blacklist if you’re very familiar with them already; I put git/Github integration in my blacklist, for example.</p>
+<section id="basic-usage" class="level2">
+<h2 class="anchored" data-anchor-id="basic-usage">Basic Usage</h2>
+<p>The program is relatively feature-rich, and has quite a number of useful parameters.</p>
+<p>Cloud Generation:<br>
+<code>--coverage</code>: Cloud sparsity.<br>
+<code>--height</code>: Cloud height; heigh values make for huge, billowing clouds.</p>
+<p>Environment:<br>
+<code>--time</code>: Time of day; determines colors and sun elevation.<br>
+<code>--preset</code>: Settings preset. See <a href="#presets">§presets</a>.<br>
+<code>--azimuth</code>: Horizontal (compass) sun angle; influences the direction of shading on the clouds.</p>
+<p>Animation:<br>
+<code>--wind</code>: Speed of cloud movement.<br>
+<code>--elevation</code>: Camera Y position; 0.5 is at cloud level, so you can be above or below.<br>
+<code>--yaw</code>: Initial yaw angle, useful for looking into/away from the wind.<br>
+<code>--pitch</code>: Initial pitch angle.</p>
+<p>Quality:<br>
+<code>--quality</code>: Number of raymarch steps. &gt;60 not recommended unless prerendered with –loop.<br>
+<code>--color</code>: truecolor/256 ansi/mono color.<br>
+<code>--ascii</code>: Enable ASCII mode, not my favorite.<br>
+<code>--ramp</code>: Glyph ramp (transparent -&gt; opaque) for ASCII rendering.<br>
+<code>--fps</code>: Desired frames per second; important for –loop.</p>
+<p>Utility:<br>
+<code>--interactive</code>: Enable flight. See <a href="#flight">§flight</a>.<br>
+<code>--once</code>: Render a single frame.<br>
+<code>--loop</code>: Prerender this many seconds, and loop playback. See <a href="#prerendering">§prerendering</a>.<br>
+<code>--output</code>: Save <code>--loop</code> prerender to a file.<br>
+<code>--file</code>: Play saved file.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="screen.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" data-glightbox="description: .lightbox-desc-4" title="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."><img src="screen.png" class="img-fluid figure-img" alt="Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions."></a></p>
-<figcaption>Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions.</figcaption>
+<p><img src="images/times.png" class="img-fluid figure-img"></p>
+<figcaption>The four times, with default settings.</figcaption>
 </figure>
 </div>
 </section>
-<section id="customization" class="level2">
-<h2 class="anchored" data-anchor-id="customization">Customization</h2>
-<p>As always, my commitment to elegant and minimal solutions and approaches has been a boon when working with AI. This skill is intentionally extremely light, and it’s very easy to customize; most notably, you can just edit <code>skills/apprentice/scripts/narrator-prompt.md</code> to ask the narrator to say… literally anything based on the conversation, since it has full context.</p>
-<p>The goal for this skill was specifically to give me learning and exposure, but I think it could be quite useful if converted into <strong>a full “wtf is claude doing” tool</strong>— based on my experience with the default version, the blurbs will be quite accurate to what and why Claude is running or choosing to do at any given moment, and it would cover a huge gap between obfuscated tool calls and user understanding. You’d just have to tweak narrator-prompt.md for that purpose.</p>
-<p>Here’s the default <code>narrator-prompt.md</code> for reference:</p>
-<div class="callout callout-style-default callout-note callout-titled" title="narrator-prompt.md">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-narrator-prompt.md
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:2000px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fapprentice%2Fblob%2Fmain%2Fskills%2Fapprentice%2Fscripts%2Fnarrator-prompt.md&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
-</div>
-</div>
+<section id="flight" class="level2">
+<h2 class="anchored" data-anchor-id="flight">Flight!</h2>
+<p>Since the program already listens for keypressed to exit, interactive keyboard controls were a tiny addition. The arrow keys make you look around, and in <code>--interactive</code> mode, you fly in the direction you’re facing! In this mode <code>-w</code> controls your flight speed.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="gifs/flight.gif" class="img-fluid figure-img"></p>
+<figcaption>Sped-up footage of flight in interactive mode. The usual experience is much more leisurely.</figcaption>
+</figure>
 </div>
 </section>
-<section id="personal-thoughts" class="level2">
-<h2 class="anchored" data-anchor-id="personal-thoughts">Personal Thoughts</h2>
-<p>The loss of small-scale coding as a career-defining skill hurts a lot (it’s my #1 favorite thing to do, after all), but progress is progress. Having a good understanding of how coding works and how to organize and manage a project, which are the other skills you develop while coding. I just worry it’ll be hard to come up with projects if it’s always more effective to vibecode them :/</p>
-<p>Here’s a finishing quote from a goofy daily stoic quotes applet I have on my linux desktop:</p>
-<blockquote class="blockquote">
-<p>The man who is truly good and wise neither struggles with adversity nor complains of his lot; rather, he takes heart from even the harshest of conditions. -Musonius Rufus, Lecture X</p>
-</blockquote>
-<p>Who knows where AI will take us— but the sun will keep rising. Carpe diem.</p>
-
-
-<div class="hidden" aria-hidden="true">
-<span class="glightbox-desc lightbox-desc-1">Image from an early version, but demonstrative of the sort of comments it gives.</span>
-<span class="glightbox-desc lightbox-desc-4">Projects like this (terminal+x11 display for this tiny usb screen) now take only a couple hours, but they can still be a great learning opportunity— I ended up with more exposure to USB serial architecture than I would have gotten if I wrote the project myself, from apprentice blurbs and /btw questions.</span>
+<section id="prerendering" class="level2">
+<h2 class="anchored" data-anchor-id="prerendering">Prerendering</h2>
+<p>Volumetric rendering is computationally expensive, and you don’t really want a screensaver making your CPU chug. I came up with a simple solution: just prerender a set number of frames and then loop them. This comes with the added benefit of being able to save the frames to play later.</p>
+<p>30 fps 4-second looped animation:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./clouds</span> <span class="at">--loop</span> 4 <span class="at">--fps</span> 30</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Export to file and play file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./clouds</span> <span class="at">-loop</span> 4 <span class="at">--fps</span> 30 <span class="at">-o</span> demo.clouds</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./clouds</span> <span class="at">--file</span> demo.clouds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="colors" class="level2">
+<h2 class="anchored" data-anchor-id="colors">Colors</h2>
+<p>The project also supports a 256-color fallback for terminals without truecolor (or select it manually with <code>--color 256</code>). This color banding on this is GNARLY, I think I like it even more than truecolor.</p>
+<p><img src="gifs/256golden.gif" class="img-fluid"> <img src="gifs/256day.gif" class="img-fluid"> <img src="gifs/256sunset.gif" class="img-fluid"></p>
+</section>
+<section id="web-demo" class="level2">
+<h2 class="anchored" data-anchor-id="web-demo">Web Demo</h2>
+<p>Because it’s 2026, I was able to make a webdemo in 10 minutes with a quick oneshot prompt to “compile it to WASM and make a drop-in iframe”. So now you can pull it up in a browser window if you don’t feel like compiling for use in the terminal<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p><a href="https://gbkorr.github.io/gbkorr/clouds/clouds.html"><code>https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS</code></a></p>
+<p>ARGS has format e.g.&nbsp;<code>clouds.html?coverage=0.5&amp;elevation=0&amp;ascii=true</code>. color, loop, presets, and interactive mode aren’t implemented. Use <code>ctrl +/-</code> to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.</p>
+<div style="width:600px;height:400px;background:#000;display:grid;place-items:center">
+  <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?time=sunset&amp;elevation=0.7 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
+    load demo
+  </button>
 </div>
+
+
 </section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>technically a plugin<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>As well as the website itself, and almost all code featured. The scripts for this plugin are Claude-authored, though.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Present in this very sentence! Although there’s an argument to be made that triplets actually aren’t great for prose. My opinion is mixed.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Why the heck is the correct term an “em dash”?? I don’t call the letter B “bee”.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>I’ve recently abandoned my beloved overuse of <strong>bold text</strong> because it just looks like Claude prose to me now.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Oh god, I’ve been reading too many claude logs. I can feel the subtle shifts in my prose that mimic it.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Of course, it’s still a project designed for the terminal and this web version won’t be getting any updates. But it’s cool to have.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -749,31 +760,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
-window.onload = () => {
-  lightboxQuarto.on('slide_before_load', (data) => {
-    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-    const href = trigger.getAttribute('href');
-    if (href !== null) {
-      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-      if (imgEl !== null) {
-        const srcAttr = imgEl.getAttribute("src");
-        if (srcAttr && srcAttr.startsWith("data:")) {
-          slideConfig.href = srcAttr;
-        }
-      }
-    } 
-  });
-
-  lightboxQuarto.on('slide_after_load', (data) => {
-    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-    if (window.Quarto?.typesetMath) {
-      window.Quarto.typesetMath(slideNode);
-    }
-  });
-
-};
-          </script>
 
 
 
