@@ -46,7 +46,7 @@ A simple **Claude skill** for learning from agentic tooling as it happens. [link
 
 <img class='thumbnail' src=images/ggufr.png>
 
-An **LLM chatbot** running locally in pure R. [link](ggufr/ggufr.qmd)
+**LLM inference** running in pure R, written from scratch. [link](ggufr/ggufr.qmd)
 
 <br clear="left">
 

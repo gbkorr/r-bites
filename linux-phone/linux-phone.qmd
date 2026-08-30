@@ -514,7 +514,7 @@ date +"%A; %B %dth %Y" | termux-tts-speak
 ```
 
 **Type with voice**:  
-Usage: say "say <text> over"; it will inject <text> as keyboard text into whatever window you're focused on. `termux-speech-to-text` likes to cut off the final word so you have to end with a dummy phrase like "over".
+Usage: say "say \<text\> over"; it will inject <text> as keyboard text into whatever window you're focused on. `termux-speech-to-text` likes to cut off the final word so you have to end with a dummy phrase like "over".
 
 ```bash
 while true; do
