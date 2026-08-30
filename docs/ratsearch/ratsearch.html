@@ -220,6 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#subagents" id="toc-subagents" class="nav-link" data-scroll-target="#subagents">8.4 Subagents</a></li>
   </ul></li>
+  <li><a href="#batsearch" id="toc-batsearch" class="nav-link" data-scroll-target="#batsearch">9. Batsearch</a></li>
   </ul>
 </nav>
     </div>
@@ -520,7 +521,7 @@ ratsearch.sh
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>See section 8 for a commented walkthrough of the code.</p>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:2200px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fratsearch.sh&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2180px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fratsearch.sh&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
 </div>
 </div>
 </div>
@@ -762,9 +763,31 @@ ratsearch.sh
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">subagent</span> <span class="st">"You are a helpful assistant..."</span> <span class="dt">\</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Summarize this document: </span><span class="va">$DOCUMENT</span><span class="st">"</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-
 </section>
+</section>
+<section id="batsearch" class="level2">
+<h2 class="anchored" data-anchor-id="batsearch">9. Batsearch</h2>
+<p>The obvious limitation of this project is that using wikipedia offline serves very little purpose— it’s almost always more effective to just do a websearch. I realized that this is even easier than what ratsearch does— I just have to hook up a tool to a “get web results” function— so I made a new tool, and got it down to just 30 lines of code! The structure is similar to ratsearch, but I had to compromise on the comments and error handling. I’d do a more detailed writeup, but it’d be too similar to this one…</p>
+<p>Importantly, I think this tool actually serves a useful purpose: I designed it to be a pipable, one-shot unix command, so it’s easy to integrate into other things (whereas ratsearch uses an interactive, user-facing-only conversation). I can actually imagine a lot of terminal utilities that could benefit from this sort of thing (maybe a man/tdlr alternative that just websearches how to use a function?).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="batsearch.sh">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+batsearch.sh
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:720px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fbatsearch.sh&amp;style=docco&amp;type=code&amp;showBorder=on&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showFullPath=on&amp;showCopy=on"></iframe>
+</div>
+</div>
+</div>
+<p><img src="batsearch.png" class="img-fluid"></p>
+
+
 </section>
 
 

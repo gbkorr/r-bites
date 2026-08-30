@@ -266,7 +266,7 @@ Download a .zim wikipedia archive (section 2), and copy `ratsearch.sh` from belo
 :::{.callout-note collapse=true title="ratsearch.sh"}
 See section 8 for a commented walkthrough of the code.
 ```{=html}
-<iframe frameborder="0" scrolling="no" style="width:100%; height:2200px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fratsearch.sh&style=docco&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:2180px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fratsearch.sh&style=docco&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 ```
 :::
 
@@ -539,6 +539,20 @@ response="$(
     "Summarize this document: $DOCUMENT"
 )"
 ```
+
+## 9. Batsearch
+The obvious limitation of this project is that using wikipedia offline serves very little purpose— it's almost always more effective to just do a websearch. I realized that this is even easier than what ratsearch does— I just have to hook up a tool to a "get web results" function— so I made a new tool, and got it down to just 30 lines of code! The structure is similar to ratsearch, but I had to compromise on the comments and error handling. I'd do a more detailed writeup, but it'd be too similar to this one...
+
+Importantly, I think this tool actually serves a useful purpose: I designed it to be a pipable, one-shot unix command, so it's easy to integrate into other things (whereas ratsearch uses an interactive, user-facing-only conversation). I can actually imagine a lot of terminal utilities that could benefit from this sort of thing (maybe a man/tdlr alternative that just websearches how to use a function?).
+
+:::{.callout-note collapse=true title="batsearch.sh"}
+```{=html}
+<iframe frameborder="0" scrolling="no" style="width:100%; height:720px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fgbkorr%2Fratsearch%2Fblob%2Fmain%2Fbatsearch.sh&style=docco&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+```
+:::
+
+![](batsearch.png)
+
 
 
 

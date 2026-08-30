@@ -249,7 +249,7 @@
     "href": "ratsearch/ratsearch.html#batsearch",
     "title": "ratsearch: a 100-Line Wikipedia-RAG Chatbot",
     "section": "9. Batsearch",
-    "text": "9. Batsearch\nThe obvious limitation of this project is that using wikipedia— it’s almost always more effective to just do a websearch.\nSo I wrote another tool for that, and I think I serves a bit of a more useful niche. Better yet, I managed to do it all in just 30 lines of bash! Both of these project"
+    "text": "9. Batsearch\nThe obvious limitation of this project is that using wikipedia offline serves very little purpose— it’s almost always more effective to just do a websearch. I realized that this is even easier than what ratsearch does— I just have to hook up a tool to a “get web results” function— so I made a new tool, and got it down to just 30 lines of code! The structure is similar to ratsearch, but I had to compromise on the comments and error handling. I’d do a more detailed writeup, but it’d be too similar to this one…\nImportantly, I think this tool actually serves a useful purpose: I designed it to be a pipable, one-shot unix command, so it’s easy to integrate into other things (whereas ratsearch uses an interactive, user-facing-only conversation). I can actually imagine a lot of terminal utilities that could benefit from this sort of thing (maybe a man/tdlr alternative that just websearches how to use a function?).\n\n\n\n\n\n\nbatsearch.sh"
   },
   {
     "objectID": "ratsearch/ratsearch.html#footnotes",
