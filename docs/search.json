@@ -599,7 +599,7 @@
     "href": "clouds/clouds.html#web-demo",
     "title": "clouds.c: A Small, Feature-Rich Terminal Screensaver",
     "section": "Web Demo",
-    "text": "Web Demo\nBecause it’s 2026, I was able to make a webdemo in 10 minutes with a quick oneshot prompt to “compile it to WASM and make a drop-in iframe”. So now you can pull it up in a browser window if you don’t feel like compiling for use in the terminal1.\nhttps://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS\nARGS has format e.g. clouds.html?coverage=0.5&elevation=0&ascii=true. color, loop, presets, and interactive mode aren’t implemented. Use ctrl +/- to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.\n\n  \n    load demo"
+    "text": "Web Demo\nBecause it’s 2026, I was able to make a webdemo in 10 minutes with a quick oneshot prompt to “compile it to WASM and make a drop-in iframe”. So now you can pull it up in a browser window if you don’t feel like compiling for use in the terminal1.\nhttps://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS\nARGS has format e.g. clouds.html?coverage=0.5&elevation=0&ascii=true. –color, loop, presets, and interactive mode aren’t implemented. Use ctrl +/- to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.\n\n  \n    load demo"
   },
   {
     "objectID": "clouds/clouds.html#footnotes",
@@ -747,5 +747,19 @@
     "title": "Play Videos in R",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nOf the default uniform block shading elements █▓▒░, RStudio renders █ at half height and ▒ as thinner than a regular monospaced character. It’s absurd!↩︎"
+  },
+  {
+    "objectID": "clouds/clouds.html#features-and-args",
+    "href": "clouds/clouds.html#features-and-args",
+    "title": "clouds.c: A Small, Feature-Rich Terminal Screensaver",
+    "section": "Features and Args",
+    "text": "Features and Args\nThe program is relatively feature-rich, and has quite a number of useful parameters.\nCloud Generation:\n--coverage: Cloud sparsity.\n--height: Cloud height; heigh values make for huge, billowing clouds.\nEnvironment:\n--time: Time of day; determines colors and sun elevation.\n--preset: Settings preset. See §presets.\n--azimuth: Horizontal (compass) sun angle; influences the direction of shading on the clouds.\nAnimation:\n--wind: Speed of cloud movement.\n--elevation: Camera Y position; 0.5 is at cloud level, so you can be above or below.\n--yaw: Initial yaw angle, useful for looking into/away from the wind.\n--pitch: Initial pitch angle.\nQuality:\n--quality: Number of raymarch steps. &gt;60 not recommended unless prerendered with –loop.\n--color: truecolor/256 ansi/mono color.\n--ascii: Enable ASCII mode, not my favorite.\n--ramp: Glyph ramp (transparent -&gt; opaque) for ASCII rendering.\n--fps: Desired frames per second; important for –loop.\nUtility:\n--interactive: Enable flight. See §flight.\n--once: Render a single frame.\n--loop: Prerender this many seconds, and loop playback. See §prerendering.\n--output: Save --loop prerender to a file.\n--file: Play saved file.\n\n\n\nThe four times, with default settings."
+  },
+  {
+    "objectID": "clouds/clouds.html#features",
+    "href": "clouds/clouds.html#features",
+    "title": "clouds.c: A Small, Feature-Rich Terminal Screensaver",
+    "section": "Features",
+    "text": "Features\nThe program is relatively feature-rich, and has quite a number of useful args.\nCloud Generation:\n--coverage: Cloud sparsity.\n--height: Cloud height; heigh values make for huge, billowing clouds.\nEnvironment:\n--time: Time of day; determines colors and sun elevation.\n--preset: Settings preset. See §presets.\n--azimuth: Horizontal (compass) sun angle; influences the direction of shading on the clouds.\nAnimation:\n--wind: Speed of cloud movement.\n--elevation: Camera Y position; 0.5 is at cloud level, so you can be above or below.\n--yaw: Initial yaw angle, useful for looking into/away from the wind.\n--pitch: Initial pitch angle.\nQuality:\n--quality: Number of raymarch steps. &gt;60 not recommended unless prerendered with –loop.\n--color: truecolor/256 ansi/mono color.\n--ascii: Enable ASCII mode, not my favorite.\n--ramp: Glyph ramp (transparent -&gt; opaque) for ASCII rendering.\n--fps: Desired frames per second; important for –loop.\nUtility:\n--interactive: Enable flight. See §flight.\n--once: Render a single frame.\n--loop: Prerender this many seconds, and loop playback. See §prerendering.\n--output: Save --loop prerender to a file.\n--file: Play saved file.\n\n\n\nThe four times, with default settings."
   }
 ]

@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#basic-usage" id="toc-basic-usage" class="nav-link active" data-scroll-target="#basic-usage">Basic Usage</a></li>
+  <li><a href="#features" id="toc-features" class="nav-link active" data-scroll-target="#features">Features</a></li>
   <li><a href="#flight" id="toc-flight" class="nav-link" data-scroll-target="#flight">Flight!</a></li>
   <li><a href="#prerendering" id="toc-prerendering" class="nav-link" data-scroll-target="#prerendering">Prerendering</a></li>
   <li><a href="#colors" id="toc-colors" class="nav-link" data-scroll-target="#colors">Colors</a></li>
@@ -245,9 +245,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>The presets <code>nimbus</code>, <code>below</code>, <code>sol</code>, and <code>thunder</code>.</figcaption>
 </figure>
 </div>
-<section id="basic-usage" class="level2">
-<h2 class="anchored" data-anchor-id="basic-usage">Basic Usage</h2>
-<p>The program is relatively feature-rich, and has quite a number of useful parameters.</p>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
+<p>The program is relatively feature-rich, and has quite a number of useful args.</p>
 <p>Cloud Generation:<br>
 <code>--coverage</code>: Cloud sparsity.<br>
 <code>--height</code>: Cloud height; heigh values make for huge, billowing clouds.</p>
@@ -307,7 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="web-demo">Web Demo</h2>
 <p>Because it’s 2026, I was able to make a webdemo in 10 minutes with a quick oneshot prompt to “compile it to WASM and make a drop-in iframe”. So now you can pull it up in a browser window if you don’t feel like compiling for use in the terminal<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p><a href="https://gbkorr.github.io/gbkorr/clouds/clouds.html"><code>https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS</code></a></p>
-<p>ARGS has format e.g.&nbsp;<code>clouds.html?coverage=0.5&amp;elevation=0&amp;ascii=true</code>. color, loop, presets, and interactive mode aren’t implemented. Use <code>ctrl +/-</code> to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.</p>
+<p>ARGS has format e.g.&nbsp;<code>clouds.html?coverage=0.5&amp;elevation=0&amp;ascii=true</code>. –color, loop, presets, and interactive mode aren’t implemented. Use <code>ctrl +/-</code> to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.</p>
 <div style="width:600px;height:400px;background:#000;display:grid;place-items:center">
   <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?time=sunset&amp;elevation=0.7 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
     load demo

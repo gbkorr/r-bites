@@ -15,9 +15,8 @@ github: [https://github.com/gbkorr/clouds.c](https://github.com/gbkorr/clouds.c)
 
 ![The presets `nimbus`, `below`, `sol`, and `thunder`.](images/presets.png)
 
-## Basic Usage
-The program is relatively feature-rich, and has quite a number of useful parameters.
-
+## Features
+The program is relatively feature-rich, and has quite a number of useful args.
 
 Cloud Generation:    
 `--coverage`: Cloud sparsity.      
@@ -82,7 +81,7 @@ Because it's 2026, I was able to make a webdemo in 10 minutes with a quick onesh
 
 [`https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS`](https://gbkorr.github.io/gbkorr/clouds/clouds.html)
 
-ARGS has format e.g. `clouds.html?coverage=0.5&elevation=0&ascii=true`. color, loop, presets, and interactive mode aren't implemented. Use `ctrl +/-` to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it's not designed to look good at super high resolution.
+ARGS has format e.g. `clouds.html?coverage=0.5&elevation=0&ascii=true`. --color, loop, presets, and interactive mode aren't implemented. Use `ctrl +/-` to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it's not designed to look good at super high resolution.
 
 ```{=html}
 <div style="width:600px;height:400px;background:#000;display:grid;place-items:center">
