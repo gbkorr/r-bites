@@ -15,7 +15,7 @@ github: [https://github.com/gbkorr/clouds.c](https://github.com/gbkorr/clouds.c)
 
 ![The presets `nimbus`, `below`, `sol`, and `thunder`.](images/presets.png)
 
-## Features
+## Flags
 The program is relatively feature-rich, and has quite a number of useful args.
 
 Cloud Generation:    
