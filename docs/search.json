@@ -564,7 +564,7 @@
     "href": "clouds/clouds.html",
     "title": "clouds.c: A Small, Feature-Rich Terminal Screensaver",
     "section": "",
-    "text": "Here’s a little project I cooked up with Claude Fable over the course of about two weeks. Like my other projects with Claude, I led the design and iteration and had Claude do the technical implementation.\nI’ve always enjoyed terminal screensavers like cbonsai and pipes.sh, but my background in R never gave me an opportunity to make my own— I’m just not great at writing in C. That made this a particularly good project to vibecode— I know how the renderer works, but wouldn’t have been able to get the volumetric logic running in C on my own (in a reasonable amount of time to make it worth doing as a project).\ngithub: https://github.com/gbkorr/clouds.c"
+    "text": "Here’s a little project I cooked up with Fable over the course of about two weeks. Like my other projects with Claude, I led the design and iteration and had Claude do the technical implementation.\nI’ve always enjoyed terminal screensavers like cbonsai and pipes.sh, but my background in R never gave me an opportunity to make my own— I’m just not great at writing in C. That made this a particularly good project to vibecode— I know how the renderer works, but wouldn’t have been able to get the volumetric logic running in C on my own (in a reasonable amount of time to make it worth doing as a project).\ngithub: https://github.com/gbkorr/clouds.c"
   },
   {
     "objectID": "clouds/clouds.html#basic-usage",
