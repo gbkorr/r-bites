@@ -16,6 +16,14 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 #### *Recent Articles*:
 
+*September*
+
+<img class='thumbnail' src=images/naive.png>
+
+A **short math paper** on encoding data in the *delay* between signals. [link](naive/naive.qmd)
+
+<br clear="left">
+
 *August*
 
 <img class='thumbnail' src=images/ratsearch2.png>

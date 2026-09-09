@@ -1,0 +1,56 @@
+---
+title: "A Naive Delay-Based System of Data Transmission"
+date: September 2026
+date-format: 'MMMM YYYY'
+author: Gabriel Broussard Korr
+format:
+  html:
+    toc: true
+---
+
+I had the itch to do some mathematical writing this month, so I came up with a problem to explore and drafted a short paper on it. The problem originally arose from the question of "how efficiently can I communicate with my friend by beating a large drum?", and developed into a simple system for transmitting data through the delay between sounds. I'm sure there's already a name for this technique, but I haven't looked into it since that would take away the fun! (hence the lack of citations)
+
+I'll probably end up implementing this for an IoT or steganography project in the fall— it's pretty versatile and fun to work with. But mainly, it was fun to do some writing in $\LaTeX{}$ and see the old math textbook font again :). I hadn't realized Quarto supported that sort of thing.
+
+> Note: I did not use or consult AI in the creation of this article; the goal was simply to give myself a fun exercise.
+
+## 1. Definition {style="font-family: 'Computer Modern';"}
+
+:::{style="font-family: 'Computer Modern';"}
+Information is communicated through the delay $d$ between impulses, which is quantized to one of $s$ discrete values. A minimum delay $m$ is enforced so that impulses do not occur in rapid succession.
+
+Formally, the value $v$ represented by a delay $d$ between the $n$th impulse (occurring at time $t_n$) and the previous impulse depends on the number of discrete values $s$, the time scalar $p$, and the minimum delay $m$. A half-step $0.5p$ is added to $d$ to give a balanced margin for error if the impulse is early or late.
+
+$d = t_n - t_{n-1}$
+
+$v = \lfloor sp(d + 0.5p - m) \rfloor\ mod\ s$
+
+$\therefore v\in\{0,\dots,s-1\}\text{ for }d > m$
+:::
+## 2. Influences on Data Rate {style="font-family: 'Computer Modern';"}
+
+:::{style="font-family: 'Computer Modern';"}
+The time to transmit a given value $v$ is equal to $pv+m$; thus, if each value takes up the proportion $P_v$ of the transmitted data (i.e. $\sum{P_v}=1$), the average delay $D$ per impulse can be calculated as $D = m+p\sum P_v v$. This is significant; it suggests that if the data is manipulated to contain more low values, it will be transmitted faster in the same amount of impulses. For uniform data (the assumption for the rest of this paper), $D=m+0.5sp$.
+
+The number of discrete values $s$ influences both the speed and number of impulses required to transmit a piece of data. For an arbitrary number $V$, the number of impulses $b$ required to transmit $V$ are $b=\lceil\log_s(V+1)\rceil$, since $b$ impulses can represent $s^b$ different values. Thus, $b$ decreases asymptotically as $s$ increases for a given $V$, while the average transmission time $D$ increases linearly; larger values of $s$ give diminishing returns. Note that the number of impulses required to transmit the number $V=255$ is equivalent to the number of impulses required to transmit one arbitrary byte; $(b\ for\ V)$ proxies $(b\ for\ log_2V\ bits)$.
+
+The number of bits $B$ carried by each impulse is then found as $B = 1/log_s(2)$. This number can be fractional, such as in the case where two impulses carry enough values to represent three bits ($s=3,B\approx 1.58$, since two $s=3$ impulses can represent 9 values).
+
+The time scalar $p$ linearly influences the overall speed of transmission, and can be chosen to minimize errors while maximizing speed; if impulses are received within time $t \pm \sigma$ due to uncertainty in impulse and reception timing, a value of $p=2E\sigma$ produces an error rate of $P(|Z|>E)$ (gaussian, e.g. 5% for $E=2$) by spacing out the values such that an impulse is incorrectly received only when $t_{real} > t_{intended} \pm E\sigma$. Thus, the error rate can be finely controlled with $E$ if the timing uncertaintly is measurable.
+
+Finally, the bitrate $R$ (bits per impulse $\times$ average delay between impulses) can be calculated as $R = BD = \frac{m+0.5sp}{log_s(2)}$. If the minimum and average delay $m$ and $D$ are kept constant, $R = \frac{1}{D}(1+log_2(D-m)-log_2(p))$ and $R$ increases by $1/D$ of a bit each time $p$ is halved. Therefore, improvements in transmission fidelity (decreasing $\sigma$ and allowing a smaller $p$ for the same error rate) improve the bitrate logarithmically: $R \propto -log(p)$ (when $s$ is adjusted to keep $D$ constant).
+:::
+## 3. Discussion {style="font-family: 'Computer Modern';"}
+
+:::{style="font-family: 'Computer Modern';"}
+The system is defined for continuous-time impulses, but it also works well in discrete scenarios such as characters in text. For instance, a document could hide information in the number of characters between em dashes in the text. Because $v$ is modular (i.e. a delay of $d+sp$ produces the same value as $d$), this is particularly robust to restrictions on where key characters can be placed; however, it comes at the cost of a rather low payload capacity, with an upper bound on bits per character at roughly $\frac{1+log_2D}{D}$.
+
+In general, a benefit of this system is that sparse, high-$D$ embedding produces an extremely low SNR, which may make it difficult to detect as steganography. This is doubly true in the case of timing-based steganography (like the timing of packets), where continuous time offers much higher payload capacity for the same number of impulses by using a finer value of $p$; for instance, at $p=1$ms, impulses spaced an average of 10 seconds apart (with a minimum delay of 1 second) can transmit data at a rate of nearly 1.5 bits per second!
+
+A limitation of the default system is that it is simple to detect analytically; impulses following this system will have a recognizable distribution of delays ($P_v$, uniform by default), which will stand out unless intentionally tuned to match the geometric distribution seen in random noise. Another simple solution is to rotate between impulse types; for example, alternating between interchangeable symbols like semicolons and em dashes (such that delay #1 is the number of characters between a semicolon and the first em dash following it, delay #2 is between that em dash and the next semicolon, and so on) both obfuscates the signal's distribution and allows both symbols to be used naturally without mangling the data (since additional semicolons during delay #1 are ignored). Detecting such a rotation system is much more challenging, especially due the already low SNR of the impulses.
+
+Future work may be useful to extend the math in Section 2 to work for arbitrary distributions of $P_v$, and to analyze whether this system offers advantages over preexisting techniques for discrete and continuous steganography.
+:::
+
+
+

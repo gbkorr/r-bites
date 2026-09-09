@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Delay-Based Data Protocol"
+            icon: broadcast
+            href: naive/naive.qmd
           - text: "Tiny Wikipedia RAG"
             icon: book
             href: ratsearch/ratsearch.qmd
