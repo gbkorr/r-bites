@@ -20,7 +20,7 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 <img class='thumbnail' src=images/naive.png>
 
-A **short math paper** on encoding data in the *delay* between signals. [link](naive/naive.qmd)
+A short **math paper** on encoding data in the *delay* between signals. [link](naive/naive.qmd)
 
 <br clear="left">
 
