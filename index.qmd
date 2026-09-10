@@ -12,7 +12,7 @@ This is where I upload articles on small projects I've done. At first it was jus
 
 See my [Github](https://github.com/gbkorr) for more projects.
 
-> Note: All writing is my own. AI is useful, but I always write without it. Projects marked with * are vibe-coded; the rest are all coded by hand. Both are important skills!
+> Note: All writing is my own— I never use AI to help with my writing. Projects marked with * are vibe-coded; the rest are all coded by hand. Both are important skills!
 
 #### *Recent Articles*:
 
