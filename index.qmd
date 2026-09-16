@@ -18,6 +18,12 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 *September*
 
+<img class='thumbnail' src=images/bayan.png>
+
+\* A **web synthesizer** for the accordion, and some musings on the state of SWE.
+
+<br clear="left">
+
 <img class='thumbnail' src=images/naive.png>
 
 A short **math paper** on encoding data in the *delay* between signals. [link](naive/naive.qmd)

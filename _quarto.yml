@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Web Accordion Interface"
+            icon: ui-radios-grid
+            href: bayan/bayan.qmd
           - text: "Delay-Based Data Protocol"
             icon: broadcast
             href: naive/naive.qmd

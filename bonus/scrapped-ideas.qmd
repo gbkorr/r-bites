@@ -5,6 +5,8 @@ I do a lot of projects for fun, but not all of them succeed enough to put on the
 
 ---
 
+**folkcodec** (Sep '26): I gave Claude an impossible task: make a good 2kbps audio codec so I can compress my beloved folk music recordings. Claude realized that it can just take the approach of [codec2](https://en.wikipedia.org/wiki/Codec_2) and apply it to multiple voices to get a very good audio approximation for music— I was very surprised, and I'm not aware of a widely-available format that does anything similar. A week of attempts failed at improving this system, and I'm not really sure how or if I want to release it— slightly compressed audio is a pretty acquired taste (and it only works for music without dense accompaniment— unlike all modern pop). What is there to write about?
+
 **tugra** (Jul '26): I'm interested in the concept of communication that's impossible to parse algorithmically; i.e., a way for humans to communicate that can't be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn't succeed long-term.
 
 **stego** (Jul '26): There's a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.
