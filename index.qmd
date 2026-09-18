@@ -20,7 +20,7 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 <img class='thumbnail' src=images/bayan.png>
 
-\* A **web synthesizer** for the accordion, and some musings on the state of SWE.
+\* A **web synthesizer** for the accordion, and some musings on the state of SWE. [link](bayan/bayan.qmd)
 
 <br clear="left">
 
