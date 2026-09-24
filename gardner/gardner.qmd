@@ -56,7 +56,7 @@ I was rather surprised by the quality of that validation article (written on Lan
 
 Here's a nice piece I had Claude write on a 400-character bash oneliner I had it make that draws Julia sets in the terminal.
 
-[Julia.md](claude-excerpts/julia.html)
+[Julia.md](claude-excerpts/julia.html){target="_blank"}
 
 The writing (and Gardner's in general) reminds me of that "old style" of STEM writing before pop science and math got big (Gardner's columns stopped in 1981). Reading Gardner again also made me pick up the em dash once more— harumph. It's such a good tool for writing, and easily accessible on mac with `shift-option-hyphen`. Frankly, the people who get weirded out by it just haven't read much.[^obv]
 
@@ -68,9 +68,9 @@ I quite enjoyed what it came up with, though the shoehorned references to my art
 
 [^whoops]: Which it was basically forced to include based on its interpretation of my prompt. Definitely a prompting issue rather than something pertaining to the actual style guide.
 
-[Talking Drums](claude-excerpts/drums.html)
+[Talking Drums](claude-excerpts/drums.html){target="_blank"}
 
-[Perlin Noise](claude-excerpts/perlin.html)
+[Perlin Noise](claude-excerpts/perlin.html){target="_blank"}
 
 ## The Guide Itself
 
