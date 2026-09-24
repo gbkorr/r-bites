@@ -13,10 +13,10 @@ website:
     left:
       - text: "Articles"
         menu:
-          - text: "Improving Claude's Prose"
+          - text: "Improving Claude's Prose *"
             icon: book
             href: gardner/gardner.qmd
-          - text: "Web Accordion Interface"
+          - text: "Web Accordion Interface *"
             icon: ui-radios-grid
             href: bayan/bayan.qmd
           - text: "Delay-Based Data Protocol"
@@ -25,10 +25,10 @@ website:
           - text: "Tiny Wikipedia RAG"
             icon: book
             href: ratsearch/ratsearch.qmd
-          - text: "Terminal Cloud Renderer"
+          - text: "Terminal Cloud Renderer *"
             icon: clouds-fill
             href: clouds/clouds.qmd
-          - text: "Claude Apprentice"
+          - text: "Claude Apprentice *"
             icon: asterisk
             href: grr-claude/grr-claude.qmd
           - text: "LLM Inference in R"
