@@ -27,8 +27,8 @@ I'd been listening to a lot of [bayan](https://en.wikipedia.org/wiki/Bayan_(acco
 
 Unlike most European accordions, the bayan uses a button layout (far superior, imo) rather than a piano keyboard, and it happens to be organized with a stagger very similar to a computer keyboard. Making a website interface for a button accoridon isn't a new idea[^ex]^,^[^ex2], but I figured that with the power of vibe coding I could make a better one. Besides, those were regular old chromatic accordions— not bayans! The differentiating factor ended up being that I included a free bass system for the left hand, and I think my website has better polish/UX/timbre.
 
-[^ex]: https://www.keyboardaccordion.com/chromatic
-[^ex2]: https://okathira-dev.github.io/client-web-api-sandbox/button-accordion-with-keyboard/index.html
+[^ex]: [https://www.keyboardaccordion.com/chromatic](https://www.keyboardaccordion.com/chromatic)
+[^ex2]: [https://okathira-dev.github.io/client-web-api-sandbox/button-accordion-with-keyboard/index.html](https://okathira-dev.github.io/client-web-api-sandbox/button-accordion-with-keyboard/index.html)
 
 Developing this was an interesting process— I intentionally chose a hands-off approach where I made Claude do all the technical work, and kept my role as purely the designer. Of course, this involved lots of designing— loads of back-and-forth timbre feedback to get it tuned right, and 90% of the interface was by my own design. Both the sound engine and the web design took a lot of polishing and tweaking to get to my liking. I did the overall layout too— I actually gave Claude a hand-drawn sketch of the layout I wanted, and to my surprise it interpreted it perfectly and even read the wonky, faint handwriting of my labels and notes.
 

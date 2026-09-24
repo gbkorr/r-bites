@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Improving Claude's Prose"
+            icon: book
+            href: gardner/gardner.qmd
           - text: "Web Accordion Interface"
             icon: ui-radios-grid
             href: bayan/bayan.qmd

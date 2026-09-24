@@ -18,6 +18,13 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 *September*
 
+
+<img class='thumbnail' src=images/gardner.jpeg>
+
+\* Experimenting with getting Claude to **emulate the writing style** of my favorite mathematics author. [link](gardner/gardner.qmd)
+
+<br clear="left">
+
 <img class='thumbnail' src=images/bayan.png>
 
 \* A **web synthesizer** for the accordion, and some musings on the state of SWE. [link](bayan/bayan.qmd)

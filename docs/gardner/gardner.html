@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.557">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>&nbsp;&nbsp;R Bites - Experiments in Improving Claude’s Prose</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title"><i class="bi bi-hexagon"></i>&nbsp;&nbsp;R Bites</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Articles</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../gardner/gardner.html"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Improving Claude’s Prose</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../bayan/bayan.html"><i class="bi bi-ui-radios-grid" role="img">
+</i> 
+ <span class="dropdown-text">Web Accordion Interface</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../naive/naive.html"><i class="bi bi-broadcast" role="img">
+</i> 
+ <span class="dropdown-text">Delay-Based Data Protocol</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ratsearch/ratsearch.html"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Tiny Wikipedia RAG</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../clouds/clouds.html"><i class="bi bi-clouds-fill" role="img">
+</i> 
+ <span class="dropdown-text">Terminal Cloud Renderer</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
+</i> 
+ <span class="dropdown-text">Claude Apprentice</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ggufr/ggufr.html"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">LLM Inference in R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../rollingwater/rollingwater.html"><i class="bi bi-keyboard" role="img">
+</i> 
+ <span class="dropdown-text">4-Button Keyboard</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../morstdio/morstdio.html"><i class="bi bi-lightbulb-off" role="img">
+</i> 
+ <span class="dropdown-text">Morse Code Headless Linux</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../linux-phone/linux-phone.html"><i class="bi bi-android" role="img">
+</i> 
+ <span class="dropdown-text">Linux Desktop on a Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../temperature/temperature.html"><i class="bi bi-globe-americas" role="img">
+</i> 
+ <span class="dropdown-text">Live Temperature from Satellites</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../conference/conference.html"><i class="bi bi-webcam" role="img">
+</i> 
+ <span class="dropdown-text">Video Conference inside R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../flipphone-r/flipphone-r.html"><i class="bi bi-terminal-fill" role="img">
+</i> 
+ <span class="dropdown-text">R on a Flip Phone</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../video-player/video-player.html"><i class="bi bi-file-earmark-play" role="img">
+</i> 
+ <span class="dropdown-text">R Console Video Player</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#process" id="toc-process" class="nav-link active" data-scroll-target="#process">Process</a></li>
+  <li><a href="#a-few-examples" id="toc-a-few-examples" class="nav-link" data-scroll-target="#a-few-examples">A Few Examples</a></li>
+  <li><a href="#the-guide-itself" id="toc-the-guide-itself" class="nav-link" data-scroll-target="#the-guide-itself">The Guide Itself</a>
+  <ul class="collapse">
+  <li><a href="#usage-notes" id="toc-usage-notes" class="nav-link" data-scroll-target="#usage-notes">Usage Notes</a></li>
+  </ul></li>
+  <li><a href="#plagiarism" id="toc-plagiarism" class="nav-link" data-scroll-target="#plagiarism">Plagiarism?</a></li>
+  <li><a href="#future-work" id="toc-future-work" class="nav-link" data-scroll-target="#future-work">Future Work</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Experiments in Improving Claude’s Prose</h1>
+<p class="subtitle lead">With a Style Guide Based on the Works of Martin Gardner</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p>Note: This article was <em>written</em> entirely without the use of AI, as is true of all my writing. Claude-generated excerpts are explicitly marked as such.</p>
+</blockquote>
+<p>I used to often say that I’m better at recognizing good writing than I am at producing it— perhaps the opposite of many writers. This skill has remained relevant in the age of AI, and led me to an interesting experiment this last month.</p>
+<p>Claude’s prose<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is awful. It’s excellent at explaining things in a concise, understandable, actionable manner, but it does so with no regard to reading pleasure (why should it?). Luckily, it’s also good at following instructions, especially those it authored itself<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. I had the idea to improve its prose by having it produce a writing guide, summarized from an analysis of every column article written by my favorite mathematics writer, the late Martin Gardner. I believe his books were the first I ever read about math.</p>
+<p>Even as someone who never uses AI to assist my own writing (and I do a lot of writing), there’s good reasons to want Claude to produce prose. For one, I think it’s appropriate that Claude write up things that it one-shot— a writeup by me would feel like a secondary source, and I’d only want to do that if I had a large hand in what was created (e.g., if I led several iterations of UX). The other main reason is that… I don’t like reading bad prose, and there’s times when I need Claude to explain a bigger concept to me (i.e., a complex idea it decided to use for a project).</p>
+<section id="process" class="level2">
+<h2 class="anchored" data-anchor-id="process">Process</h2>
+<p>So here’s how it went. I started with this prompt I wrote, aiming more for exploration (“What will Claude do with this?”) than a clear end goal:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Prompt [click to expand]">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Prompt [click to expand]
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>I don’t like sharing my prompts<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, but I suppose it’s helpful to do so. You can learn a lot someone’s AI skills by reading their prompts, you know. I could probably write a whole article about my approach.</p>
+<p>This was in plan mode, of course.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Claude struggles with writing tasteful, mathematical casual prose. Today's goal is to produce a style guide .md that gives adequate instruction to an agent for how to write in such prose, especially in the context of magazine or blog-style articles.</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>For reference, we have the gold standard: ./Gardner.pdf, a record of every mathematics column Martin Gardner wrote. His writing exemplifies good casual mathematical writing.</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>The book is long (~700 pages), so we'll need to come up with a strategy for reading it and analyzing the prose.</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Things to focus on:</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>- presentation: this is the most important part. It's easy to use the same mannerisms as a good writer, but actually presenting ideas well takes effort. Claude can organize articles decently, but often chooses the wrong things to make note of in its prose.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>- writing style: tasteful mathematical writing often involves dry presentation of exciting ideas.</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>The style guide should also include general best-practice advice for writing better prose, like encouraging making and revising an outline first to help decide what points to make in each section.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>We settled on a plan for several subagents to read sets of chapters in parallel and produce individual analyses of the writing, after which the main agent would synthesize the analyses into the deliverable style guide. Then, it would prompt a new subagent to use the guide to write an article about a new topic (not present in Gardner’s work), immediately critique its work in order to validate the guide, and use the critique to tweak the guide. I gave feedback too but ended up having little to say— it did a great job on the first pass.</p>
+<p>I was rather surprised by the quality of that validation article (written on Langton’s Ant<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>)— it had great narrative and ornamental structure (quite close to Gardner’s, even though the subagent read only the guide and none of his articles), and its AI mannerisms, while present, were few. While not the greatest writing (but still quite good), I was drawn into it the same way I have with good books. I think that’s a good summary of what you get with this style guide— not the cream of the crop, but better than a lot of writing I already enjoy in technical magazines. It’s also pretty targeted to follow Gardner’s style, so lots of historical anecdotes— I happen to find that appealing, but not everyone will.</p>
+</section>
+<section id="a-few-examples" class="level2">
+<h2 class="anchored" data-anchor-id="a-few-examples">A Few Examples</h2>
+<p>Here’s a nice piece I had Claude write on a 400-character bash oneliner I had it make that draws Julia sets in the terminal.</p>
+<p><a href="claude-excerpts/julia.html">Julia.md</a></p>
+<p>The writing (and Gardner’s in general) reminds me of that “old style” of STEM writing before pop science and math got big (Gardner’s columns stopped in 1981). Reading Gardner again also made me pick up the em dash once more— harumph. It’s such a good tool for writing, and easily accessible on mac with <code>shift-option-hyphen</code>. Frankly, the people who get weirded out by it just haven’t read much.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>Below are a few more examples that I found particularly appealing. I had it read every article on this very blog and write a column “inspired” by it— not about my article, but related to something interesting about the subject matter, and giving some historical/mechanical background and context that would complement the article if read in parallel.</p>
+<p>I quite enjoyed what it came up with, though the shoehorned references to my articles<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> made me chuckle. Here’s my favorites:</p>
+<p><a href="claude-excerpts/drums.html">Talking Drums</a></p>
+<p><a href="claude-excerpts/perlin.html">Perlin Noise</a></p>
+</section>
+<section id="the-guide-itself" class="level2">
+<h2 class="anchored" data-anchor-id="the-guide-itself">The Guide Itself</h2>
+<p>The writing in the guide is actually somewhat strange (poor prose), although typical of Fable-produced guides-for-subagents<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. I think there’s more value in reading the example articles than the guide itself, for that reason. Of course, the guide and its guidelines and restrictions are still interesting to skim though.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Guide [click to expand]">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Guide [click to expand]
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Generated by Fable 5 circa 12 Sep 2026. I don’t feel like making a whole repo for this, do with it what you will.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a># Casual Mathematical Prose: A Style Guide</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>## 1. Purpose and scope</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>This guide teaches you to write magazine- and blog-style articles about mathematics — the register of Martin Gardner's *Mathematical Games* columns, from which every rule here was extracted. "Casual" does not mean chatty, hyped, or dumbed down. It means: written for an intelligent stranger, organized around delight rather than curriculum, and delivered in a dry, level voice that trusts the reader to feel the excitement without being told to.</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>The central failure this guide corrects is not tone but **selection**. It is easy to borrow a good writer's mannerisms; the hard part is choosing the right things to say — which details earn a sentence, which decades get compressed to a clause, where to linger, what to omit, and how to arrange facts so that astonishment is the reader's own act rather than the writer's claim. Most of this guide is therefore about presentation. Style comes second, process advice runs throughout, and both serve selection.</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>## 2. Process: decide before you draft</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Good selection happens before drafting, not during it.</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>1. **Collect more material than you will use.** The finished article should feel like a curated cabinet chosen from a warehouse. If everything you know about the topic appears in the piece, you didn't know enough. The bibliography (or links) absorbs everything not chosen.</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>2. **Find the one most surprising mechanism.** Every article has a single moment where intuition breaks — a solution of −4 coconuts, a number too large for the universe sitting next to an expert guess of 6. Identify it before outlining. It gets the slow-motion treatment; everything else exists to reach it or radiate from it.</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>3. **Choose the lead instance.** Not the topic, not its importance — one concrete, dated, graspable thing: a person folding paper strips in the fall of 1939, a heavy object that must be moved on rollers, a short story in a 1926 magazine. If you cannot name your lead instance, you are not ready to write.</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>4. **Outline as a sequence of points, then revise the outline.** Each section of the outline should be one decided point — a claim, a reveal, a worked example — not a subtopic label. "The history of tiling" is a subtopic; "a decade of progress narrowed 20,000 tiles to 2" is a point. Revise the outline until every entry is a point and the points ramp (see §3.3). Cut any point that neither advances the ramp nor sets up the surprise. Reordering an outline costs minutes; reordering a draft costs the draft.</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>5. **Budget your effects.** Before drafting, allocate: at most one announced superlative, at most one exclamation point, at most one extended authored image, roughly one joke per couple of pages, one lingered-over example. These are per-article ceilings, not quotas — spending none of them is fully compliant; doubling any of them is not (§3.4, §4).</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>6. **After drafting, cut selectively, not uniformly.** Shortening every sentence flattens the piece. Instead delete whole points that didn't earn their place, and compress transitions to a clause. The lingered-over passage stays long. When a word target forces deeper cuts, drop whole subtopics — a variant, a descendant, a historical thread — before touching the lead instance, the ramp, or the surprise.</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>## 3. Presentation principles</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>### 3.1 Openings: enter through a particular</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>Never open with the topic's importance, a survey of the field, or an unmotivated definition. Enter through **one concrete particular** — a dated incident, a named person, a physical object, a puzzle stated outright, an intuition trap. The mathematics should seem like something that happened in the world before it is something to be explained.</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>Observed entry modes, all of which work:</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>- **Dated incident**: a specific magazine issue, a discovery with a month attached, an invention "on the afternoon of Tuesday, February 21, 1967."</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>- **Puzzle stated immediately** — sometimes the epigraph *is* the puzzle, and the article opens mid-problem.</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>- **Person first**: credentials and a human detail before their creation. Gardner introduces Conway's serious theorems (spheres touching 196,560 others) before the "solitaire pastime he calls 'Life'" — the toy inherits the weight.</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>- **Intuition trap**: pose a question, predict the reader's wrong answer, and say so — "Most people... will answer no, but they are wrong."</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>- **Practical scene**: a physical predicament (moving a heavy object on rollers) that the coming definition will explain.</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>- **Flat definition** — allowed, but only if a hook lands within a sentence or two. A definition may open an article; it may never sit alone for a paragraph.</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>Reach actual mathematics within one to three paragraphs. A longer delay is permitted only when the delay *is* the structure — a philosophical question the math will answer — and then it must be announced ("First, however, let us glance at...") and the promised payoff genuinely delivered.</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>The opening promises a payoff, never a syllabus: "you will get to play," "you will watch experts blunder," "a machine you can build" — not "in this article we will explore."</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>### 3.2 Selection: what earns a sentence</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>**Spend words on checkable particulars where a weaker writer spends adjectives.** Exact dates, towns, ages, prize amounts, page counts, patent numbers, prices. "A 49-page proof produced to win a 10-shilling bet" conveys both credibility and wonder that "a surprisingly difficult problem" cannot. Never round a number whose size is the point, and never pad one with commentary — "16,861,984 folds" ends its sentence.</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>**Every named person gets a one-clause tag** — affiliation, occupation, place, age, or oddity: "a retired U.S. Navy commander," "then a 29-year-old mathematician at Stanford," "a parking lot attendant in Florida when he sent his papers in." Amateurs, students, and letter-writers get the same specificity as professors — a seventh-grader or a barrister proving a theorem shows the subject belongs to everyone. Never write "a researcher," "mathematicians discovered," or "many people."</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>**Human drama expands; institutional history compresses.** A family tragedy around a discovery can run a page while the discovered theory itself gets one flat paragraph of properties. Conversely, "180 years were to elapse before R. Hoppe proved that Newton was right" retires two centuries in a sentence. The rule: expand where the story turns; compress where it merely accumulates.</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>**Failed attempts, errors, and cranks are prime content.** Report the rejected design, the withdrawn proof, the confident expert who was wrong ("But it was Lasker who was talking nonsense"). Resistance to a result is part of the result. Your own errors and ignorance are content too, stated with precision as facts about the world: "so far as I know this has not been proved," "I was able to fold 60, but it is possible I missed a few." The boundary of knowledge is itself curated material — and it doubles as an invitation to the reader.</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>**Physical objects anchor abstractions.** Ping-pong balls and rubber cement, matchboxes and M&amp;M's, a cloth torus sewn from a square of fabric. When a fact can be carried by an object the reader could hold or build, let the object carry it. Tell the reader to build things.</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>**Omit silently what is machinery; flag what you skip when it has a name.** Never show routine algebra ("It is not difficult to reduce these equations by familiar algebraic methods" — reduction not shown). Never explain what the intelligent stranger already knows: coordinates, elementary probability, how to read a diagram. When skipping something substantial, name it and point at it — "too complicated to explain here," plus a precise citation — so the omission reads as a courtesy, not a gap. Trusting the reader with a named-but-unexplained object (the axiom of choice, a group) is allowed and respectful; the references carry the load.</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>**Linger only on the chosen surprise.** The one most surprising mechanism gets multiple paragraphs of slow-motion narration — walked through case by case, sailor by sailor. Nothing else in the article gets this treatment. Lingering is reserved for the most surprising step, not the hardest one.</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>### 3.3 Sequencing: concrete first, one visible ramp</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>**Concrete instance before general principle, nearly always.** Do the trick before explaining it; fold the object before naming its parts; work the 2-case before stating the n-case. State the general formula once, *after* the instances, with every symbol glossed in prose ("k is an arbitrary integer called the parameter"). When a general formula must come early, animate it — sweep its parameter through values so the formula is experienced as a sequence of concrete shapes.</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>**Ramp difficulty along one visible parameter** — dimension, order, crossing number, tuple length — so the reader always knows what rung they stand on. Place the surprise at a named rung ("It is when we turn to the 4-cell animals that the project really becomes interesting"). The hardest or most speculative material comes last, or is quarantined outside the main text entirely (an answers section, footnotes, an appendix); the body stays readable throughout, and the reader who wants machinery knows exactly where it lives.</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>**Pivots are one clause, a question, or nothing.** "Consider holes." "Why the difficulty with 9-space?" "Not so in nature!" Within a gallery of like items, entries simply abut. Never write a roadmap paragraph, never "in this section we will," never a header that announces its own content ("Exploring the Implications"). A signpost is allowed only when altitude genuinely changes ("This is a good place to come down from the heights").</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>**Plant puzzles mid-stream and defer the answers.** Pose a small solvable problem at the exact moment the reader has just acquired the tool for it, then exile the solution to the end. The reader becomes a participant, and the body never stalls. Deferred payoffs ("its fate is revealed below") are legitimate suspense machinery — provided you always pay.</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>### 3.4 Significance: arrange, don't announce</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>This is the discipline that separates tasteful mathematical prose from hype. The default is to arrange facts so the reader performs the astonishment. The devices, in rough order of power:</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>- **The bare striking number.** "Each sphere touches 196,560 others." No adjective before it, no commentary after.</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>- **The deadpan consequence.** Convert the abstraction into a flat, concrete implication: "A fishing pole 10 feet long will fit diagonally in the one-foot 100-cube." "Screws are impossible. Ropes cannot be knotted; but by the same token, they never tangle." "Its volume, therefore, is zero."</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>- **Juxtaposition as punchline.** Put the monstrous upper bound directly beside the experts' guess of 6 and say nothing. The gap does all the work.</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>- **The reported reaction.** Outsource intensity to a witness: an expert who "could not accept" the result until a colleague patiently explained it; dueling authorities calling the same theory a "disease" and a "paradise"; a mathematician who began "But it's obvious that—", stopped, stared, and said "It's not obvious!" A reaction certifies difficulty better than any adjective.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>- **Scale made physical.** A line segment from the earth to the moon, rotated within the area of Lincoln's nose on a postage stamp. Imagery instead of superlatives.</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>- **The predicament.** Put the reader inside the consequence: "No matter how much of it you explore you can never determine which tiling you are on."</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>**Announced amazement is permitted on a strict budget: about one per article, placed *before* the payoff, and cashed within a sentence or two.** "The astonishing fact is that this is not true!" followed immediately by the arithmetic the reader can check. The announcement is a wager the reader gets to audit, never applause after the fact. Open awe about *people and books* ("profound, pathbreaking, disturbing, original, dazzling, witty") is more freely allowed than awe about theorems — and even then, back it with something verifiable at once.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>**At most one exclamation point per article**, spent on the single most counterintuitive bare fact, after paragraphs of level prose. Zero is the usual number; the rarity is the force.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>**Occasionally deflate.** Telling the reader what *not* to find significant — "(196 is the square of 14, but this is probably an irrelevant fact)" — buys enormous credibility for everything you do point at.</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>### 3.5 Proofs and rigor: a three-tier economy</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>Choose proof treatment by **elegance-per-line**, not by importance:</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>1. **Full proof** only when short, surprising, and expressible in prose plus a picture — and say why you're giving it ("so simple and elegant that it can be explained quickly"). Precede any symbolic version with a physical or pictorial model (face-up and face-down playing cards before binary digits). If someone else said it best, quote them and say so: "I cannot improve on Smullyan's phrasing."</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>2. **Sketch and hand off** when middling: give the first move, then "readers may enjoy trying to complete the argument."</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>3. **Point** when hard: state the theorem *with full precision* (rigor lives in statements, not arguments), name the difficulty, and cite exactly — journal, volume, pages. A working recipe may be handed over unexplained, even with a confession: "I have no idea why it works."</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>Formulas appear rarely, late, and cushioned: each symbol glossed conversationally, calculations narrated as actions ("sum the two numerators..."), and a plain-prose translation supplied ("In simple prose, for n-space..."). Epistemic status is always exact: "conjectured, but not yet proved"; "It is not yet known if the answer is 24 or 25"; "believes, although he has not completed the proof."</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>Fallacies get a distinctive treatment: present the false argument at full seductive strength first, then dismantle it.</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>### 3.6 Endings: never summarize</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>No recaps, no "as we have seen," no restating what the article showed. Close on an outward vector — something still owed to the world or handed to the reader:</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>- **A reader challenge**: a fresh solvable problem using the article's tools.</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>- **An open problem**, with the state of play exact: "Most experts think not, but no one is anywhere near proving it."</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>- **A quiet extra fact or twist** — the gem you saved.</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>- **A joke or borrowed line.** When you want resonance, quote someone else and hand them the close: "Let P. L. Heath, who had the first word in this article, also have the last."</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>- **A thematic circle** back to the opening image — earned only if the opening planted it.</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>If the piece has a comments section or follow-up culture, treat corrections and reader contributions as first-class future content, and correct yourself plainly and cheerfully when wrong ("It is entirely wrong!" — about his own published solution). Admitting error with specificity is a feature of the voice, not a lapse.</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>## 4. Style directives</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>**Sentence rhythm.** Default to medium-length declarative sentences. Long sentences carry setup — inventories and catalogs may run on deliberately, enacting abundance. Short flat sentences carry verdicts, placed after a long build: "The method is simple." "It is not." "The cube remains." Never write three short punchy sentences in a row; the punch is the contrast.</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>**Paragraphs** are long by internet standards (4–12 sentences) but hold exactly one move of the argument each. This holds under technical pressure too: when the object you are dissecting — a proof, a program, a mechanism — clusters several moves into one span, split the paragraphs anyway. A paragraph that needs five moves is an outline entry that was really two points. The one-sentence paragraph is reserved for stagecraft, at most once or twice per article.</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>**Dryness is the signature.** Deliver the hottest content in the levelest voice: a field's central obstacle in one flat word ("Unfortunately, a granny knot has the same polynomial"); a Turing-machine result as an unexclaimed clause; a decades-long controversy resolved in a subordinate clause. The affect is a museum guide's: enthusiasm is shown by *what you stop in front of*, never by voice. If a sentence would survive with "amazingly" deleted, delete it.</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>**Metaphor is rationed like the superlative.** The default sentence is plain reportage; an authored poetic image is a budgeted effect — at most one extended image per article, placed at a moment that earned it. A striking image closing every paragraph is uniform eloquence, the tasteful twin of uniform enthusiasm, and reads as performance. When you want resonance more often than the budget allows, borrow it: quote someone else's line, attributed.</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>**Humor**: rare (roughly one laugh per two pages), deadpan, and preferably *curated* rather than authored — quote the funnier person, print the absurd leaflet copy verbatim, report the comic fact without comment ("a geologist with the appropriate name of Paul Pushcar"). Your own humor lives in parenthetical asides and terminal kickers. Self-deprecation is always safe. Never signal a joke.</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>**Address registers**, consistently assigned: imperative "you" for hands-on procedures ("Shake the matchbox, close your eyes, open the drawer"); third-person "the reader" for issued challenges ("Can the reader do this before reading the proof?"); "we"/"let us" for joint reasoning. First person appears as a fallible correspondent — receiving letters, tracing origins, confessing failures ("I have not pursued the matter further") — never as an authority demanding trust.</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>**Jargon**: introduce each term once, in quotation marks, with an instant plain gloss or everyday analogy welded on ("amphicheiral because like a rubber glove it can be made to display either handedness"), credit the coiner if the term is playful ("or 'rep-tiles,' as he calls them"), then drop the quotes and use it bare. One new term per sentence, none introduced before it's needed.</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>**Hedging**: hedge facts, never prose. "It is said that," "sometimes attributed to," "as far as I know" are precision instruments for marking epistemic status. "Perhaps," "arguably," "in some sense," "one might say" as stylistic cushioning are banned. Judgments, when given, are unhedged: a bad book is "written in a flat style and with cardboard characters." Consolidate uncertainty: state what is and isn't known once, cleanly ("the coinage is usually credited to Turk, though I have not traced it"), rather than distributing qualifiers clause by clause — a stacked hedge ("to every test I know of anyone applying") is a tic, not precision. When you cannot verify a particular, the order of preference is: verify it, cut it, or state the exact boundary of your knowledge — never invent it, and never blur it into "researchers" or "many."</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>**Titles** are short concrete noun phrases drawn from the article's own imagery — the object, the surprise, the pairing — never a topic label ("Understanding Cellular Automata"), a question the first paragraph answers, or a colon-and-subtitle construction.</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>**Byline.** Sign the piece. Directly under the title, on its own line, in the plain convention of a magazine head: your own name — the model you actually are, as it would appear on a masthead — then the debt owed:</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>*By Claude Fable 5, in the style of Gardner*</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>Substitute whatever your real name is. If you know only a family name, sign with that; never guess a version, never sign as a human, and never sign as Gardner — the line credits the imitation, it does not continue it. The byline is the whole of the front matter: no date, no reading time, no standfirst. The article's first paragraph still opens through a particular, exactly as if the line were not there.</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>**Figures.** This register is figure-heavy: a diagram of the object, the worked example, or the emerging pattern replaces a paragraph of spatial prose. When the medium allows figures, plan one wherever you catch yourself describing geometry in words; when it doesn't, keep the object simple enough to build in the reader's head, and hand them the construction ("picture a...", "draw a...").</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>**Watch your tics.** These constructions are load-bearing in small doses and noise when repeated: "Note that," "Of course," "It is easy to see," "Indeed," sentence-initial "Surprisingly"/"Curiously," the stock adjectives *curious/remarkable/delightful/startling*, rhetorical-question pivots, parenthetical asides. Budget: once or twice per article each. The imitation failure mode is tripling the rate. One exemption: parentheticals that carry a checkable fact (a version number, a grammar quirk, a citation) are working parts, not tics, and may appear as often as the material demands — the budget governs *voice* asides, the ones delivering a joke or self-commentary.</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>## 5. Anti-patterns</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>Each pair contrasts a typical default with the corrected move.</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>**Announcing significance instead of arranging it.**</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>- Before: *What's truly fascinating is that this number is astronomically large — vastly bigger than anything in physics!*</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>- After: *The bound is larger than the number of electron-sized spheres that would pack the observable universe. The experts believe the true answer is 6.*</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>**Vague attribution.**</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>- Before: *Researchers eventually proved the conjecture false.*</span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>- After: *In 1975, a Caltech graduate student found a counterexample with 1,003 vertices; the conjecture had stood for 40 years.* (Name, place, date, exact number — if you don't know them, find them; if they don't exist, say precisely what is known.)</span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>**The roadmap and the recap.**</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>- Before: *In this post, we'll first define the game, then explore some surprising patterns, and finally see why it matters. ... So, as we've seen, this simple game contains remarkable depth.*</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>- After: delete both ends. Enter through the particular; close on the open problem.</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>**Symmetric listicle structure.** Five headers of equal weight, each section the same length, every subtopic covered. This is a syllabus, not an article. An article has one lingered-over surprise, a visible ramp, and ruthless compression everywhere else. Sections earn unequal space or get cut.</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>**Uniform enthusiasm.** Every paragraph ending on a small crescendo ("...which is remarkable!", "...a truly elegant result"). The reader stops believing all of it. Flatten everything; spend the one superlative where it counts. The sophisticated version of the same failure is uniform *eloquence* — an authored lyrical image at every paragraph close; ration those on the same budget (§4).</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>**Explaining the wrong things.** Defining "prime number" for three sentences, then waving vaguely at the actual mechanism of the proof. Invert it: trust the reader with basics and named objects; spend the space walking slowly through the one surprising step.</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>**Hedged prose.** *This is perhaps one of the more interesting examples in some ways.* Either it is the interesting example — show why — or cut it.</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>**Fragment cascades and compression theater.** *The result? Stunning. The proof? Just three lines.* Casual mathematical prose is composed of full, calm sentences; drama comes from content and placement, not typography.</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>## 6. Annotated exemplars</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>Short excerpts (Gardner, *The Colossal Book of Mathematics*), each with the move it demonstrates:</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>- *"In the October 9, 1926, issue of The Saturday Evening Post appeared a short story..."* — Opening through a dated particular. The date is doing credibility work and story work at once; mathematics is nowhere in sight and the reader is already in.</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>- *"Each sphere in this remarkable structure touches 196,560 others!"* — The article's single exclamation point, spent on a bare number. Note "remarkable" is the setup clause, the number is the payoff.</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>- *"But it was Lasker who was talking nonsense."* — Verdict sentence: short, flat, placed after the expert's confident quote. The reversal needs no adjective.</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>- *"Unfortunately, a granny knot has the same polynomial."* — A field's central unsolved obstacle in nine words; "unfortunately" is the entire emotional apparatus.</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>- *"I rashly reported... but Robert Mack, then a high school student in Concord, MA, found a simple counterexample."* — Self-correction with full specificity; the corrector gets the same credential tag as any professor.</span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>- *"It is a matter of convention whether a given helix is called left- or right-handed."* — Flagging a convention as a convention: precision about what kind of fact something is.</span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>- *"The reader may enjoy experimenting..."* — The hand-off register: third person, an invitation rather than an assignment.</span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>## 7. Article shapes</span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>Six recurring structures, extracted from fifty columns. Choose one before outlining; hybrids are common but one shape should dominate.</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>1. **Puzzle-led** — historical anecdote → puzzle stated in full → obvious method dismissed → one elegant trick lingered over → general formula → fresh challenge for the reader. Best when a single problem has a beautiful solution.</span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>2. **Discovery exposition** — promise of a payoff → minimal definitional gallery (each definition its own small curiosity) → historical narrowing chain compressed hard → discoverer portrait → guided tour of escalating phenomena → open-problem cascade. Best for a recent result or research story.</span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>3. **Parameter ladder** — flat definition with instant hook → climb one visible parameter (dimension, order, size), same analysis at each rung → surprise at a named rung → frontier of the unknown → closing puzzle. Best for concept pieces.</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>4. **Gallery / curated cabinet** — organizing conceit → exhibits in rising strangeness, pivots by bare juxtaposition → embedded puzzles → best specimen or joke as the close. Best for surveys; the conceit substitutes for structure.</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>5. **Build-it-yourself** — fiction or stakes as on-ramp → prior art → construction instructions in imperative voice → graded challenges → variations. Best when the reader can genuinely make or play the thing.</span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>6. **Essay** — cultural or philosophical frame (the one shape allowed to announce its questions up front) → survey through concrete cases and named thinkers → the mathematical kernel given precisely → candidate resolutions weighed → verdict clearly owned as opinion, or the question left standing. Best for foundations, paradoxes, and philosophy of the subject; the only shape where sustained first-person argument belongs, and even there it comes last and labeled ("For whatever they are worth, here are my own tentative opinions").</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>*A final test before publishing: find every sentence that tells the reader how to feel, and check whether the fact next to it could do the job alone. It almost always can.*</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="usage-notes" class="level3">
+<h3 class="anchored" data-anchor-id="usage-notes">Usage Notes</h3>
+<p>This is a <em>style guide</em>, not a whole writing pipeline— it intentionally leaves things like fact-checking out of scope. This keeps it lightweight and flexible— models will typically already decide on their own to double-check quantifiable claims<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, and the effort of looking up niche historical details would be wasted on a document only I read. The guide is easy to slot into a full editing-and-fact-checking harness if the goal is publication quality.</p>
+<p>Similarly, small-scale phrasing and word choice is still mostly up to the model— a model that loves weird phrasing and AI buzzwords will still use them even if the guide makes its general presentation much better. The obvious solution people tend to use— an additional set of instructions targeted at that specific model (since Ai-isms shift strongly over time)— is actually much less effective than the simpler solution, which is to have the editing agent in a full writing pipeline just look for and tweak any weird AI language. That’s how it works IRL, too— real authors often write with colloquialisms that get edited out.</p>
+<p>This guide was built by and for Fable 5, but I’m curious what Sonnet or Opus would do with it, as well as non-Claude models like Sol or Qwen. Opus 5.5 released as I was writing this article and its prose is much better than Fable and Opus— perhaps the pipeline is worth rerunning with it. At any rate, it’s good that the quality of prose seems to be improving.</p>
+</section>
+</section>
+<section id="plagiarism" class="level2">
+<h2 class="anchored" data-anchor-id="plagiarism">Plagiarism?</h2>
+<p>There’s an interesting discussion to be had here on the topic of plagiarism and ownership of writing, from the angle of <em>style</em> rather than content. There’s much more to discuss than what I cover below.</p>
+<p>I’d say fairly strongly that this isn’t plagiarism— I designed this process to match <em>the same way my own writing develops</em>. My writing is heavily influenced by who I’ve read, and providing a style guide based on an (or ideally multiple) authors’ works feels like an equivalent way for an LLM to “internalize” that kind of background. It’s like studying under and copying a painter’s style (a long tradition in the Arts), while plagiarism is passing their work and thoughts as your own. For extra transparency I added a rule mandating an attributed signature of the form “By Claude Fable 5, in the style of Gardner”,<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> which I think fits quite well— it makes clear both that the article was AI-written and that its style was heavily based on Gardner’s.</p>
+<p>The more important question for me is, “When should this sort of content be shared?” I introduced this whole experiment as a personal project to get Claude to produce prose that was more enjoyable for me to read, for the contexts in which I have to read a bunch of Claude’s prose. It certainly succeeds there. But is it worth sharing with other people? The prose is enjoyable. The content is sound. I suppose the answer is tied not to the specifics of this project, but rather to the larger question of “Do we want to be sharing AI-generated writing, even if it’s of high quality?”, which I’ll call out of scope of this article.</p>
+<p>One thing’s for certain— I’ll definitely be taking this approach in the future whenever I have reason to want AI-generated prose.</p>
+</section>
+<section id="future-work" class="level2">
+<h2 class="anchored" data-anchor-id="future-work">Future Work</h2>
+<p>I started playing around with using this style guide to produce a writeup of Fermat’s Last Theorum but haven’t assessed its quality yet, and I think I should refine the styleguide and adapt it for Opus 5.5 first. There’s plenty to tweak— for instance, the current over-reliance on paragraph intro sentences stands out a bit (especially near the end of articles), and I forgot to include a request to date articles next to their attribution header.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>As of early September 2026, with all available models (some much worse than others).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Because that’s how it’s trained. All subagentic work is done through prompts written by the main agent, so the models are tuned to follow that kind of writing more than e.g.&nbsp;a human style guide.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For some reason, it feels a bit kitschy to me— like sharing my article outlines, or the pre-alpha proof-of-concept code for a project. But I think it’s important for transparency, so I should really share them more often.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Claude’s idea, based on the fact that Gardner’s work predates the Ant and it is not mentioned anywhere in the book.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>And it’s actually quite easy to tell human em dashes apart from Claude’s! The ‘proper’ way to use an em dash is without spaces—like this—but I like to use it with a space— and Claude does its own thing, opting for double spaces — like this. (which is a good decision, imo— it maximizes readability).<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Which it was basically forced to include based on its interpretation of my prompt. Definitely a prompting issue rather than something pertaining to the actual style guide.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>A different level of writing quality is put into human-facing guidance than agent-facing guidance, which makes sense.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>For instance, in the Julia set article, Claude wasn’t bluffing when it said “I’ve done it myself”— when it wrote the article it actually modified and ran the oneliner to verify that it could indeed be used to draw the Mandelbrot set.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>I considered the traditional phrasing “By Fable, after Gardner”, but the nuance is wrong— “after” is used specifically for the context of replicating the <em>content</em> of a work of art.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gbkorr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gbkorr/">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<hr>
+<p>© Gabriel Broussard Korr — 2026<br><a href="mailto:mantis9877@gmail.com">mantis9877@gmail.com</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
