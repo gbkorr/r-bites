@@ -5,7 +5,7 @@ I do a lot of projects for fun, but not all of them succeed enough to put on the
 
 ---
 
-**folkcodec** (Sep '26): I gave Claude an impossible task: make a good 2kbps audio codec so I can compress my beloved folk music recordings. Claude realized that it can just take the approach of [codec2](https://en.wikipedia.org/wiki/Codec_2) and apply it to multiple voices to get a very good audio approximation for music— I was very surprised, and I'm not aware of a widely-available format that does anything similar. A week of attempts failed at improving this system, and I'm not really sure how or if I want to release it— slightly compressed audio is a pretty acquired taste (and it only works for music without dense accompaniment— unlike all modern pop). What is there to write about?
+**folkcodec** (Sep '26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music, to no success.
 
 **tugra** (Jul '26): I'm interested in the concept of communication that's impossible to parse algorithmically; i.e., a way for humans to communicate that can't be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn't succeed long-term.
 
