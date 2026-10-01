@@ -128,9 +128,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
         <li>
+    <a class="dropdown-item" href="../gardner/gardner.html"><i class="bi bi-book" role="img">
+</i> 
+ <span class="dropdown-text">Improving Claude’s Prose *</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../bayan/bayan.html"><i class="bi bi-ui-radios-grid" role="img">
 </i> 
- <span class="dropdown-text">Web Accordion Interface</span></a>
+ <span class="dropdown-text">Web Accordion Interface *</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../naive/naive.html"><i class="bi bi-broadcast" role="img">
@@ -145,12 +150,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../clouds/clouds.html"><i class="bi bi-clouds-fill" role="img">
 </i> 
- <span class="dropdown-text">Terminal Cloud Renderer</span></a>
+ <span class="dropdown-text">Terminal Cloud Renderer *</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../grr-claude/grr-claude.html"><i class="bi bi-asterisk" role="img">
 </i> 
- <span class="dropdown-text">Claude Apprentice</span></a>
+ <span class="dropdown-text">Claude Apprentice *</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../ggufr/ggufr.html"><i class="bi bi-stars" role="img">
@@ -316,10 +321,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="web-demo" class="level2">
 <h2 class="anchored" data-anchor-id="web-demo">Web Demo</h2>
 <p>Because it’s 2026, I was able to make a webdemo in 10 minutes with a quick oneshot prompt to “compile it to WASM and make a drop-in iframe”. So now you can pull it up in a browser window if you don’t feel like compiling for use in the terminal<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p><a href="https://gbkorr.github.io/gbkorr/clouds/clouds.html"><code>https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS</code></a></p>
+<p><a href="https://gbkorr.github.io/gbkorr/clouds/clouds.html?elevation=0&amp;height=6&amp;coverage=0.5&amp;pitch=30&amp;yaw=30"><code>https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS</code></a></p>
 <p>ARGS has format e.g.&nbsp;<code>clouds.html?coverage=0.5&amp;elevation=0&amp;ascii=true</code>. –color, loop, presets, and interactive mode aren’t implemented. Use <code>ctrl +/-</code> to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it’s not designed to look good at super high resolution.</p>
 <div style="width:600px;height:400px;background:#000;display:grid;place-items:center">
-  <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?time=sunset&amp;elevation=0.7 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
+  <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?elevation=0&amp;height=6&amp;coverage=0.5&amp;pitch=30&amp;yaw=30 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
     load demo
   </button>
 </div>

@@ -79,13 +79,13 @@ Because it's 2026, I was able to make a webdemo in 10 minutes with a quick onesh
 
 [^but]: Of course, it's still a project designed for the terminal and this web version won't be getting any updates. But it's cool to have.
 
-[`https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS`](https://gbkorr.github.io/gbkorr/clouds/clouds.html)
+[`https://gbkorr.github.io/gbkorr/clouds/clouds.html?ARGS`](https://gbkorr.github.io/gbkorr/clouds/clouds.html?elevation=0&height=6&coverage=0.5&pitch=30&yaw=30)
 
 ARGS has format e.g. `clouds.html?coverage=0.5&elevation=0&ascii=true`. --color, loop, presets, and interactive mode aren't implemented. Use `ctrl +/-` to increase/decrease resolution. I recommend zooming in a bit or making your browser window small, since it's not designed to look good at super high resolution.
 
 ```{=html}
 <div style="width:600px;height:400px;background:#000;display:grid;place-items:center">
-  <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?time=sunset&elevation=0.7 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
+  <button style="font:600 24px sans-serif;padding:16px 40px;cursor:pointer" onclick="this.outerHTML='<iframe src=https://gbkorr.github.io/gbkorr/clouds/clouds.html?elevation=0&height=6&coverage=0.5&pitch=30&yaw=30 width=600 height=400 style=border:0;background:#000 title=clouds></iframe>'">
     load demo
   </button>
 </div>
