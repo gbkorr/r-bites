@@ -13,6 +13,9 @@ website:
     left:
       - text: "Articles"
         menu:
+          - text: "Web Shipworks *"
+            icon: airplane-fill
+            href: shipworks/shipworks.qmd
           - text: "Improving Claude's Prose *"
             icon: book
             href: gardner/gardner.qmd

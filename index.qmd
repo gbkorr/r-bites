@@ -16,8 +16,15 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 #### *Recent Articles*:
 
-*September*
+*October*
 
+<img class='thumbnail' src=images/shipworks.png>
+
+\* A polished webapp replicating the **custom ship editor** from one of my favorite games. [link](shipworks/shipworks.qmd)
+
+<br clear="left">
+
+*September*
 
 <img class='thumbnail' src=images/gardner.jpeg>
 
