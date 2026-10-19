@@ -230,7 +230,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This article is an overview of a tool I created for one of my favorite video games, <a href="https://store.steampowered.com/app/1434950/HighFleet/">Highfleet</a>. I wanted to use the game’s ship creator on the go my laptop (without having to boot the whole game), and this also gave me an opportunity to improve on the editor, which in the game is pretty bare-bones.</p>
-<p><a href="https://gbkorr.github.io/khivashipbuilder"><strong>LINK TO THE SHIPBUILDER</strong></a></p>
+<p><a href="https://gbkorr.github.io/khivashipworks"><strong>LINK TO THE SHIPBUILDER</strong></a></p>
 <p>The webapp was <strong>100% coded by Opus 5.5</strong>. I took this as an opportunity to practice my AI web development, staying completely hands-off the code and only focusing on QA and design. It took several weeks of polish, as well as some community feedback— I had a working shipbuilder and renderer within a day and the rest was all polish and iteration. I also asked for a refactor and cleanup late in the process, which turned the codebase from experimental clutter into a neat working space for release.</p>
 <p>This project is particularly fun because there’s <strong>actually a need</strong> for it— as mentioned, the ingame editor is somewhat simple and inconvenient (especially for sharing designs), and being able to access it on any device is a big convenience. The project had a very positive reception when I shared it with the game’s community.</p>
 <p><a href="main.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="main.png" class="img-fluid"></a></p>
@@ -792,7 +792,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
