@@ -1,0 +1,95 @@
+---
+title: "class"
+date: November 2026
+date-format: 'MMMM YYYY'
+format: 
+  html:
+    toc: true
+---
+	
+After getting experienced with agentic coding and project management, .......
+
+knowledge of any coding language is required for the course— the students need something to compare with
+
+no AI used to write this/brainstorm!
+
+
+"look everything up. ask AI about it. In an age where AI can do most of the things you can, asking questions is one of the most important things you can do to keep your mind sharp."
+
+
+
+## Week 1: Course Introduction
+The point of this week is getting settled and introducing the students to their dev environment. Students should be given access to a shared Claude Max plan, or individual Pro plans; the course will focus on Opus 5.5. Discussion will mainly be limited to personal introductions and an explanation of the course.
+
+:::{.callout-note title="Homework"}
+Get your dev environment set up and gain some familiarity with Claude Code (CC). Ask it to make a port of the game Snake in a language you know.
+
+NOT HAPPY WITH AN ARTIFACT- SHOULD ONLY BE FOR WEBWORK
+
+Then, tell Claude to port it to an "artifact"— this is a webpage connected to your account that can easily be shared via URL[^art]. Set the artifact to be viewable by anyone with the link (`Share` -> `Only you` -> `Anyone with the link`) and submit it to this assignment.
+:::
+[^art]: If the students are on a shared Max plan, this also makes it easy for the instructor to view their projects all at once by viewing the account's artifacts.
+
+
+## Week 2: Workshop and First Impressions
+This week is dedicated to making sure students are familiar and comfortable with the dev environment. Often, some students need extra help to get familiar with things in coding-related classes or they'll fall behind right at the start.
+
+Group/class discussions of first impressions, and a short in-class activity running CC to make sure everyone has it working (with the instructor going around to help anyone who needs it). Activity e.g.: "Ask Claude to generate a meme. This is an intentionally silly assignment."[^amuse]
+
+[^amuse]: The students will amuse themselves with the (probably poor) results.
+
+:::{.callout-note title="Homework"}
+Do a small project. This will be the first of many.
+
+Example projects:
+- a tool that makes randomized ASCII cathedrals
+- an interactive PNG steganography demo or video
+- data visualization of the college's spending or student/class/subject distribution
+
+Write up a small description of what you built, any insight you gained along the way, and include some screenshots of the project. Some things to think about:
+- How well do you understand what you made? How much does it matter?
+- How well does it work? How easy would it be for you, others, or another AI to maintain or mod?
+
+(The instructor is recommended to respond with follow-up questions and/or discussion to each student's submission; the goal is to get them to think more about what they've made.)
+:::
+
+## Week 3: LLM Mechanics
+This week is reserved for lectures or readings on how people's prompts magically turn into working code— the mechanics behind LLMs and agentic work. Instructors should either find a premade guide about these, or, ideally, lecture on their own.
+
+General outline:
+
+- **Basic LLM mechanics**: Your prompt is injected into a "chat template", and the model predicts the response of a "helpful AI agent" within that template.
+- **Training background**: Basic background about training: raw word prediction (on what corpus?) + some reinforcement learning to be a servile assistant and code/problem-solve better.
+- **Agentic Harnesses**: How do you turn a chatbot/word predictor into programmer? Let it execute bash, but be careful! 
+
+And the bonus topic below. This could also be saved for the Local AI week.
+
+- **LLM token prediction**: How the model actually gets from the prompt to generated text; model architecture and RAM limitations. (interesting, but not particularly important; some students may find it satisfying or intriguing to know)
+
+:::{.callout-note title="Homework"}
+Do another small project, or make a signficant refinement or expansion to last week's.
+
+(Each project assignment should copy the "Write up a small description of what you built... Some things to think about: ..." instructions for submission and writeup.)
+:::
+
+## Week 4: Open Discussion and Project Sharing
+Classes will typically start with short presentations/discussions of projects from the previous week (by anyone who feels like sharing), with a strict time budget (e.g. first 30 minutes of class).[^sort]
+
+[^sort]: The students will sort out who wants to and gets time to present; the goal is to spark discussion and sharing, not to give everyone presentation practice. (The final project is the one indended for presentation practice.)
+
+This week is left as an open discussion week to talk more, discuss the trajectory of the class, clean up any bugs/issues that need to be sorted out, and so on. It could also be treated as a "buffer week".
+
+:::{.callout-note title="Homework"}
+Do another small project, or make a signficant refinement or expansion to last week's.
+:::
+
+## Week 5: Web Work
+
+
+
+
+
+
+
+
+

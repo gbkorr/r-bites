@@ -5,7 +5,9 @@ I do a lot of projects for fun, but not all of them succeed enough to put on the
 
 ---
 
-**folkcodec** (Sep '26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music, to no success.
+\***colony** (Oct '26): I set up a working system for distributed inference in the computer lab, but couldn't figure out anything interesting to do with a bunch of 2tps agents. Inference is very slow but supports dozens of parallel agents.
+
+\***folkcodec** (Sep '26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music. It's coming along, but the use case is somewhat unclear— maybe I'll use this for a low-storage esp32 music player or something.
 
 **tugra** (Jul '26): I'm interested in the concept of communication that's impossible to parse algorithmically; i.e., a way for humans to communicate that can't be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn't succeed long-term.
 

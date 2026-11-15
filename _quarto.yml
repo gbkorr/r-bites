@@ -13,9 +13,15 @@ website:
     left:
       - text: "Articles"
         menu:
-          - text: "Web Shipworks *"
+          - text: "AI Course Plan"
+            icon: mortarboard
+            href: syllabus/syllabus.qmd
+          - text: "Web Shipbuilder *"
             icon: airplane-fill
             href: shipworks/shipworks.qmd
+          - text: "Bucket-Brigade Inference *"
+            icon: bucket-fill
+            href: colony/colony.qmd
           - text: "Improving Claude's Prose *"
             icon: book
             href: gardner/gardner.qmd
