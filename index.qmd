@@ -18,7 +18,7 @@ See my [Github](https://github.com/gbkorr) for more projects.
 
 *November*
 
-<img class='thumbnail' src=images/shipworks.png>
+<img class='thumbnail' src=images/coming-soon.png>
 
 A **course plan** for teaching agentic coding. [link](syllabus/syllabus.qmd)
 
@@ -26,7 +26,7 @@ A **course plan** for teaching agentic coding. [link](syllabus/syllabus.qmd)
 
 *October*
 
-<img class='thumbnail' src=images/shipworks.png>
+<img class='thumbnail' src=images/colony.png>
 
 \* A simple protocol for **distributed inference** on a computer network with high agent throughput. [link](colony/colony.qmd)
 
