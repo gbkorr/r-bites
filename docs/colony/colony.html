@@ -199,12 +199,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#specification" id="toc-specification" class="nav-link active" data-scroll-target="#specification">Specification</a></li>
+  <li><a href="#distributed-inference" id="toc-distributed-inference" class="nav-link active" data-scroll-target="#distributed-inference">Distributed Inference</a></li>
+  <li><a href="#specification" id="toc-specification" class="nav-link" data-scroll-target="#specification">Specification</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance">Performance</a></li>
   <li><a href="#utility" id="toc-utility" class="nav-link" data-scroll-target="#utility">Utility</a></li>
   <li><a href="#prototyping-with-claude" id="toc-prototyping-with-claude" class="nav-link" data-scroll-target="#prototyping-with-claude">Prototyping with Claude</a></li>
-  <li><a href="#release" id="toc-release" class="nav-link" data-scroll-target="#release">Release</a></li>
+  <li><a href="#release" id="toc-release" class="nav-link" data-scroll-target="#release">Release?</a></li>
   </ul>
 </nav>
     </div>
@@ -238,14 +239,20 @@ ul.task-list li input[type="checkbox"] {
 
 <p>Here’s a project I worked on for most of October. The idea is to have a protocol for distributed, “bucket-brigade inference”, where each machine contains only part of a GGUF and the network passes a token’s activations through each node to generate the next token.</p>
 <p>I got it working, with the computer lab computers able to join the network and run inference just by running a .bat file served by the other nodes. But the inference ended up being so slow that I couldn’t come up with anything interesting to do with the network…</p>
-<p>Anyway, here’s some info and takeaways from the project. This one felt a little weird to write (and less informative) than some of the other articles I’ve made, but maybe it’ll be interesting.</p>
+<p>Anyway, here’s some details about the protocol. This one felt a little weird to write compared to some of the other articles I’ve made, but maybe it’ll be interesting.</p>
+<section id="distributed-inference" class="level2">
+<h2 class="anchored" data-anchor-id="distributed-inference">Distributed Inference</h2>
+<p>Distributed inference is a bit of a canonical idea— both in general (Anthropic made a post about it recently) and as a solution to the RAM issue. “If you need the whole model in RAM and don’t have enough RAM on one machine, why not split the model between multiple machines?” The time cost of transfering data between machines during inference is actually minimal, so this is more feasible than you might think— it’s not much that worse than running inference on a single machine.</p>
+<p>Where it really gains something is in parallelization— unlike a single machine, which can only stream its weights out of RAM for one token at a time, the machines on a distributed inference network can all stream their weights at once. Practically, this means <em>each node can run inference on a separate token</em>, all at the same time. But… inference is serial, so these tokens can’t belong to the same conversation. But this still allows for a much higher token throughput when the network is running inference for <strong>multiple agents at once</strong>.</p>
+<p>There are several preexisting frameworks for distributed inference— including one that already ships with llamacpp— but Colony focuses specifically on being lightweight and easy to set up, and on taking advantage of that multi-agent throughput.</p>
+</section>
 <section id="specification" class="level2">
 <h2 class="anchored" data-anchor-id="specification">Specification</h2>
 <p>In a Colony network, all nodes are <strong>Ants</strong> except for one <strong>Queen</strong>.</p>
 <p>The Queen exposes the /v1 inference API and handles tokenization and sampling. The Ants just perform inference, each using a different slice of the model weights.</p>
 <p>To generate a token, the Queen sends the activations (embedded vector or prefill matrix) to Ant 1, which runs it through its layers and passes it to Ant 2. This continues through every layer until it gets back to the Queen.</p>
 <p>Critically, this allows, for example, Ant 1 to inference for agent B while Ant 2 is inferencing for agent A— multiple agents can run their activations through the network at once because each agent’s activations are only present on one node at a time (hence the “bucket-brigade” description). Combined with batching (where multiple agents’ activations are combined into one matrix so a node can inference on several at once), the Colony’s agent throughput can get very high, many times past the number of nodes.</p>
-<p>To initialize the Colony network, each node needs to obtain its designated layer weights; this is most easily achieved by having the Queen download the target GGUF, slice it itself, and send the weight slices to each connected Ant.</p>
+<p>To initialize the Colony network, each node needs to obtain its designated layer weights; this is most easily achieved by having the Queen download the target GGUF, slice it itself, and send the weight slices to each connected Ant to save on disk.</p>
 <p>Load balancing is left out of scope of the specification, as it’s easy to adapt the system to be centralized (e.g.&nbsp;controlled by an external machine, website, botnet controller, etc.) or decentralized (decisions made by quorum among the active machines).</p>
 <p>When a node goes inactive, its context can be recovered by running the entire context through a new route as prefill (after reapportioning the weights), though this is very slow. Preferably, assume nodes won’t go inactive and treat their context as lost if they do.</p>
 </section>
@@ -257,7 +264,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="performance" class="level2">
 <h2 class="anchored" data-anchor-id="performance">Performance</h2>
 <p>Turns out you can’t escape the Tyranny of RAM. This system, like anything for inference<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, is limited by the speed its computers can stream the weights out of RAM into the CPU for every token. And there’s… not really anything to be done about it :(</p>
-<p>I got around 2tps on QFN<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> due to the sheer size of the model— even with just 6B active weights, it still takes hundreds of milliseconds to stream all of them through. Weaker models were a bit faster, but they’re not great at what they do.</p>
+<p>I got around 2tps on QFN<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> due to the sheer size of the model— even with just 6B active weights, it still takes hundreds of milliseconds to stream all of them through. Weaker models were a bit faster, but they’re not great at what they do. This RAM issue makes fast inference with big models basically impossible on weaker consumer hardware— perhaps that’s for the better if you’re scared about your smart TV being commandeered, but it means Colony can only be useful as a rather slow protocol for inference. (Unless you’re targeting stronger computers, but that’s the 99th percentile of hardware out there.)</p>
 <p>MTP can up to double the speed of inference, but it’s still not great at 2 -&gt; 4 tps. Lower quants reduce the amount of data held in RAM, but reduce the model’s intelligence— quantizing for better performance is a slippery slope.</p>
 </section>
 <section id="utility" class="level2">
@@ -286,7 +293,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 <section id="release" class="level2">
-<h2 class="anchored" data-anchor-id="release">Release</h2>
+<h2 class="anchored" data-anchor-id="release">Release?</h2>
 <p>I don’t think I’ll be releasing the files for this, unless there’s some demand. Why? Well, it’s sort of just slop without a <strong>clear purpose</strong>. When I release something, I like it to be well-tailored to its use case (this doesn’t have a good use case), or particularly novel. Distributed inference in general isn’t novel, and while this sort of bucket-brigade inference might actually be, the specification is what contains the novelty— not the code. As I did in this project, you can implement Colony for yourself by just feeding Claude the specification. I had it use the ggml libraries for efficient inference (no reason to <a href="../ggufr/ggufr.html">build my own inference engine</a> again), but any approach to inference works as long as you can pull out the activations to send to the next node.</p>
 
 
@@ -741,7 +748,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","loop":false});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
