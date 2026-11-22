@@ -648,21 +648,21 @@
     "href": "bonus/scrapped-ideas.html",
     "title": "Slipped Through the Cracks",
     "section": "",
-    "text": "Slipped Through the Cracks\nI do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort. Many of these were going to be articles and/or already had some writing done.\n\n*colony (Oct ’26): I set up a working system for distributed inference in the computer lab, but couldn’t figure out anything interesting to do with a bunch of 2tps agents. Inference is very slow but supports dozens of parallel agents.\n*folkcodec (Sep ’26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music. It’s coming along, but the use case is somewhat unclear— maybe I’ll use this for a low-storage esp32 music player or something.\ntugra (Jul ’26): I’m interested in the concept of communication that’s impossible to parse algorithmically; i.e., a way for humans to communicate that can’t be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn’t succeed long-term.\nstego (Jul ’26): There’s a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.\nawkme (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.\ntunnelvision (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was the “moustache distortion”, funnily enough…"
+    "text": "Slipped Through the Cracks\nI do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort. Many of these were going to be articles and/or already had some writing done.\n\n*folkcodec (Sep ’26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music. It’s coming along, but the use case is somewhat unclear— maybe I’ll use this for a low-storage esp32 music player or something.\ntugra (Jul ’26): I’m interested in the concept of communication that’s impossible to parse algorithmically; i.e., a way for humans to communicate that can’t be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn’t succeed long-term.\nstego (Jul ’26): There’s a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.\nawkme (May ’26): A oneliner awk script (my favorite language) intended to locate (multilaterate, like GPS) the user using machine learning with the signal strength of nearby wifi networks. Could use more testing, but appears to be a harder ML problem than expected— such that solving likely isn’t feasible with a small awk script.\ntunnelvision (Mar ’26): A method for upscaling drone footage under certain circumstances by stacking frames as the drone travels forward. Mostly for image processing practice, but I came up with a neat technique for stacking— it just didn’t end up working. One of this big villains of this project was the “moustache distortion”, funnily enough…"
   },
   {
     "objectID": "colony/colony.html",
     "href": "colony/colony.html",
     "title": "Colony: Bucket-Brigade Inference",
     "section": "",
-    "text": "Here’s a project I worked on for most of October. The idea is to have a protocol for distributed, “bucket-brigade inference”, where each machine contains only part of a GGUF and the network passes a token’s activations through each node to generate the next token.\nI got it working, with the computer lab computers able to join the network and run inference just by running a .bat file served by the other nodes. But the inference ended up being so slow that I couldn’t come up with anything interesting to do with the network…\nAnyway, here’s some info and takeaways from the project. This one felt a little weird to write (and less informative) than some of the other articles I’ve made, but maybe it’ll be interesting."
+    "text": "Here’s a project I worked on for most of October. The idea is to have a protocol for distributed, “bucket-brigade inference”, where each machine contains only part of a GGUF and the network passes a token’s activations through each node to generate the next token.\nI got it working, with the computer lab computers able to join the network and run inference just by running a .bat file served by the other nodes. But the inference ended up being so slow that I couldn’t come up with anything interesting to do with the network…\nAnyway, here’s some details about the protocol. This one felt a little weird to write compared to some of the other articles I’ve made, but maybe it’ll be interesting."
   },
   {
     "objectID": "colony/colony.html#specification",
     "href": "colony/colony.html#specification",
     "title": "Colony: Bucket-Brigade Inference",
     "section": "Specification",
-    "text": "Specification\nIn a Colony network, all nodes are Ants except for one Queen.\nThe Queen exposes the /v1 inference API and handles tokenization and sampling. The Ants just perform inference, each using a different slice of the model weights.\nTo generate a token, the Queen sends the activations (embedded vector or prefill matrix) to Ant 1, which runs it through its layers and passes it to Ant 2. This continues through every layer until it gets back to the Queen.\nCritically, this allows, for example, Ant 1 to inference for agent B while Ant 2 is inferencing for agent A— multiple agents can run their activations through the network at once because each agent’s activations are only present on one node at a time (hence the “bucket-brigade” description). Combined with batching (where multiple agents’ activations are combined into one matrix so a node can inference on several at once), the Colony’s agent throughput can get very high, many times past the number of nodes.\nTo initialize the Colony network, each node needs to obtain its designated layer weights; this is most easily achieved by having the Queen download the target GGUF, slice it itself, and send the weight slices to each connected Ant.\nLoad balancing is left out of scope of the specification, as it’s easy to adapt the system to be centralized (e.g. controlled by an external machine, website, botnet controller, etc.) or decentralized (decisions made by quorum among the active machines).\nWhen a node goes inactive, its context can be recovered by running the entire context through a new route as prefill (after reapportioning the weights), though this is very slow. Preferably, assume nodes won’t go inactive and treat their context as lost if they do."
+    "text": "Specification\nIn a Colony network, all nodes are Ants except for one Queen.\nThe Queen exposes the /v1 inference API and handles tokenization and sampling. The Ants just perform inference, each using a different slice of the model weights.\nTo generate a token, the Queen sends the activations (embedded vector or prefill matrix) to Ant 1, which runs it through its layers and passes it to Ant 2. This continues through every layer until it gets back to the Queen.\nCritically, this allows, for example, Ant 1 to inference for agent B while Ant 2 is inferencing for agent A— multiple agents can run their activations through the network at once because each agent’s activations are only present on one node at a time (hence the “bucket-brigade” description). Combined with batching (where multiple agents’ activations are combined into one matrix so a node can inference on several at once), the Colony’s agent throughput can get very high, many times past the number of nodes.\nTo initialize the Colony network, each node needs to obtain its designated layer weights; this is most easily achieved by having the Queen download the target GGUF, slice it itself, and send the weight slices to each connected Ant to save on disk.\nLoad balancing is left out of scope of the specification, as it’s easy to adapt the system to be centralized (e.g. controlled by an external machine, website, botnet controller, etc.) or decentralized (decisions made by quorum among the active machines).\nWhen a node goes inactive, its context can be recovered by running the entire context through a new route as prefill (after reapportioning the weights), though this is very slow. Preferably, assume nodes won’t go inactive and treat their context as lost if they do."
   },
   {
     "objectID": "colony/colony.html#setup",
@@ -676,7 +676,7 @@
     "href": "colony/colony.html#performance",
     "title": "Colony: Bucket-Brigade Inference",
     "section": "Performance",
-    "text": "Performance\nTurns out you can’t escape the Tyranny of RAM. This system, like anything for inference1, is limited by the speed its computers can stream the weights out of RAM into the CPU for every token. And there’s… not really anything to be done about it :(\nI got around 2tps on QFN2 due to the sheer size of the model— even with just 6B active weights, it still takes hundreds of milliseconds to stream all of them through. Weaker models were a bit faster, but they’re not great at what they do.\nMTP can up to double the speed of inference, but it’s still not great at 2 -&gt; 4 tps. Lower quants reduce the amount of data held in RAM, but reduce the model’s intelligence— quantizing for better performance is a slippery slope."
+    "text": "Performance\nTurns out you can’t escape the Tyranny of RAM. This system, like anything for inference1, is limited by the speed its computers can stream the weights out of RAM into the CPU for every token. And there’s… not really anything to be done about it :(\nI got around 2tps on QFN2 due to the sheer size of the model— even with just 6B active weights, it still takes hundreds of milliseconds to stream all of them through. Weaker models were a bit faster, but they’re not great at what they do. This RAM issue makes fast inference with big models basically impossible on weaker consumer hardware— perhaps that’s for the better if you’re scared about your smart TV being commandeered, but it means Colony can only be useful as a rather slow protocol for inference. (Unless you’re targeting stronger computers, but that’s the 99th percentile of hardware out there.)\nMTP can up to double the speed of inference, but it’s still not great at 2 -&gt; 4 tps. Lower quants reduce the amount of data held in RAM, but reduce the model’s intelligence— quantizing for better performance is a slippery slope."
   },
   {
     "objectID": "colony/colony.html#utility",
@@ -696,8 +696,8 @@
     "objectID": "colony/colony.html#release",
     "href": "colony/colony.html#release",
     "title": "Colony: Bucket-Brigade Inference",
-    "section": "Release",
-    "text": "Release\nI don’t think I’ll be releasing the files for this, unless there’s some demand. Why? Well, it’s sort of just slop without a clear purpose. When I release something, I like it to be well-tailored to its use case (this doesn’t have a good use case), or particularly novel. Distributed inference in general isn’t novel, and while this sort of bucket-brigade inference might actually be, the specification is what contains the novelty— not the code. As I did in this project, you can implement Colony for yourself by just feeding Claude the specification. I had it use the ggml libraries for efficient inference (no reason to build my own inference engine again), but any approach to inference works as long as you can pull out the activations to send to the next node.\n\n\n\ndiagram by claude\nUI v2 deployed onsite testing with a single ant."
+    "section": "Release?",
+    "text": "Release?\nI don’t think I’ll be releasing the files for this, unless there’s some demand. Why? Well, it’s sort of just slop without a clear purpose. When I release something, I like it to be well-tailored to its use case (this doesn’t have a good use case), or particularly novel. Distributed inference in general isn’t novel, and while this sort of bucket-brigade inference might actually be, the specification is what contains the novelty— not the code. As I did in this project, you can implement Colony for yourself by just feeding Claude the specification. I had it use the ggml libraries for efficient inference (no reason to build my own inference engine again), but any approach to inference works as long as you can pull out the activations to send to the next node.\n\n\n\ndiagram by claude\nUI v2 deployed onsite testing with a single ant."
   },
   {
     "objectID": "colony/colony.html#footnotes",
@@ -746,14 +746,14 @@
     "href": "index.html#footnotes",
     "title": "R Bites",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nAlso, I was in Alaska.↩︎"
+    "text": "Footnotes\n\n\nWhich is less exciting than it sounds— I couldn’t include much Seuss due to copyright!↩︎\nAlso, I was in Alaska.↩︎"
   },
   {
     "objectID": "syllabus/syllabus.html",
     "href": "syllabus/syllabus.html",
     "title": "class",
     "section": "",
-    "text": "In progress!"
+    "text": "After getting experienced with agentic coding and project management, …….\nknowledge of any coding language is required for the course— the students need something to compare with\nno AI used to write this/brainstorm!\nMy college operates on a 10-week Quarter system, so that’s what this course uses— I intend to teach it here! The assignments and ideas here should be easy to modify to fit a semester, or a ChatGPT-based class, etc.\nif there’s interest, I could write the lectures and recommended discussion notes for each week.\n“look everything up. ask AI about it. In an age where AI can do most of the things you can, asking questions is one of the most important things you can do to keep your mind sharp.”\nWRITE A REASONING SECTION FOR CONTENT AND HW EACH WEEK"
   },
   {
     "objectID": "grr-claude/grr-claude.html",
@@ -943,5 +943,117 @@
     "title": "Play Videos in R",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nOf the default uniform block shading elements █▓▒░, RStudio renders █ at half height and ▒ as thinner than a regular monospaced character. It’s absurd!↩︎"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-1-course-introduction",
+    "href": "syllabus/syllabus.html#week-1-course-introduction",
+    "title": "class",
+    "section": "Week 1: Course Introduction",
+    "text": "Week 1: Course Introduction\nThe point of this week is getting settled and introducing the students to their dev environment. Students should be given access to a shared Claude Max plan, or individual Pro plans; the course will focus on Opus 5.5. Discussion will mainly be limited to personal introductions and an explanation of the course.\n\n\n\n\n\n\nHomework\n\n\n\nGet your dev environment set up and gain some familiarity with Claude Code (CC). Ask it to make a port of the game Snake in a language you know.\nNOT HAPPY WITH AN ARTIFACT- SHOULD ONLY BE FOR WEBWORK\nALWAYS THE NEWEST OPUS (5.5 at time of writing) for consistency"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-2-workshop-and-first-impressions",
+    "href": "syllabus/syllabus.html#week-2-workshop-and-first-impressions",
+    "title": "class",
+    "section": "Week 2: Workshop and First Impressions",
+    "text": "Week 2: Workshop and First Impressions\nThis week is dedicated to making sure students are familiar and comfortable with the dev environment. Often, some students need extra help to get familiar with things in coding-related classes or they’ll fall behind right at the start.\nGroup/class discussions of first impressions, and a short in-class activity running CC to make sure everyone has it working (with the instructor going around to help anyone who needs it). Activity e.g.: “Ask Claude to generate a meme. This is an intentionally silly assignment.”1\n\n\n\n\n\n\nHomework\n\n\n\nDo a small project. This will be the first of many.\nExample projects: - a tool that makes randomized ASCII cathedrals - an interactive PNG steganography demo or video - data visualization of the college’s spending or student/class/subject distribution\nWrite up a small description of what you built, any insight you gained along the way, and include some screenshots of the project. Some things to think about: - How well do you understand what you made? How much does it matter? - How well does it work? How easy would it be for you, others, or another AI to maintain or mod?\n(The instructor is recommended to respond with follow-up questions and/or discussion to each student’s submission; the goal is to get them to think more about what they’ve made.)"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-3-llm-mechanics",
+    "href": "syllabus/syllabus.html#week-3-llm-mechanics",
+    "title": "class",
+    "section": "Week 3: LLM Mechanics",
+    "text": "Week 3: LLM Mechanics\nThis week is reserved for lectures or readings on how people’s prompts magically turn into working code— the mechanics behind LLMs and agentic work. Instructors should either find a premade guide about these, or, ideally, lecture on their own.\nGeneral outline:\n\nBasic LLM mechanics: Your prompt is injected into a “chat template”, and the model predicts the response of a “helpful AI agent” within that template.\nTraining background: Basic background about training: raw word prediction (on what corpus?) + some reinforcement learning to be a servile assistant and code/problem-solve better.\nAgentic Harnesses: How do you turn a chatbot/word predictor into programmer? Let it execute bash, but be careful!\n\nAnd the bonus topic below. This could also be saved for the Local AI week.\n\nLLM token prediction: How the model actually gets from the prompt to generated text; model architecture and RAM limitations. (interesting, but not particularly important; some students may find it satisfying or intriguing to know)\n\n\n\n\n\n\n\nHomework\n\n\n\nDo another small project, or make a signficant refinement or expansion to last week’s.\n(Each project assignment should copy the “Write up a small description of what you built… Some things to think about: …” instructions for submission and writeup.)"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-4-open-discussion-and-project-sharing",
+    "href": "syllabus/syllabus.html#week-4-open-discussion-and-project-sharing",
+    "title": "class",
+    "section": "Week 4: Open Discussion and Project Sharing",
+    "text": "Week 4: Open Discussion and Project Sharing\nClasses each week will typically start with short presentations/discussions of projects from the previous week (by anyone who feels like sharing), with a strict time budget (e.g. first 30 minutes of class).2\nThis week is left as an open discussion week to talk more, discuss the trajectory of the class, clean up any bugs/issues that need to be sorted out, and so on. It could also be treated as a “buffer week”.\n\n\n\n\n\n\nHomework\n\n\n\nDo another small project, or make a signficant refinement or expansion to last week’s."
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-5-web-work",
+    "href": "syllabus/syllabus.html#week-5-web-work",
+    "title": "class",
+    "section": "Week 5: Web Work",
+    "text": "Week 5: Web Work\nThis week focuses on frontend and deployment— “you have a webpage, how do you get it to people?”.\nLecture on serving a webpage locally to https://localhost:8000 with python3 -m http.server, and what you need to do to actually make a webpage public to the internet. (Incl. Claude artifacts, great for sharing in-progress projects with people; just not a permanent release solution)\nThis is also a good opportunity to let a student lead the lecture, since someone in the class is likely to be experienced with this topic.\n\n\n\n\n\n\nHomework\n\n\n\nTake a project from a previous week, and port it to run as a webpage, client-side (e.g. with Javascript or WASM). (Or make a new project that runs in the browser.)\nThen, tell Claude to port it to an “artifact”— this is a webpage connected to your account that can easily be shared via URL3. Set the artifact to be viewable by anyone with the link (Share -&gt; Only you -&gt; Anyone with the link) and submit it to this assignment.\nTHIS TEACHEST THEM TO MAKE WEB STUFF AND ARTIFACT"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#footnotes",
+    "href": "syllabus/syllabus.html#footnotes",
+    "title": "class",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThe students will amuse themselves with the (probably poor) results.↩︎\nThe students will sort out who wants to and gets time to present; the goal is to spark discussion and sharing, not to give everyone presentation practice. (The final project is the one indended for presentation practice.)↩︎\nIf the students are on a shared Max plan, this also makes it easy for the instructor to view their projects all at once by viewing the account’s artifacts.↩︎\nvia lecture, an article, or “find and read information on your own to share in the group discussion”↩︎\nContext management, weaker models for easier tasks, etc. Could also touch on session forks, though that’s a bit underexplored at the moment.↩︎"
+  },
+  {
+    "objectID": "colony/colony.html#distributed-inference",
+    "href": "colony/colony.html#distributed-inference",
+    "title": "Colony: Bucket-Brigade Inference",
+    "section": "Distributed Inference",
+    "text": "Distributed Inference\nDistributed inference is a bit of a canonical idea— both in general (Anthropic made a post about it recently) and as a solution to the RAM issue. “If you need the whole model in RAM and don’t have enough RAM on one machine, why not split the model between multiple machines?” The time cost of transfering data between machines during inference is actually minimal, so this is more feasible than you might think— it’s not much that worse than running inference on a single machine.\nWhere it really gains something is in parallelization— unlike a single machine, which can only stream its weights out of RAM for one token at a time, the machines on a distributed inference network can all stream their weights at once. Practically, this means each node can run inference on a separate token, all at the same time. But… inference is serial, so these tokens can’t belong to the same conversation. But this still allows for a much higher token throughput when the network is running inference for multiple agents at once.\nThere are several preexisting frameworks for distributed inference— including one that already ships with llamacpp— but Colony focuses specifically on being lightweight and easy to set up, and on taking advantage of that multi-agent throughput."
+  },
+  {
+    "objectID": "bespoke/bespoke.html",
+    "href": "bespoke/bespoke.html",
+    "title": "Dr. Seuss and the Age of Bespoke Software",
+    "section": "",
+    "text": "This short article is a bit of a reflection on a new tool I made for using Morse, and the new reality of making software in-house."
+  },
+  {
+    "objectID": "bespoke/bespoke.html#morse-reader",
+    "href": "bespoke/bespoke.html#morse-reader",
+    "title": "Dr. Seuss and the Age of Bespoke Software",
+    "section": "Morse Reader",
+    "text": "Morse Reader\nThe tool I made addresses a gap I saw in the learning resources for Morse code: lots of websites let you translate text, but none of them combine that text with images like children’s books do. This sort of combination provides context and interest, and typically makes it quite a bit easier and more engaging to learn a language.\nSo I had Claude build a little website that takes PDF uploads, extracts the text with OCR, and converts it into blocks of playable Morse1. A little UX tweaking later and I had a nice, simple, useful, shippable tool in about an hour of work. What a time to be alive!\n\n\n\nThe default book with text revealed.\n\n\nThe tool is intended to be used with Dr. Seuss books2, but I can’t ship it with them due to copyright; you’ll have to find your own Seuss PDFs to import. You can also upload non-picture-books, but that’s boring :P. PDFs are saved locally in the browser, so you don’t have to reimport them every time you visit the page.\nYou can find the website here: https://gbkorr.github.io/gbkorr/morse"
+  },
+  {
+    "objectID": "bespoke/bespoke.html#bespoke-development",
+    "href": "bespoke/bespoke.html#bespoke-development",
+    "title": "Dr. Seuss and the Age of Bespoke Software",
+    "section": "Bespoke Development",
+    "text": "Bespoke Development\nThis project really got me thinking about how easy it is to build useful code now. It really is the age of bespoke development— it’s easier to make most tools in-house than to properly fork an existing project3, now that AI is so efficient at coding. This has some unexpected benefits— the tools may end up more secure or well-coded than if they were forked, since much of the preexisting human OSS code is… improvable, let’s say.\nThe downside is that these in-house projects end up disaggregating the tools and ideas that would otherwise be stored in one big, utility-porkbellied OSS project, but since these tools and ideas are relatively simple to come up with from scratch now (that’s the whole idea here), I’m not sure this is too bad.\nAll of this applies less and less as the software in question gets more complicated or difficult. Anything that can’t be easily figured out on its own, or for which there’s an obscure, better solution, will really benefit from an OSS reference or paper. And large projects— especially those that require good UX, as mentioned below— need the continuous user testing that centralized OSS provides."
+  },
+  {
+    "objectID": "bespoke/bespoke.html#open-source-software",
+    "href": "bespoke/bespoke.html#open-source-software",
+    "title": "Dr. Seuss and the Age of Bespoke Software",
+    "section": "Open-Source Software",
+    "text": "Open-Source Software\nWhat does this mean for OSS in general? Well, it’s much easier for an AI to read, test, and adapt premade code than to do all the exploratory work on its own. Thus, it’s still valuable for code to be open-sourced— moreso as an token/speed saving than anything else. Of course, for software that’s had a high degree of QA/user testing (like a popular GUI tool), the UX will be much stronger than one made on-the-spot, and this sort of software is usually worth forking (and maybe redoing the backend of)."
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-6-local-ai",
+    "href": "syllabus/syllabus.html#week-6-local-ai",
+    "title": "class",
+    "section": "Week 6: Local AI",
+    "text": "Week 6: Local AI\nThis week covers4 local AI— what it is (open-source weights and inference software), its implications (what will happen to datacenters when local AI gets more powerful and accessible?), and political concerns (Chinese models, cyber safety).\n\n\n\n\n\n\nHomework\n\n\n\nPick a project from a prior week, and redo it from scratch using OpenCode. Compare and contrast your results with the original project:\n\nWhat open-weights model did you use?\nWhat did it struggle with?\nWhat was it able to do on par with Claude?\n\nNEEDS INFO ON HOW TO SET UP\n\n\n\n\n\n\n\n\nLearning Goals and Reasoning\n\n\n\n\n\ncompare with\nConcerns: hard to set up! unless class is all on one ssh"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-7-subagents",
+    "href": "syllabus/syllabus.html#week-7-subagents",
+    "title": "class",
+    "section": "Week 7: Subagents",
+    "text": "Week 7: Subagents\nAt this point, the class has covered the most relevant topics. The remaining weeks can be lower-key project/finals work, discussions, and lectures on assorted material. This week’s content focuses on subagents: why they exist5, where they’re useful, and the extent to which a user should be telling the agent how to use them (Claude typically manages them well on its own now). This can also mention workflows— a niche CC tool, but brings up a big question to discuss: when should automated, repetitive work use a deterministic pipeline vs. a group of agents? This is more nuanced than it seems.\n\n\n\n\n\n\nHomework\n\n\n\nSkim or read https://metr.org/hugging-face-incident-report-aug-2026.pdf for us to discuss next week. Start by reading page 3, which gives an overview of the paper and links to different sections that may be of interest.\n\n\n\n\n\n\n\n\nLearning Goals and Reasoning\n\n\n\n\n\nthe paper is interesting enough that students shouldn’t need an assignment for it. If necessary, a simple reflection/comments on the paper could work\n\n\n\ndiscussion of “how will things be distributed in the future? OSS doesn’t matter much when anyone can reimplement by themselves— should they? (that might even be MORE secure)\nprompt caching where? might need a more detailed week for it econonmical token usage, after subagents. prompt caching, etc"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-9-oral-presentations",
+    "href": "syllabus/syllabus.html#week-9-oral-presentations",
+    "title": "class",
+    "section": "Week 9: Oral Presentations",
+    "text": "Week 9: Oral Presentations\nIf the instructor doesn’t have time for 1-on-1 oral presentations"
+  },
+  {
+    "objectID": "syllabus/syllabus.html#week-10-retrospective-discussions",
+    "href": "syllabus/syllabus.html#week-10-retrospective-discussions",
+    "title": "class",
+    "section": "Week 10: Retrospective Discussions",
+    "text": "Week 10: Retrospective Discussions\ncourses often have students write a reflection of what they learned in a class, but it’s much rarer to see this done as a group discussion. ave students write that reflection and then discuss it in class after submitting"
+  },
+  {
+    "objectID": "bespoke/bespoke.html#footnotes",
+    "href": "bespoke/bespoke.html#footnotes",
+    "title": "Dr. Seuss and the Age of Bespoke Software",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nWith the typical controls for Morse WPM, frequency, tone, etc. These are pretty important— I’m picky about how my morse sounds!↩︎\nSome of the most entertaining children’s books out there! The rhyming is also quite helpful for learning morse.↩︎\nOften this in-house work will involve referencing existing OSS projects, but that’s still quite different from a fork or branch.↩︎"
   }
 ]

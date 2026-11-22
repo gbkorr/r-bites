@@ -16,12 +16,15 @@ website:
           - text: "AI Course Plan"
             icon: mortarboard
             href: syllabus/syllabus.qmd
-          - text: "Web Shipbuilder *"
-            icon: airplane-fill
-            href: shipworks/shipworks.qmd
+          - text: "Morse E-Reader *"
+            icon: journal-bookmark-fill
+            href: bespoke/bespoke.qmd
           - text: "Bucket-Brigade Inference *"
             icon: bucket-fill
             href: colony/colony.qmd
+          - text: "Web Shipbuilder *"
+            icon: airplane-fill
+            href: shipworks/shipworks.qmd
           - text: "Improving Claude's Prose *"
             icon: book
             href: gardner/gardner.qmd

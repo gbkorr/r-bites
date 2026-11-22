@@ -99,14 +99,14 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">AI Course Plan</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../shipworks/shipworks.html"><i class="bi bi-airplane-fill" role="img">
-</i> 
- <span class="dropdown-text">Web Shipbuilder *</span></a>
-  </li>  
-        <li>
     <a class="dropdown-item" href="../colony/colony.html"><i class="bi bi-bucket-fill" role="img">
 </i> 
  <span class="dropdown-text">Bucket-Brigade Inference *</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../shipworks/shipworks.html"><i class="bi bi-airplane-fill" role="img">
+</i> 
+ <span class="dropdown-text">Web Shipbuilder *</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../gardner/gardner.html"><i class="bi bi-book" role="img">
@@ -210,7 +210,6 @@ ul.task-list li input[type="checkbox"] {
 <h1>Slipped Through the Cracks</h1>
 <p>I do a lot of projects for fun, but not all of them succeed enough to put on the blog. Here’s a list of recent ones that didn’t pan out, despite several weeks (or months) of effort. Many of these were going to be articles and/or already had some writing done.</p>
 <hr>
-<p>*<strong>colony</strong> (Oct ’26): I set up a working system for distributed inference in the computer lab, but couldn’t figure out anything interesting to do with a bunch of 2tps agents. Inference is very slow but supports dozens of parallel agents.</p>
 <p>*<strong>folkcodec</strong> (Sep ’26): Lots of attempts at getting claude to improve a HILN audio codec to use for compressing folk music. It’s coming along, but the use case is somewhat unclear— maybe I’ll use this for a low-storage esp32 music player or something.</p>
 <p><strong>tugra</strong> (Jul ’26): I’m interested in the concept of communication that’s impossible to parse algorithmically; i.e., a way for humans to communicate that can’t be understood by AI. I came up with a few ideas for a writing system that could accomplish this, but they all had the same flaw— it seems to always be possible to make a dedicated OCR/algorithmic vision program to parse these if you know how they work, so they wouldn’t succeed long-term.</p>
 <p><strong>stego</strong> (Jul ’26): There’s a million ways to hide data in plain writing, and I had a pretty clever idea for one; if we use an algorithm that sorts every word into one of 256 (or 16, or 2) categories, we can selectively choose words from specific categories to encode numerical data in an otherwise normal piece of writing. I wanted to implement this using LLM generation— if every token were a full word, this would work flawlessly, but because of how tokenization breaks up words, it ends up not working at all. Oh well.</p>
