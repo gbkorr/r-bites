@@ -26,7 +26,7 @@ A **course plan** for teaching agentic coding. [link](syllabus/syllabus.qmd)
 
 <img class='thumbnail' src=images/morsereader.png>
 
-* A **Morse e-reader** and short article on "Dr. Seuss and the Age of Bespoke Software".[^whoops] [link](bespoke/bespoke.qmd)
+\* A **Morse e-reader** and short article on "Dr. Seuss and the Age of Bespoke Software".[^whoops] [link](bespoke/bespoke.qmd)
 
 [^whoops]: Which is less exciting than it sounds— I couldn't include much Seuss due to copyright!
 
